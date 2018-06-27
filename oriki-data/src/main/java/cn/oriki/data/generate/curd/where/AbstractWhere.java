@@ -48,4 +48,12 @@ public abstract class AbstractWhere implements Where {
         return operatorCreteria;
     }
 
+    public LinkedList<OperatorCreterias> getOperatorCreterias() {
+        return operatorCreterias;
+    }
+
+    public AbstractWhere() {
+        operatorCreterias = Lists.newLinkedList();
+    }
+
 }
