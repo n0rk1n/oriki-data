@@ -43,4 +43,8 @@ public class GenerateResult {
         params = Lists.newArrayList();
     }
 
+    public GenerateResult(String generateResult) {
+        this.generateResult = generateResult;
+    }
+
 }
