@@ -2,6 +2,11 @@ package cn.oriki.commons.constants;
 
 import java.io.File;
 
+/**
+ * String 常量
+ *
+ * @author oriki.wang
+ */
 public interface StringConstants {
 
     String EMPTY_STRING_VALUE = "";
