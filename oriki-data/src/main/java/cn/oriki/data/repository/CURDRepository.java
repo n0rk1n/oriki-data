@@ -5,6 +5,7 @@ import cn.oriki.data.generate.curd.save.result.SaveResult;
 import cn.oriki.data.generate.exception.GenerateException;
 
 import java.io.Serializable;
+import java.util.Collection;
 
 public interface CURDRepository<T, ID extends Serializable> extends Repository<T, ID> {
 
@@ -15,5 +16,11 @@ public interface CURDRepository<T, ID extends Serializable> extends Repository<T
     DeleteResult delete(T entity) throws GenerateException;
 
     DeleteResult deleteAll() throws GenerateException;
+
+    T queryById(ID id) throws GenerateException;
+
+    Collection<T> queryByIds(Collection<ID> ids) throws GenerateException;
+
+    Collection<T> queryAll() throws GenerateException;
 
 }

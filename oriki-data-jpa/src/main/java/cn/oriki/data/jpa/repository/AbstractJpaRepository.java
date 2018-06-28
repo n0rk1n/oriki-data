@@ -9,10 +9,12 @@ import cn.oriki.data.generate.curd.save.result.SaveResult;
 import cn.oriki.data.generate.exception.GenerateException;
 import cn.oriki.data.generate.result.GenerateResult;
 import cn.oriki.data.jpa.generate.curd.delete.AbstractJpaDelete;
+import cn.oriki.data.jpa.generate.curd.query.AbstractJpaQuery;
 import cn.oriki.data.jpa.generate.curd.save.AbstractJpaSave;
 import cn.oriki.data.repository.AbstractRepository;
 import cn.oriki.data.utils.reflect.ReflectDatas;
 import com.google.common.collect.Lists;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;
@@ -118,7 +120,7 @@ public abstract class AbstractJpaRepository<T, ID extends Serializable> extends 
      * @param save
      * @return
      */
-    public <S extends T> SaveResult<S, ID> executeSave(AbstractJpaSave save, S entity) throws GenerateException, IllegalAccessException {
+    protected <S extends T> SaveResult<S, ID> executeSave(AbstractJpaSave save, S entity) throws GenerateException, IllegalAccessException {
         GenerateResult generateResult = save.generate();
         String sql = generateResult.getGenerateResult();
         List<Serializable> params = generateResult.getParams();
@@ -135,6 +137,34 @@ public abstract class AbstractJpaRepository<T, ID extends Serializable> extends 
         saveResult.setNumber(i);
 
         return saveResult;
+    }
+
+    /**
+     * 执行 Query 查询单条数据的时候使用的操作
+     *
+     * @param query
+     * @return
+     */
+    protected T queryOne(AbstractJpaQuery query) throws GenerateException {
+        GenerateResult generateResult = query.generate();
+        String sql = generateResult.getGenerateResult();
+        List<Serializable> params = generateResult.getParams();
+
+        return this.jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<T>(entityClass), params.toArray());
+    }
+
+    /**
+     * 执行 Query 查询数据列表的时候使用的操作
+     *
+     * @param query
+     * @return
+     */
+    protected List<T> queryList(AbstractJpaQuery query) throws GenerateException {
+        GenerateResult generateResult = query.generate();
+        List<Serializable> params = generateResult.getParams();
+        String sql = generateResult.getGenerateResult();
+
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<T>(entityClass), params.toArray());
     }
 
     public JdbcTemplate getJdbcTemplate() {

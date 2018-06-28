@@ -9,6 +9,8 @@ import com.alibaba.druid.pool.DruidDataSource;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 
 public class MySQLRepositoryImplTest {
@@ -67,6 +69,40 @@ public class MySQLRepositoryImplTest {
     public void deleteAll() throws GenerateException {
         DeleteResult delete = this.repository.deleteAll();
         System.out.println("删除的元素个数：" + delete.getNumber());
+    }
+
+    @Test
+    public void queryById() throws GenerateException {
+        Children children = this.repository.queryById(40L);
+        showChildren(children);
+    }
+
+    @Test
+    public void queryByIds() throws GenerateException {
+        Collection<Children> children = this.repository.queryByIds(Arrays.asList(39L, 40L));
+
+        for (Children child : children) {
+            showChildren(child);
+        }
+    }
+
+    @Test
+    public void queryAll() throws GenerateException {
+        Collection<Children> children = this.repository.queryAll();
+
+        for (Children child : children) {
+            showChildren(child);
+        }
+    }
+
+    private void showChildren(Children children) {
+        System.out.println("id:" + children.getId());
+        System.out.println("name:" + children.getName());
+        System.out.println("age:" + children.getAge());
+        System.out.println("create_time:" + children.getCreateTime());
+        System.out.println("update_time:" + children.getUpdateTime());
+
+        System.out.println(" ------");
     }
 
 }

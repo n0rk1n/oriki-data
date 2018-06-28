@@ -7,6 +7,8 @@ import cn.oriki.data.generate.curd.where.enumeration.ConditionalEnum;
 import cn.oriki.data.generate.exception.GenerateException;
 import cn.oriki.data.jpa.generate.curd.delete.AbstractJpaDelete;
 import cn.oriki.data.jpa.generate.curd.delete.impl.MySQLDeleteImpl;
+import cn.oriki.data.jpa.generate.curd.query.AbstractJpaQuery;
+import cn.oriki.data.jpa.generate.curd.query.impl.MySQLQueryImpl;
 import cn.oriki.data.jpa.generate.curd.save.AbstractJpaSave;
 import cn.oriki.data.jpa.generate.curd.save.impl.MySQLSaveImpl;
 import cn.oriki.data.jpa.repository.AbstractJpaRepository;
@@ -83,17 +85,53 @@ public class MySQLRepositoryImpl<T, ID extends Serializable> extends AbstractJpa
 
     @Override
     public T queryById(ID id) throws GenerateException {
-        return null;
+        AbstractJpaQuery query = new MySQLQueryImpl(getTableName());
+
+        String primaryKeyColumnName = super.getPrimaryKeyColumnName();
+
+        query.getWhere().andCriteria(primaryKeyColumnName, ConditionalEnum.EQUALS, id); // 添加查询条件
+
+        List<Field> fields = ReflectDatas.getFields(entityClass);
+
+        for (Field field : fields) {
+            String columnName = getColumnName(field);
+
+            query.query(columnName, field.getName()); // 列名 as 属性名
+        }
+
+        return queryOne(query);
     }
 
     @Override
-    public Iterable<T> queryByIds(Collection<ID> ids) throws GenerateException {
-        return null;
+    public Collection<T> queryByIds(Collection<ID> ids) throws GenerateException {
+        AbstractJpaQuery query = new MySQLQueryImpl(getTableName());
+        String primaryKeyColumnName = super.getPrimaryKeyColumnName();
+
+        query.getWhere().in(primaryKeyColumnName, ids);
+
+        List<Field> fields = ReflectDatas.getFields(entityClass);
+
+        for (Field field : fields) {
+            String columnName = getColumnName(field);
+
+            query.query(columnName, field.getName()); // 列名 as 属性名
+        }
+
+        return queryList(query);
     }
 
     @Override
-    public Iterable<T> queryAll() throws GenerateException {
-        return null;
+    public Collection<T> queryAll() throws GenerateException {
+        AbstractJpaQuery query = new MySQLQueryImpl(getTableName());
+
+        List<Field> fields = ReflectDatas.getFields(entityClass);
+        for (Field field : fields) {
+            String columnName = getColumnName(field);
+
+            query.query(columnName, field.getName()); // 列名 as 属性名
+        }
+
+        return queryList(query);
     }
 
 }
