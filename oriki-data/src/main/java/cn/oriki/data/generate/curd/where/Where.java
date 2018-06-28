@@ -13,6 +13,14 @@ public interface Where extends Generate {
 
     void andCriteria(Criteria... criterias); // 与关系添加条件
 
+    default void andCriteria(String key , ConditionalEnum conditional , Serializable value){
+        Criteria criteria = new Criteria();
+        criteria.setKey(key);
+        criteria.setConditional(conditional);
+        criteria.setValue(value);
+        andCriteria(criteria);
+    }
+
     void orCriteria(Criteria... criterias); // 或关系添加条件
 
     /**

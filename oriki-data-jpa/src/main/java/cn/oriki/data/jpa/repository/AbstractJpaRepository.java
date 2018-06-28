@@ -4,6 +4,10 @@ import cn.oriki.commons.utils.string.StringConverts;
 import cn.oriki.commons.utils.string.Strings;
 import cn.oriki.data.annotation.Column;
 import cn.oriki.data.annotation.Table;
+import cn.oriki.data.generate.curd.delete.result.DeleteResult;
+import cn.oriki.data.generate.exception.GenerateException;
+import cn.oriki.data.generate.result.GenerateResult;
+import cn.oriki.data.jpa.generate.curd.delete.AbstractJpaDelete;
 import cn.oriki.data.repository.AbstractRepository;
 import cn.oriki.data.utils.reflect.ReflectDatas;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -11,20 +15,12 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import javax.sql.DataSource;
 import java.io.Serializable;
 import java.lang.reflect.Field;
+import java.util.List;
 import java.util.Objects;
 
-public class AbstractJpaRepository<T, ID extends Serializable> extends AbstractRepository<T, ID> {
+public abstract class AbstractJpaRepository<T, ID extends Serializable> extends AbstractRepository<T, ID> {
 
     protected JdbcTemplate jdbcTemplate;
-
-    public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
-
-    public void setJdbcTemplate(DataSource dataSource) {
-        JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-        this.jdbcTemplate = jdbcTemplate;
-    }
 
     public AbstractJpaRepository(Class T, Class ID) {
         super(T, ID);
@@ -92,6 +88,38 @@ public class AbstractJpaRepository<T, ID extends Serializable> extends AbstractR
     protected String getPrimaryKeyColumnName() {
         Field field = getPrimaryKeyField();
         return this.getColumnName(field);
+    }
+
+    /**
+     * 执行 delete 方法操作
+     *
+     * @return delete 操作结果
+     */
+    protected DeleteResult executeDelete(AbstractJpaDelete delete) throws GenerateException {
+        GenerateResult generateResult = delete.generate();
+        String sql = generateResult.getGenerateResult();
+        List<Serializable> params = generateResult.getParams();
+
+        int i = jdbcTemplate.update(sql, params.toArray());
+
+        // 封装结果
+        DeleteResult deleteResult = new DeleteResult();
+        deleteResult.setNumber(i);
+
+        return deleteResult;
+    }
+
+    public JdbcTemplate getJdbcTemplate() {
+        return jdbcTemplate;
+    }
+
+    public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
+
+    public void setJdbcTemplate(DataSource dataSource) {
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+        this.jdbcTemplate = jdbcTemplate;
     }
 
 }
