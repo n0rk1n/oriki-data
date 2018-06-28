@@ -19,6 +19,7 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 public class MySQLRepositoryImpl<T, ID extends Serializable> extends AbstractJpaRepository<T, ID> {
 
@@ -125,7 +126,19 @@ public class MySQLRepositoryImpl<T, ID extends Serializable> extends AbstractJpa
 
     @Override
     public boolean exists(ID id) throws GenerateException {
-        return false;
+        AbstractJpaQuery query = new MySQLQueryImpl(getTableName());
+
+        String primaryKeyColumnName = super.getPrimaryKeyColumnName();
+        Field primaryKeyField = getPrimaryKeyField();
+        String idFieldName = primaryKeyField.getName();
+        Class<ID> type = (Class<ID>) primaryKeyField.getType();
+
+        query.query(primaryKeyColumnName, idFieldName); // select id
+        query.getWhere().andCriteria(primaryKeyColumnName, ConditionalEnum.EQUALS, id); // where id = ?
+
+        ID value = queryValue(query, idClass);
+
+        return Objects.nonNull(value);
     }
 
 }

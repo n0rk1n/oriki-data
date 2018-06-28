@@ -6,6 +6,7 @@ import cn.oriki.data.generate.curd.save.result.SaveResult;
 import cn.oriki.data.generate.exception.GenerateException;
 import cn.oriki.data.jpa.entity.Children;
 import com.alibaba.druid.pool.DruidDataSource;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -93,6 +94,12 @@ public class MySQLRepositoryImplTest {
         for (Children child : children) {
             showChildren(child);
         }
+    }
+
+    @Test
+    public void exists() throws GenerateException {
+        boolean b = this.repository.exists(40L);
+        Assert.assertTrue(b);
     }
 
     private void showChildren(Children children) {

@@ -144,6 +144,7 @@ public abstract class AbstractJpaRepository<T, ID extends Serializable> extends 
      *
      * @param query
      * @return
+     * @throws GenerateException
      */
     protected T queryOne(AbstractJpaQuery query) throws GenerateException {
         GenerateResult generateResult = query.generate();
@@ -151,6 +152,22 @@ public abstract class AbstractJpaRepository<T, ID extends Serializable> extends 
         List<Serializable> params = generateResult.getParams();
 
         return this.jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<T>(entityClass), params.toArray());
+    }
+
+    /**
+     * 执行 Query 查询某个类型值的查询
+     *
+     * @param query
+     * @param <S>
+     * @return
+     * @throws GenerateException
+     */
+    protected <S> S queryValue(AbstractJpaQuery query, Class<S> clazz) throws GenerateException {
+        GenerateResult generateResult = query.generate();
+        String sql = generateResult.getGenerateResult();
+        List<Serializable> params = generateResult.getParams();
+
+        return this.jdbcTemplate.queryForObject(sql, params.toArray(), clazz);
     }
 
     /**
