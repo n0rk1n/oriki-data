@@ -37,6 +37,29 @@ public abstract class AbstractRepository<T, ID extends Serializable> implements 
     }
 
     /**
+     * 获取实体类的被 @PrimaryKey 标识的属性的值（属于 Serializable 子类），不存在返回 null
+     *
+     * @param entity
+     * @param <S>
+     * @return
+     */
+    protected <S extends T> Serializable getIdValue(S entity) {
+        Field primaryKeyField = getPrimaryKeyField();
+        primaryKeyField.setAccessible(true);
+
+        Object o = null;
+        try {
+            o = primaryKeyField.get(entity);
+            if (Objects.nonNull(o) && o instanceof Serializable) {
+                return (Serializable) o;
+            }
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
      * 获取被 @PrimaryKey 标识的属性，默认情况下一个实体类中只有一个
      *
      * @return 被 @PrimaryKey 标识的属性

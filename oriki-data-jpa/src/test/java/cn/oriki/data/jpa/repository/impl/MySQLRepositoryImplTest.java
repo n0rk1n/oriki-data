@@ -3,6 +3,7 @@ package cn.oriki.data.jpa.repository.impl;
 import cn.oriki.commons.loader.ConfigLoader;
 import cn.oriki.data.generate.curd.delete.result.DeleteResult;
 import cn.oriki.data.generate.curd.save.result.SaveResult;
+import cn.oriki.data.generate.curd.update.result.UpdateResult;
 import cn.oriki.data.generate.exception.GenerateException;
 import cn.oriki.data.jpa.entity.Children;
 import com.alibaba.druid.pool.DruidDataSource;
@@ -102,6 +103,19 @@ public class MySQLRepositoryImplTest {
         Assert.assertTrue(b);
     }
 
+    @Test
+    public void update() throws IllegalAccessException, GenerateException {
+        Children children = new Children();
+        children.setId(40L);
+        children.setName("zhangsan");
+        children.setAge(18);
+        children.setCreateTime(new Date());
+        UpdateResult updateResult = this.repository.update(children);
+
+        System.out.println("是否为更新操作：" + updateResult.isUpdate());
+        System.out.println("影响行数：" + updateResult.getNumber());
+    }
+
     private void showChildren(Children children) {
         System.out.println("id:" + children.getId());
         System.out.println("name:" + children.getName());
@@ -111,5 +125,6 @@ public class MySQLRepositoryImplTest {
 
         System.out.println(" ------");
     }
+
 
 }

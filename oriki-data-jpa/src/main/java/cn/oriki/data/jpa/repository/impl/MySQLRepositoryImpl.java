@@ -12,6 +12,8 @@ import cn.oriki.data.jpa.generate.curd.query.AbstractJpaQuery;
 import cn.oriki.data.jpa.generate.curd.query.impl.MySQLQueryImpl;
 import cn.oriki.data.jpa.generate.curd.save.AbstractJpaSave;
 import cn.oriki.data.jpa.generate.curd.save.impl.MySQLSaveImpl;
+import cn.oriki.data.jpa.generate.curd.update.AbstractJpaUpdate;
+import cn.oriki.data.jpa.generate.curd.update.impl.MySQLUpdateImpl;
 import cn.oriki.data.jpa.repository.AbstractJpaRepository;
 import cn.oriki.data.utils.reflect.ReflectDatas;
 
@@ -86,9 +88,37 @@ public class MySQLRepositoryImpl<T, ID extends Serializable> extends AbstractJpa
     }
 
     @Override
-    public <S extends T> UpdateResult update(S entity) throws GenerateException {
-        // 根据 id 查询后修改其余参数
-        return null;
+    public <S extends T> UpdateResult update(S entity) throws GenerateException, IllegalAccessException {
+        // 根据 id 查询后，不存在执行 save 操作
+        Serializable id = getIdValue(entity);
+
+        UpdateResult updateResult = new UpdateResult();
+
+        if (Objects.isNull(id)) {
+            SaveResult<S, ID> saveResult = save(entity);
+            updateResult.isUpdate(false); // 为 save 操作
+            updateResult.setNumber(saveResult.getNumber());
+        } else {
+            // 更新操作
+            AbstractJpaUpdate update = new MySQLUpdateImpl(getTableName());
+
+            List<FieldTypeNameValue> fieldTypeNameValues = ReflectDatas.getFieldTypeNameValues(entity);// 获取包含null值的属性
+            fieldTypeNameValues.forEach((fieldTypeNameValue -> {
+                String fieldName = fieldTypeNameValue.getName();// 获取属性名称
+                Field field = ReflectDatas.getField(entityClass, fieldName);
+                String columnName = super.getColumnName(field); // 转换为标准列名称
+                Serializable value = (Serializable) fieldTypeNameValue.getValue(); // 该值一定为 Serializable 的子类（上述获取已做过滤（ fieldValue insteadof Serializable ））
+
+                update.update(columnName, value);
+            }));
+
+            update.getWhere().andCriteria(getPrimaryKeyColumnName(), ConditionalEnum.EQUALS, id); // 拼接 where
+
+            int i = super.executeUpdate(update);
+            updateResult.setNumber(i);
+        }
+
+        return updateResult;
     }
 
     @Override

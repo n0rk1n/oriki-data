@@ -18,7 +18,7 @@ public interface CURDRepository<T, ID extends Serializable> extends Repository<T
 
     DeleteResult deleteAll() throws GenerateException;
 
-    <S extends T> UpdateResult update(S entity) throws GenerateException;
+    <S extends T> UpdateResult update(S entity) throws GenerateException, IllegalAccessException; // 要求方法本身先查（ byId ），不存在执行 save 方法
 
     T queryById(ID id) throws GenerateException;
 

@@ -27,6 +27,7 @@ public abstract class AbstractUpdate implements Update {
         if (Objects.isNull(setParams)) {
             setParams = Maps.newHashMap();
         }
+        setParams.put(key, value);
     }
 
     public Where getWhere() {

@@ -11,6 +11,7 @@ import cn.oriki.data.generate.result.GenerateResult;
 import cn.oriki.data.jpa.generate.curd.delete.AbstractJpaDelete;
 import cn.oriki.data.jpa.generate.curd.query.AbstractJpaQuery;
 import cn.oriki.data.jpa.generate.curd.save.AbstractJpaSave;
+import cn.oriki.data.jpa.generate.curd.update.AbstractJpaUpdate;
 import cn.oriki.data.repository.AbstractRepository;
 import cn.oriki.data.utils.reflect.ReflectDatas;
 import com.google.common.collect.Lists;
@@ -112,6 +113,21 @@ public abstract class AbstractJpaRepository<T, ID extends Serializable> extends 
         deleteResult.setNumber(i);
 
         return deleteResult;
+    }
+
+    /**
+     * 执行 update 方法操作
+     *
+     * @param update
+     * @return
+     */
+    protected int executeUpdate(AbstractJpaUpdate update) throws GenerateException {
+        GenerateResult generateResult = update.generate();
+
+        String sql = generateResult.getGenerateResult();
+        List<Serializable> params = generateResult.getParams();
+
+        return this.jdbcTemplate.update(sql, params.toArray());
     }
 
     /**
