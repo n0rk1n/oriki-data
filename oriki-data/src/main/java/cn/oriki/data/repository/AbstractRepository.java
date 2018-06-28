@@ -20,6 +20,23 @@ public abstract class AbstractRepository<T, ID extends Serializable> implements 
     }
 
     /**
+     * save 方法使用，将获取的主键存入实体类中
+     *
+     * @param entity save 对象
+     * @param id     插入后获取的id
+     * @param <S>    泛型
+     * @throws IllegalAccessException Field 对象存入数据失败抛出异常
+     */
+    protected <S extends T> void putIdToEntity(S entity, ID id) throws IllegalAccessException {
+        Field field = getPrimaryKeyField();
+        if (Objects.isNull(field)) {
+            throw new IllegalArgumentException("we can't find @ParmaryKey at " + entityClass.getName());
+        }
+        field.setAccessible(true);
+        field.set(entity, id);
+    }
+
+    /**
      * 获取被 @PrimaryKey 标识的属性，默认情况下一个实体类中只有一个
      *
      * @return 被 @PrimaryKey 标识的属性

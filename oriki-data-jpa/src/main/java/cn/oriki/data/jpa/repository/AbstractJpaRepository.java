@@ -5,11 +5,14 @@ import cn.oriki.commons.utils.string.Strings;
 import cn.oriki.data.annotation.Column;
 import cn.oriki.data.annotation.Table;
 import cn.oriki.data.generate.curd.delete.result.DeleteResult;
+import cn.oriki.data.generate.curd.save.result.SaveResult;
 import cn.oriki.data.generate.exception.GenerateException;
 import cn.oriki.data.generate.result.GenerateResult;
 import cn.oriki.data.jpa.generate.curd.delete.AbstractJpaDelete;
+import cn.oriki.data.jpa.generate.curd.save.AbstractJpaSave;
 import cn.oriki.data.repository.AbstractRepository;
 import cn.oriki.data.utils.reflect.ReflectDatas;
+import com.google.common.collect.Lists;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;
@@ -107,6 +110,31 @@ public abstract class AbstractJpaRepository<T, ID extends Serializable> extends 
         deleteResult.setNumber(i);
 
         return deleteResult;
+    }
+
+    /**
+     * 执行 save 方法操作
+     *
+     * @param save
+     * @return
+     */
+    public <S extends T> SaveResult<S, ID> executeSave(AbstractJpaSave save, S entity) throws GenerateException, IllegalAccessException {
+        GenerateResult generateResult = save.generate();
+        String sql = generateResult.getGenerateResult();
+        List<Serializable> params = generateResult.getParams();
+
+        int i = jdbcTemplate.update(sql, params.toArray());
+
+        // 获取 id 并存入实体中
+        ID id = jdbcTemplate.queryForObject("SELECT LAST_INSERT_ID()", idClass);
+        super.putIdToEntity(entity, id);
+
+        // 获取结果
+        SaveResult<S, ID> saveResult = new SaveResult<>();
+        saveResult.setEntitys(Lists.newArrayList(entity));
+        saveResult.setNumber(i);
+
+        return saveResult;
     }
 
     public JdbcTemplate getJdbcTemplate() {
