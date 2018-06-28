@@ -3,6 +3,7 @@ package cn.oriki.data.jpa.repository.impl;
 import cn.oriki.commons.utils.reflect.entity.FieldTypeNameValue;
 import cn.oriki.data.generate.curd.delete.result.DeleteResult;
 import cn.oriki.data.generate.curd.save.result.SaveResult;
+import cn.oriki.data.generate.curd.update.result.UpdateResult;
 import cn.oriki.data.generate.curd.where.enumeration.ConditionalEnum;
 import cn.oriki.data.generate.exception.GenerateException;
 import cn.oriki.data.jpa.generate.curd.delete.AbstractJpaDelete;
@@ -84,6 +85,12 @@ public class MySQLRepositoryImpl<T, ID extends Serializable> extends AbstractJpa
     }
 
     @Override
+    public <S extends T> UpdateResult update(S entity) throws GenerateException {
+        // 根据 id 查询后修改其余参数
+        return null;
+    }
+
+    @Override
     public T queryById(ID id) throws GenerateException {
         AbstractJpaQuery query = new MySQLQueryImpl(getTableName());
 
@@ -114,6 +121,11 @@ public class MySQLRepositoryImpl<T, ID extends Serializable> extends AbstractJpa
         query.queryAll(entityClass); // 查询所有字段
 
         return queryList(query);
+    }
+
+    @Override
+    public boolean exists(ID id) throws GenerateException {
+        return false;
     }
 
 }

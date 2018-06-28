@@ -2,6 +2,7 @@ package cn.oriki.data.repository;
 
 import cn.oriki.data.generate.curd.delete.result.DeleteResult;
 import cn.oriki.data.generate.curd.save.result.SaveResult;
+import cn.oriki.data.generate.curd.update.result.UpdateResult;
 import cn.oriki.data.generate.exception.GenerateException;
 
 import java.io.Serializable;
@@ -17,10 +18,14 @@ public interface CURDRepository<T, ID extends Serializable> extends Repository<T
 
     DeleteResult deleteAll() throws GenerateException;
 
+    <S extends T> UpdateResult update(S entity) throws GenerateException;
+
     T queryById(ID id) throws GenerateException;
 
     Collection<T> queryByIds(Collection<ID> ids) throws GenerateException;
 
     Collection<T> queryAll() throws GenerateException;
+
+    boolean exists(ID id) throws GenerateException;
 
 }
