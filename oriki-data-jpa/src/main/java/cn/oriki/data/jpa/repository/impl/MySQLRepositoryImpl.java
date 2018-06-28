@@ -88,16 +88,9 @@ public class MySQLRepositoryImpl<T, ID extends Serializable> extends AbstractJpa
         AbstractJpaQuery query = new MySQLQueryImpl(getTableName());
 
         String primaryKeyColumnName = super.getPrimaryKeyColumnName();
-
         query.getWhere().andCriteria(primaryKeyColumnName, ConditionalEnum.EQUALS, id); // 添加查询条件
 
-        List<Field> fields = ReflectDatas.getFields(entityClass);
-
-        for (Field field : fields) {
-            String columnName = getColumnName(field);
-
-            query.query(columnName, field.getName()); // 列名 as 属性名
-        }
+        query.queryAll(entityClass);
 
         return queryOne(query);
     }
@@ -105,17 +98,11 @@ public class MySQLRepositoryImpl<T, ID extends Serializable> extends AbstractJpa
     @Override
     public Collection<T> queryByIds(Collection<ID> ids) throws GenerateException {
         AbstractJpaQuery query = new MySQLQueryImpl(getTableName());
-        String primaryKeyColumnName = super.getPrimaryKeyColumnName();
 
+        String primaryKeyColumnName = super.getPrimaryKeyColumnName();
         query.getWhere().in(primaryKeyColumnName, ids);
 
-        List<Field> fields = ReflectDatas.getFields(entityClass);
-
-        for (Field field : fields) {
-            String columnName = getColumnName(field);
-
-            query.query(columnName, field.getName()); // 列名 as 属性名
-        }
+        query.queryAll(entityClass);
 
         return queryList(query);
     }
@@ -124,12 +111,7 @@ public class MySQLRepositoryImpl<T, ID extends Serializable> extends AbstractJpa
     public Collection<T> queryAll() throws GenerateException {
         AbstractJpaQuery query = new MySQLQueryImpl(getTableName());
 
-        List<Field> fields = ReflectDatas.getFields(entityClass);
-        for (Field field : fields) {
-            String columnName = getColumnName(field);
-
-            query.query(columnName, field.getName()); // 列名 as 属性名
-        }
+        query.queryAll(entityClass); // 查询所有字段
 
         return queryList(query);
     }

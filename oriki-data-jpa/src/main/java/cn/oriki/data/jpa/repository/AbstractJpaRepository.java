@@ -64,7 +64,7 @@ public abstract class AbstractJpaRepository<T, ID extends Serializable> extends 
      *
      * @return 数据库列名称
      */
-    protected String getColumnName(Field field) {
+    public static String getColumnName(Field field) {
         String columnName;
         Column annotation = (Column) ReflectDatas.getAnnotation(field, Column.class);
         if (Objects.nonNull(annotation)) {

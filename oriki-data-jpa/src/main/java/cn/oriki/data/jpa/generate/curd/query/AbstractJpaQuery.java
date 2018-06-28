@@ -7,9 +7,12 @@ import cn.oriki.data.generate.curd.query.AbstractQuery;
 import cn.oriki.data.generate.curd.where.Where;
 import cn.oriki.data.generate.exception.GenerateException;
 import cn.oriki.data.generate.result.GenerateResult;
+import cn.oriki.data.jpa.repository.AbstractJpaRepository;
+import cn.oriki.data.utils.reflect.ReflectDatas;
 import com.google.common.collect.Lists;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -45,6 +48,21 @@ public abstract class AbstractJpaQuery extends AbstractQuery {
             selectQuery = Lists.newArrayList();
         }
         selectQuery.add(key + SEPARATOR + alias);
+    }
+
+    /**
+     * 查询所有字段
+     *
+     * @param entityClass 实体类 Class
+     * @param <T>         泛型
+     */
+    public <T> void queryAll(Class<T> entityClass) {
+        List<Field> fields = ReflectDatas.getFields(entityClass);
+        for (Field field : fields) {
+            String columnName = AbstractJpaRepository.getColumnName(field);
+
+            query(columnName, field.getName()); // 列名 as 属性名
+        }
     }
 
     @Override
