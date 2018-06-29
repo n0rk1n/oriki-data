@@ -1,11 +1,13 @@
 package cn.oriki.data.repository;
 
+import cn.oriki.commons.constants.ClassConstants;
 import cn.oriki.data.annotation.PrimaryKey;
 import cn.oriki.data.utils.reflect.ReflectDatas;
 
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.text.ParseException;
 import java.util.List;
 import java.util.Objects;
 
@@ -34,6 +36,26 @@ public abstract class AbstractRepository<T, ID extends Serializable> implements 
         }
         field.setAccessible(true);
         field.set(entity, id);
+    }
+
+    // 转换 ID
+    protected ID parseId(Class<ID> idClass, String idString) throws ParseException {
+        if (ClassConstants.JAVA_LANG_BTYE_CLASS_PATH.equals(idClass.getName())) {
+            return (ID) Byte.valueOf(idString);
+        } else if (ClassConstants.JAVA_LANG_SHORT_CLASS_PATH.equals(idClass.getName())) {
+            return (ID) Short.valueOf(idString);
+        } else if (ClassConstants.JAVA_LANG_INTEGER_CLASS_PATH.equals(idClass.getName())) {
+            return (ID) Integer.valueOf(idString);
+        } else if (ClassConstants.JAVA_LANG_LONG_CLASS_PATH.equals(idClass.getName())) {
+            return (ID) Long.valueOf(idString);
+        } else if (ClassConstants.JAVA_LANG_FLOAT_CLASS_PATH.equals(idClass.getName())) {
+            return (ID) Float.valueOf(idString);
+        } else if (ClassConstants.JAVA_LANG_DOUBLE_CLASS_PATH.equals(idClass.getName())) {
+            return (ID) Double.valueOf(idString);
+        } else if (ClassConstants.JAVA_LANG_STRING_CLASS_PATH.equals(idClass.getName())) {
+            return (ID) String.valueOf(idString);
+        }
+        throw new ParseException("we can't parse id", 0);
     }
 
     /**

@@ -17,16 +17,22 @@ import cn.oriki.data.utils.reflect.ReflectDatas;
 import com.google.common.collect.Lists;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 
 import javax.sql.DataSource;
 import java.io.Serializable;
 import java.lang.reflect.Field;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.text.ParseException;
 import java.util.List;
 import java.util.Objects;
 
 public abstract class AbstractJpaRepository<T, ID extends Serializable> extends AbstractRepository<T, ID> {
 
-    protected JdbcTemplate jdbcTemplate;
+    private JdbcTemplate jdbcTemplate;
 
     public AbstractJpaRepository(Class T, Class ID) {
         super(T, ID);
@@ -141,16 +147,33 @@ public abstract class AbstractJpaRepository<T, ID extends Serializable> extends 
         String sql = generateResult.getGenerateResult();
         List<Serializable> params = generateResult.getParams();
 
-        int i = jdbcTemplate.update(sql, params.toArray());
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        int number = jdbcTemplate.update((connection) -> {
+                    PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+                    for (int i = 1; i <= params.size(); i++) {
+                        try {
+                            preparedStatement.setObject(i, params.get(i - 1));
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    return preparedStatement;
+                }
+                , keyHolder);
 
-        // 获取 id 并存入实体中
-        ID id = jdbcTemplate.queryForObject("SELECT LAST_INSERT_ID()", idClass);
-        super.putIdToEntity(entity, id);
+        try {
+            // 获取 id 并存入实体中
+            String idString = keyHolder.getKey().toString(); // id 的 String 表示
+            ID id = parseId(idClass, idString);
+            super.putIdToEntity(entity, id);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         // 获取结果
         SaveResult<S, ID> saveResult = new SaveResult<>();
         saveResult.setEntitys(Lists.newArrayList(entity));
-        saveResult.setNumber(i);
+        saveResult.setNumber(number);
 
         return saveResult;
     }
