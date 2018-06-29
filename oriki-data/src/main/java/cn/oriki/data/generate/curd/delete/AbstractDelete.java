@@ -13,11 +13,6 @@ public abstract class AbstractDelete implements Delete {
         this.from = from;
     }
 
-    @Override
-    public void deleteAll() {
-        this.where.clear();
-    }
-
     public Where getWhere() {
         return where;
     }

@@ -2,7 +2,7 @@ package cn.oriki.data.generate.curd.where.enumeration;
 
 public enum ConditionalEnum {
 
-    EQUALS(" = ");
+    EQUALS(" = "), GREATER_THAN(" > "), LESS_THAN(" < ");
 
     private String conditional;
 

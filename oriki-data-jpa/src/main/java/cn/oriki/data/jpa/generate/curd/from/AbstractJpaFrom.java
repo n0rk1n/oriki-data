@@ -9,21 +9,15 @@ public abstract class AbstractJpaFrom extends AbstractFrom {
 
     private static final String FROM_KEY_WORD = " FROM ";
 
-    public AbstractJpaFrom(String fromName) {
-        super(fromName);
+    public AbstractJpaFrom(String tableName) {
+        super(tableName);
     }
 
     @Override
     public GenerateResult generate() throws GenerateException {
         String tableName = getFromName();
         if (Strings.isNotBlank(tableName)) {
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append(FROM_KEY_WORD); // FROM
-            stringBuilder.append(" " + tableName + " "); // table_name - 直接为来源名称
-
-            String fromTableName = stringBuilder.toString(); // FROM table_name
-
-            // 拼接结果
+            String fromTableName = FROM_KEY_WORD + " " + tableName + " "; // FROM table_name ， table_name - 直接为来源名称
             return new GenerateResult(fromTableName);
         }
         throw new GenerateException("tableName can't be null");

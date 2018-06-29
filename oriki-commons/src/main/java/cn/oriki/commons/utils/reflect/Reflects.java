@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
  */
 public class Reflects {
 
-    private static final String CLASS_PATH_SEPARATOR = "\\.";
+    private static final String CLASS_PATH_SEPARATOR = "\\."; // 全路径分隔符
 
     /**
      * 获取字节码对象
@@ -31,10 +31,11 @@ public class Reflects {
      * @throws ClassNotFoundException 全路径不能反射情况下抛出
      */
     public static Class getClass(String classPath) throws ClassNotFoundException {
-        if (Strings.isNotBlank(classPath)) {
-            return Class.forName(classPath);
+        if (Strings.isBlank(classPath)) {
+            return null;
         }
-        return null;
+
+        return Class.forName(classPath);
     }
 
     /**
@@ -80,16 +81,17 @@ public class Reflects {
      * @return Field 对象，如果不存在，返回 null
      */
     public static <T> Field getField(Class<T> clazz, String fieldName) {
-        if (Strings.isBlank(fieldName)) {
+        Field field = null;
+        if (Strings.isBlank(fieldName))
             return null;
-        }
 
-        for (Field field : getFields(clazz)) {
-            if (fieldName.equals(field.getName()))
-                return field;
+        for (Field _field : getFields(clazz)) { // 获取所有属性
+            if (fieldName.equals(_field.getName())) {
+                field = _field;
+                break;
+            }
         }
-
-        return null;
+        return field;
     }
 
     /**
@@ -106,7 +108,7 @@ public class Reflects {
     }
 
     /**
-     * 获取对象的属性的 类型、名称和值 集合
+     * 获取对象的属性的 类型、名称和值 集合（包含值为空的情况）
      *
      * @param entity Object 对象
      * @param <S>    泛型
@@ -145,11 +147,7 @@ public class Reflects {
      * @return Field 对象上的注解
      */
     public static Annotation getAnnotation(Field field, Class annotationClass) {
-        Annotation annotation = field.getDeclaredAnnotation(annotationClass);
-        if (Objects.nonNull(annotation)) {
-            return annotation;
-        }
-        return null;
+        return field.getDeclaredAnnotation(annotationClass);
     }
 
     /**
@@ -177,9 +175,9 @@ public class Reflects {
     // 递归，获取 Class 本身及其父类中成员变量
     private static <T> List<Field> getFields(List<Field> list, Class<T> clazz) {
         Field[] fields = clazz.getDeclaredFields();
-        list.addAll(Arrays.asList(fields));
+        list.addAll(Arrays.asList(fields)); // 存入本字节码文件所有 Field
         Class<? super T> superclass = clazz.getSuperclass();
-        if (!Objects.isNull(superclass) && !ClassConstants.JAVA_LANG_OBJECT.equals(superclass.getName())) {
+        if (Objects.nonNull(superclass) && !ClassConstants.JAVA_LANG_OBJECT.equals(superclass.getName())) {
             getFields(list, superclass);
         }
         return list;
@@ -187,11 +185,14 @@ public class Reflects {
 
     // 获取对象中对应成员变量的FieldTypeNameValue对象
     private static <S> FieldTypeNameValue getFieldTypeNameValue(Field field, S entity) throws IllegalAccessException {
+        if (Objects.isNull(field)) {
+            throw new RuntimeException("field can't be null");
+        }
+
         field.setAccessible(true); // 设置 Field 对象权限
-        Class<?> type = field.getType();
-        String name = field.getName();
+
         Object o = field.get(entity);
-        return new FieldTypeNameValue(type, name, o);
+        return new FieldTypeNameValue(field.getType(), field.getName(), o);
     }
 
 }

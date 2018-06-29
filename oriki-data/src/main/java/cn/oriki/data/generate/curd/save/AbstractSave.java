@@ -4,6 +4,7 @@ import cn.oriki.data.generate.curd.from.From;
 import com.google.common.collect.Maps;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
 
@@ -17,15 +18,11 @@ public abstract class AbstractSave implements Save {
         params = Maps.newHashMap();
     }
 
-    public String getFromName() {
-        return this.from.getFromName();
-    }
-
     @Override
     public void save(String key, Serializable value) {
         // 如果 params 为空，创建并添加
         if (Objects.isNull(params)) {
-            params = Maps.newLinkedHashMap();
+            params = Maps.newHashMap();
         }
         // 直接添加
         params.put(key, value);
@@ -36,7 +33,7 @@ public abstract class AbstractSave implements Save {
     }
 
     public Map<String, Serializable> getParams() {
-        return params;
+        return Collections.unmodifiableMap(params);
     }
 
 }

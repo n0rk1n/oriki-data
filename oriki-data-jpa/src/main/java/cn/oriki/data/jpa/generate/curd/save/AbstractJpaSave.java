@@ -29,7 +29,7 @@ public abstract class AbstractJpaSave extends AbstractSave {
 
         stringBuffer.append(INSERT_INTO_KEY_WORD); // INSERT INTO
 
-        stringBuffer.append(super.getFromName()); // 获取表名
+        stringBuffer.append(getFrom().getFromName()); // 获取表名
 
         stringBuffer.append(Generate.LEFT_PARENTHESIS); // (
 

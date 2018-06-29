@@ -12,7 +12,6 @@ import cn.oriki.data.generate.result.GenerateResult;
 import com.google.common.collect.Lists;
 
 import java.io.Serializable;
-import java.util.LinkedList;
 import java.util.List;
 
 public class AbstractJpaWhere extends AbstractWhere {
@@ -23,7 +22,7 @@ public class AbstractJpaWhere extends AbstractWhere {
     public GenerateResult generate() throws GenerateException {
         GenerateResult generateResult = new GenerateResult();
 
-        LinkedList<OperatorCreterias> operatorCreterias = getOperatorCreterias();
+        List<OperatorCreterias> operatorCreterias = getOperatorCreterias();
         if (operatorCreterias.size() == 0) { // 没有条件，返回空字符串用于拼接
             generateResult.setGenerateResult(StringConstants.EMPTY_STRING_VALUE);
         } else {
@@ -62,13 +61,13 @@ public class AbstractJpaWhere extends AbstractWhere {
     }
 
     // 添加条件，关系符使用 operator
-    private OperatorCreterias createOperatorCreteria(OperatorEnum operator, Criteria... keyConditionalValues) {
+    /*private OperatorCreterias createOperatorCreteria(OperatorEnum operator, Criteria... keyConditionalValues) {
         OperatorCreterias operatorCreterias = new OperatorCreterias();
         {
             operatorCreterias.setOperator(operator);
             operatorCreterias.setCriterias(Lists.newArrayList(keyConditionalValues));
         }
         return operatorCreterias;
-    }
+    }*/
 
 }

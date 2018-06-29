@@ -13,7 +13,6 @@ public abstract class AbstractUpdate implements Update {
 
     private Where where;
     private From from;
-
     private Map<String, Serializable> setParams;
 
     public AbstractUpdate(Where where, From from) {

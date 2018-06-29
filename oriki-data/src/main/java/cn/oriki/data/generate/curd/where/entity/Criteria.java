@@ -8,7 +8,7 @@ public class Criteria {
 
     private String key; // 键，可以是列名或键名
     private ConditionalEnum conditional; // 关系符（等于，小于，大于）
-    private Serializable value; // 值（TODO 目前只支持单表）
+    private Serializable value; // 值（TODO 目前只支持单表，所以 Where 接口中 in 方法进行 or 样式转换）
 
     public String getKey() {
         return key;

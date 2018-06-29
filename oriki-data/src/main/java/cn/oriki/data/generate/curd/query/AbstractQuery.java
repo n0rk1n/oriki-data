@@ -6,7 +6,6 @@ import cn.oriki.data.generate.curd.where.Where;
 public abstract class AbstractQuery implements Query {
 
     private Where where;
-
     private From from;
 
     public AbstractQuery(Where where, From from) {

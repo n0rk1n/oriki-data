@@ -44,7 +44,7 @@ public class MySQLRepositoryImplTest {
         SaveResult<Children, Long> saveResult = this.repository.save(children);
 
         System.out.println("影响行数：" + saveResult.getNumber());
-        Iterable<Children> entities = saveResult.getEntitys();
+        Iterable<Children> entities = saveResult.getEntities();
         entities.forEach((entity) -> {
             System.out.println("插入数据的返回id：" + entity.getId());
         });
@@ -52,7 +52,7 @@ public class MySQLRepositoryImplTest {
 
     @Test
     public void deleteById() throws GenerateException {
-        DeleteResult delete = this.repository.deleteById(37L);
+        DeleteResult delete = this.repository.deleteById(55L);
         System.out.println("删除的元素个数：" + delete.getNumber());
     }
 
@@ -75,13 +75,13 @@ public class MySQLRepositoryImplTest {
 
     @Test
     public void queryById() throws GenerateException {
-        Children children = this.repository.queryById(40L);
+        Children children = this.repository.queryById(56L);
         showChildren(children);
     }
 
     @Test
     public void queryByIds() throws GenerateException {
-        Collection<Children> children = this.repository.queryByIds(Arrays.asList(39L, 40L));
+        Collection<Children> children = this.repository.queryByIds(Arrays.asList(56L));
 
         for (Children child : children) {
             showChildren(child);
@@ -99,14 +99,14 @@ public class MySQLRepositoryImplTest {
 
     @Test
     public void exists() throws GenerateException {
-        boolean b = this.repository.exists(40L);
+        boolean b = this.repository.exists(56L);
         Assert.assertTrue(b);
     }
 
     @Test
     public void update() throws IllegalAccessException, GenerateException {
         Children children = new Children();
-        children.setId(40L);
+        children.setId(56L);
         children.setName("zhangsan");
         children.setAge(18);
         children.setCreateTime(new Date());
@@ -125,6 +125,5 @@ public class MySQLRepositoryImplTest {
 
         System.out.println(" ------");
     }
-
 
 }

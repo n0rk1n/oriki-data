@@ -54,7 +54,7 @@ public abstract class AbstractJpaRepository<T, ID extends Serializable> extends 
             tableName = tableAnnotation.name();
         } else {
             String javaClassName = ReflectDatas.getClassName(entityClass); // 截取类名
-            tableName = StringConverts.toSQLTableName(javaClassName);
+            tableName = StringConverts.toSQLTableName(javaClassName, "t_");
         }
 
         if (Strings.isBlank(tableName)) {
@@ -164,7 +164,7 @@ public abstract class AbstractJpaRepository<T, ID extends Serializable> extends 
         try {
             // 获取 id 并存入实体中
             String idString = keyHolder.getKey().toString(); // id 的 String 表示
-            ID id = parseId(idClass, idString);
+            ID id = ReflectDatas.parseId(idClass, idString);
             super.putIdToEntity(entity, id);
         } catch (ParseException e) {
             e.printStackTrace();
@@ -172,7 +172,7 @@ public abstract class AbstractJpaRepository<T, ID extends Serializable> extends 
 
         // 获取结果
         SaveResult<S, ID> saveResult = new SaveResult<>();
-        saveResult.setEntitys(Lists.newArrayList(entity));
+        saveResult.setEntities(Lists.newArrayList(entity));
         saveResult.setNumber(number);
 
         return saveResult;

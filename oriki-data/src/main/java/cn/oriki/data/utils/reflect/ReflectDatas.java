@@ -2,12 +2,8 @@ package cn.oriki.data.utils.reflect;
 
 import cn.oriki.commons.constants.ClassConstants;
 import cn.oriki.commons.utils.reflect.Reflects;
-import cn.oriki.commons.utils.string.Strings;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.text.ParseException;
 
 /**
  * ReflectDatas
@@ -16,6 +12,26 @@ import java.util.stream.Collectors;
  */
 public class ReflectDatas extends Reflects {
 
+    // 转换 ID
+    public static <ID> ID parseId(Class<ID> idClass, String idString) throws ParseException {
+        if (ClassConstants.JAVA_LANG_BTYE_CLASS_PATH.equals(idClass.getName())) {
+            return (ID) Byte.valueOf(idString);
+        } else if (ClassConstants.JAVA_LANG_SHORT_CLASS_PATH.equals(idClass.getName())) {
+            return (ID) Short.valueOf(idString);
+        } else if (ClassConstants.JAVA_LANG_INTEGER_CLASS_PATH.equals(idClass.getName())) {
+            return (ID) Integer.valueOf(idString);
+        } else if (ClassConstants.JAVA_LANG_LONG_CLASS_PATH.equals(idClass.getName())) {
+            return (ID) Long.valueOf(idString);
+        } else if (ClassConstants.JAVA_LANG_FLOAT_CLASS_PATH.equals(idClass.getName())) {
+            return (ID) Float.valueOf(idString);
+        } else if (ClassConstants.JAVA_LANG_DOUBLE_CLASS_PATH.equals(idClass.getName())) {
+            return (ID) Double.valueOf(idString);
+        } else if (ClassConstants.JAVA_LANG_STRING_CLASS_PATH.equals(idClass.getName())) {
+            return (ID) String.valueOf(idString);
+        }
+        throw new ParseException("we can't parse id", 0);
+    }
+
     /**
      * 获取所有 getter 方法
      *
@@ -23,9 +39,9 @@ public class ReflectDatas extends Reflects {
      * @param <T>   泛型
      * @return Method 集合
      */
-    public static <T> List<Method> getGetterMethod(Class<T> clazz) {
+    /*public static <T> List<Method> getGetterMethod(Class<T> clazz) {
         return getMethodStartWithPrefix(clazz, ReflectConstants.GETTER_METHOD_PREFIX);
-    }
+    }*/
 
     /**
      * 获取所有 setter 方法
@@ -34,9 +50,9 @@ public class ReflectDatas extends Reflects {
      * @param <T>   泛型
      * @return Method 集合
      */
-    public static <T> List<Method> getSetterMethod(Class<T> clazz) {
+    /*public static <T> List<Method> getSetterMethod(Class<T> clazz) {
         return getMethodStartWithPrefix(clazz, ReflectConstants.SETTER_METHOD_PREFIX);
-    }
+    }*/
 
     /**
      * 获取 getter 对应 Field
@@ -45,9 +61,9 @@ public class ReflectDatas extends Reflects {
      * @param <T>   泛型
      * @return 对应属性集合
      */
-    public static <T> List<Field> getGetterFields(Class<T> clazz) {
+    /*public static <T> List<Field> getGetterFields(Class<T> clazz) {
         return getGetterOrSetterFields(clazz, ReflectConstants.GETTER_METHOD_PREFIX);
-    }
+    }*/
 
     /**
      * 获取 setter 对应 Field
@@ -56,12 +72,12 @@ public class ReflectDatas extends Reflects {
      * @param <T>   泛型
      * @return 对应属性集合
      */
-    public static <T> List<Field> getSetterFields(Class<T> clazz) {
+    /*public static <T> List<Field> getSetterFields(Class<T> clazz) {
         return getGetterOrSetterFields(clazz, ReflectConstants.SETTER_METHOD_PREFIX);
-    }
+    }*/
 
     // 获取getter或setter对应成员变量
-    private static <T> List<Field> getGetterOrSetterFields(Class<T> clazz, String prefix) {
+    /*private static <T> List<Field> getGetterOrSetterFields(Class<T> clazz, String prefix) {
         List<Method> gettersOrSetters = getMethodStartWithPrefix(clazz, prefix); // 获取所有
 
         List<String> fieldName = speculateFieldName(gettersOrSetters, prefix); // 转换成员变量名称（假定）
@@ -69,13 +85,11 @@ public class ReflectDatas extends Reflects {
         List<Field> fields = getFields(clazz); // 获取所有成员变量
 
         // 对比，保留名称匹配 Field
-        return fields.stream().filter((field -> {
-            return fieldName.contains(field.getName());
-        })).collect(Collectors.toList());
-    }
+        return fields.stream().filter((field -> fieldName.contains(field.getName()))).collect(Collectors.toList());
+    }*/
 
     // 获取以 prefix 开头的 Method 集合（public权限）
-    private static <T> List<Method> getMethodStartWithPrefix(Class<T> clazz, String prefix) {
+    /*private static <T> List<Method> getMethodStartWithPrefix(Class<T> clazz, String prefix) {
         List<Method> methods = getPublicMethods(clazz);
 
         //获取所有以 prefix 开头的 public 方法，并且不为 Object 的 getClass 方法
@@ -91,10 +105,10 @@ public class ReflectDatas extends Reflects {
             }
             return flag;
         })).collect(Collectors.toList());
-    }
+    }*/
 
     // 推测方法的属性名称（针对setter & getter）
-    private static List<String> speculateFieldName(List<Method> gettersOrSetter, String prefix) {
+    /*private static List<String> speculateFieldName(List<Method> gettersOrSetter, String prefix) {
         return gettersOrSetter.stream().map((getterOrsetter) -> {
             String methodName = getterOrsetter.getName().replaceFirst(prefix, "");
             if (Strings.isNotBlank(methodName) && Character.isUpperCase(methodName.charAt(0))) {
@@ -106,6 +120,6 @@ public class ReflectDatas extends Reflects {
             }
             return null;
         }).collect(Collectors.toList());
-    }
+    }*/
 
 }

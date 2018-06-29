@@ -7,7 +7,7 @@ public class SaveResult<T, ID extends Serializable> {
 
     private Integer number; // 影响行数
 
-    private Collection<T> entitys; // 默认为空
+    private Collection<T> entities; // 默认为空
 
     public Integer getNumber() {
         return number;
@@ -17,12 +17,11 @@ public class SaveResult<T, ID extends Serializable> {
         this.number = number;
     }
 
-    public Collection<T> getEntitys() {
-        return entitys;
+    public Collection<T> getEntities() {
+        return entities;
     }
 
-    public void setEntitys(Collection<T> entitys) {
-        this.entitys = entitys;
+    public void setEntities(Collection<T> entities) {
+        this.entities = entities;
     }
-
 }

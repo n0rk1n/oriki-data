@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * Collections
@@ -26,7 +27,7 @@ public class Collections {
     }
 
     /**
-     * Collection 对象不为空但是没有元素
+     * Collection 对象已实例化但是没有元素
      *
      * @param collection Collection 对象
      * @param <T>        泛型
@@ -64,19 +65,20 @@ public class Collections {
     /**
      * Collection 根据 separator 进行拼接，生成字符串
      * <p>
-     * TODO 对 null 元素还是会做拼接，待解决
+     * 过滤除去不存在元素
      *
      * @param collection Collection 对象
      * @param separator  分隔符
      * @param <T>        泛型
      * @return 拼接后字符串
      */
-    public static <T> String join(final Collection<T> collection, final String separator) {
+    public static <T> String join(Collection<T> collection, final String separator) {
+        collection = collection.stream().filter(Objects::nonNull).collect(Collectors.toList()); // 过滤集合中为 null 元素
         return StringUtils.join(collection, separator);
     }
 
     /**
-     * 判断对象是否为集合
+     * 判断对象是否为集合或者为枚举集（备用）
      *
      * @param object 带判断对象
      * @return 如果是集合子类，返回 true
@@ -87,6 +89,8 @@ public class Collections {
 
     /**
      * 创建一个长度为 n 的集合，填充 o 对象
+     * <p>
+     * 实际调用的是 java.util.Collection 的 nCopy 方法
      *
      * @param n      集合长度
      * @param object 填充对象
