@@ -15,6 +15,7 @@ import cn.oriki.data.jpa.generate.curd.update.AbstractJpaUpdate;
 import cn.oriki.data.repository.AbstractRepository;
 import cn.oriki.data.utils.reflect.ReflectDatas;
 import com.google.common.collect.Lists;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -189,8 +190,12 @@ public abstract class AbstractJpaRepository<T, ID extends Serializable> extends 
         GenerateResult generateResult = query.generate();
         String sql = generateResult.getGenerateResult();
         List<Serializable> params = generateResult.getParams();
-
-        return this.jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(entityClass), params.toArray());
+        try {
+            return this.jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(entityClass), params.toArray());
+        } catch (EmptyResultDataAccessException e) { // 未找到数据会抛出的异常
+            e.printStackTrace();
+            return null;
+        }
     }
 
     /**
@@ -206,7 +211,12 @@ public abstract class AbstractJpaRepository<T, ID extends Serializable> extends 
         String sql = generateResult.getGenerateResult();
         List<Serializable> params = generateResult.getParams();
 
-        return this.jdbcTemplate.queryForObject(sql, params.toArray(), clazz);
+        try {
+            return this.jdbcTemplate.queryForObject(sql, params.toArray(), clazz);
+        } catch (EmptyResultDataAccessException e) { // 未找到数据会抛出的异常（只有 queryForObject 查询数量不为 1 的时候会抛出的异常）
+            e.printStackTrace();
+            return null;
+        }
     }
 
     /**

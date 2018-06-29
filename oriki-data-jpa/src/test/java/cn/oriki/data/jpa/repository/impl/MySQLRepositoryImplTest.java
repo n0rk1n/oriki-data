@@ -14,6 +14,7 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Objects;
 
 public class MySQLRepositoryImplTest {
 
@@ -117,13 +118,15 @@ public class MySQLRepositoryImplTest {
     }
 
     private void showChildren(Children children) {
-        System.out.println("id:" + children.getId());
-        System.out.println("name:" + children.getName());
-        System.out.println("age:" + children.getAge());
-        System.out.println("create_time:" + children.getCreateTime());
-        System.out.println("update_time:" + children.getUpdateTime());
+        if (Objects.nonNull(children)) {
+            System.out.println("id:" + children.getId());
+            System.out.println("name:" + children.getName());
+            System.out.println("age:" + children.getAge());
+            System.out.println("create_time:" + children.getCreateTime());
+            System.out.println("update_time:" + children.getUpdateTime());
 
-        System.out.println(" ------");
+            System.out.println(" ------");
+        }
     }
 
 }
