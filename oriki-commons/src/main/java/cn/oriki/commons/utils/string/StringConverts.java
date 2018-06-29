@@ -63,9 +63,9 @@ public class StringConverts {
      * @param javaClassName JavaClassName
      * @return SQLTableName
      */
-    public static String toSQLTableName(String javaClassName) {
+    /*public static String toSQLTableName(String javaClassName) {
         return toSQLName(javaClassName, "t_");
-    }
+    }*/
 
     /**
      * JavaClassName to SQLTableName （ eg : CustomerInformation -> 特定前缀 + customer_information ）
@@ -119,9 +119,9 @@ public class StringConverts {
      * @param SQLTableName 标准表名（含前缀）
      * @return 标准Java类名
      */
-    public static String toJavaClassName(String SQLTableName) {
+    /*public static String toJavaClassName(String SQLTableName) {
         return toJavaClassName(SQLTableName, "t_");
-    }
+    }*/
 
     /**
      * SQLColumnName to JavaFieldName （ eg : user_name -> userName ）
