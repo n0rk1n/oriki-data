@@ -70,8 +70,4 @@ public class ConfigLoader extends Properties {
         }
     }
 
-    public String getResourceFile() {
-        return resourceFile;
-    }
-
 }

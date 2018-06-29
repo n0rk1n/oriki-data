@@ -144,7 +144,7 @@ public class Reflects {
      * @param annotationClass 特定注解类型
      * @return Field 对象上的注解
      */
-    public static Annotation getAnnotation(Field field, Class annotationClass) {
+    public static <C extends Annotation> Annotation getAnnotation(Field field, Class<C> annotationClass) {
         return field.getDeclaredAnnotation(annotationClass);
     }
 
@@ -154,10 +154,10 @@ public class Reflects {
      * @param clazz Class 文件
      * @return 注解集合
      */
-    public static List<Annotation> getAnnotations(Class clazz) {
+    /*public static List<Annotation> getAnnotations(Class clazz) {
         Annotation[] annotations = clazz.getDeclaredAnnotations();
         return Lists.newArrayList(annotations);
-    }
+    }*/
 
     /**
      * 获取类上的特定注解，如果不存在，返回null
@@ -166,7 +166,7 @@ public class Reflects {
      * @param annotation 特定注解的字节码文件
      * @return 特定注解对象
      */
-    public static Annotation getAnnotation(Class clazz, Class annotation) {
+    public static <C extends Annotation> Annotation getAnnotation(Class clazz, Class<C> annotation) {
         return clazz.getDeclaredAnnotation(annotation);
     }
 
