@@ -14,7 +14,7 @@ public abstract class AbstractRepository<T, ID extends Serializable> implements 
     protected Class<T> entityClass;
     protected Class<ID> idClass;
 
-    public AbstractRepository(Class<T> entityClass, Class<ID> idClass) {
+    public AbstractRepository(Class<T> entityClass, Class<ID> idClass) { // TODO 通过范型获取字节码文件方法
         this.entityClass = entityClass;
         this.idClass = idClass;
     }
@@ -37,7 +37,7 @@ public abstract class AbstractRepository<T, ID extends Serializable> implements 
     }
 
     /**
-     * 获取实体类的被 @PrimaryKey 标识的属性的值（属于 Serializable 子类），不存在返回 null
+     * 获取实体类的被 @PrimaryKey 标识的属性的值（属于 Serializable 子类），不存在返回 null TODO 所以要求 JavaBean 的成员都为包装类
      *
      * @param entity
      * @param <S>
@@ -77,10 +77,8 @@ public abstract class AbstractRepository<T, ID extends Serializable> implements 
                     _field = field;
                     count++;
 
-                    // check 条件：有且只有一个
-                    if (count > 1) {
+                    if (count > 1)  // 有且只有一个
                         break;
-                    }
                 }
             }
         }

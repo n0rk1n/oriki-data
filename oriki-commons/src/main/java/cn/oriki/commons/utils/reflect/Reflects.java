@@ -1,6 +1,5 @@
 package cn.oriki.commons.utils.reflect;
 
-import cn.oriki.commons.constants.ClassConstants;
 import cn.oriki.commons.utils.reflect.entity.FieldTypeNameValue;
 import cn.oriki.commons.utils.string.Strings;
 import com.google.common.collect.Lists;
@@ -8,7 +7,6 @@ import com.google.common.collect.Lists;
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -57,9 +55,9 @@ public class Reflects {
      * @param <T>   泛型
      * @return Class 对象中所有权限为 public 方法的对象
      */
-    public static <T> List<Method> getPublicMethods(Class<T> clazz) {
+    /*public static <T> List<Method> getPublicMethods(Class<T> clazz) {
         return Lists.newArrayList(clazz.getMethods());
-    }
+    }*/
 
     /**
      * 获取字节码文件的所有 field (包含父类)
@@ -177,7 +175,7 @@ public class Reflects {
         Field[] fields = clazz.getDeclaredFields();
         list.addAll(Arrays.asList(fields)); // 存入本字节码文件所有 Field
         Class<? super T> superclass = clazz.getSuperclass();
-        if (Objects.nonNull(superclass) && !ClassConstants.JAVA_LANG_OBJECT.equals(superclass.getName())) {
+        if (Objects.nonNull(superclass) && !Object.class.equals(superclass.getName())) {
             getFields(list, superclass);
         }
         return list;

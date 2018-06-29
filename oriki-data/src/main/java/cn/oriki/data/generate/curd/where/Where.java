@@ -15,26 +15,6 @@ public interface Where extends Generate {
 
     void orCriteria(Criteria... criterias); // 或关系添加条件
 
-    default void andCriteria(String key, ConditionalEnum conditional, Serializable value) {
-        Criteria criteria = new Criteria();
-        {
-            criteria.setKey(key);
-            criteria.setConditional(conditional);
-            criteria.setValue(value);
-        }
-        andCriteria(criteria);
-    }
-
-    default void orCriteria(String key, ConditionalEnum conditional, Serializable value) {
-        Criteria criteria = new Criteria();
-        {
-            criteria.setKey(key);
-            criteria.setConditional(conditional);
-            criteria.setValue(value);
-        }
-        orCriteria(criteria);
-    }
-
     /**
      * in 方法，转换 in 为 or 参数
      *
@@ -57,5 +37,35 @@ public interface Where extends Generate {
         }
         orCriteria(criterias);
     }
+
+    default void equals(String key, Serializable value) {
+        Criteria criteria = new Criteria();
+        {
+            criteria.setKey(key);
+            criteria.setConditional(ConditionalEnum.EQUALS);
+            criteria.setValue(value);
+        }
+        andCriteria(criteria);
+    }
+
+    /*default Criteria greaterThan(String key, Serializable value) {
+        Criteria criteria = new Criteria();
+        {
+            criteria.setKey(key);
+            criteria.setConditional(ConditionalEnum.GREATER_THAN);
+            criteria.setValue(value);
+        }
+        return criteria;
+    }
+
+    default Criteria lessThan(String key, Serializable value) {
+        Criteria criteria = new Criteria();
+        {
+            criteria.setKey(key);
+            criteria.setConditional(ConditionalEnum.LESS_THAN);
+            criteria.setValue(value);
+        }
+        return criteria;
+    }*/
 
 }

@@ -1,8 +1,8 @@
 package cn.oriki.data.utils.reflect;
 
-import cn.oriki.commons.constants.ClassConstants;
 import cn.oriki.commons.utils.reflect.Reflects;
 
+import java.math.BigInteger;
 import java.text.ParseException;
 
 /**
@@ -14,19 +14,21 @@ public class ReflectDatas extends Reflects {
 
     // 转换 ID
     public static <ID> ID parseId(Class<ID> idClass, String idString) throws ParseException {
-        if (ClassConstants.JAVA_LANG_BTYE_CLASS_PATH.equals(idClass.getName())) {
+        if (Byte.class.equals(idClass)) {
             return (ID) Byte.valueOf(idString);
-        } else if (ClassConstants.JAVA_LANG_SHORT_CLASS_PATH.equals(idClass.getName())) {
+        } else if (Short.class.equals(idClass)) {
             return (ID) Short.valueOf(idString);
-        } else if (ClassConstants.JAVA_LANG_INTEGER_CLASS_PATH.equals(idClass.getName())) {
+        } else if (Integer.class.equals(idClass)) {
             return (ID) Integer.valueOf(idString);
-        } else if (ClassConstants.JAVA_LANG_LONG_CLASS_PATH.equals(idClass.getName())) {
+        } else if (Long.class.equals(idClass)) {
             return (ID) Long.valueOf(idString);
-        } else if (ClassConstants.JAVA_LANG_FLOAT_CLASS_PATH.equals(idClass.getName())) {
+        } else if (BigInteger.class.equals(idClass)) {
+            return (ID) BigInteger.valueOf(Long.valueOf(idString));
+        } else if (Float.class.equals(idClass)) {
             return (ID) Float.valueOf(idString);
-        } else if (ClassConstants.JAVA_LANG_DOUBLE_CLASS_PATH.equals(idClass.getName())) {
+        } else if (Double.class.equals(idClass)) {
             return (ID) Double.valueOf(idString);
-        } else if (ClassConstants.JAVA_LANG_STRING_CLASS_PATH.equals(idClass.getName())) {
+        } else if (String.class.equals(idClass)) {
             return (ID) String.valueOf(idString);
         }
         throw new ParseException("we can't parse id", 0);
@@ -100,7 +102,7 @@ public class ReflectDatas extends Reflects {
             if (Strings.isBlank(methodName) || !methodName.startsWith(prefix))// 名称不为空 或 不以prefix开头
                 flag = false;
 
-            if ("getClass".equals(methodName) && ClassConstants.JAVA_LANG_OBJECT.equals(method.getDeclaringClass().getName())) {// 不为Object中的getClass
+            if ("getClass".equals(methodName) && Object.class.equals(method.getDeclaringClass().getName())) {// 不为Object中的getClass
                 flag = false;
             }
             return flag;

@@ -52,7 +52,7 @@ public class MySQLRepositoryImplTest {
 
     @Test
     public void deleteById() throws GenerateException {
-        DeleteResult delete = this.repository.deleteById(55L);
+        DeleteResult delete = this.repository.deleteById(1L);
         System.out.println("删除的元素个数：" + delete.getNumber());
     }
 
@@ -75,13 +75,13 @@ public class MySQLRepositoryImplTest {
 
     @Test
     public void queryById() throws GenerateException {
-        Children children = this.repository.queryById(56L);
+        Children children = this.repository.queryById(1L);
         showChildren(children);
     }
 
     @Test
     public void queryByIds() throws GenerateException {
-        Collection<Children> children = this.repository.queryByIds(Arrays.asList(56L));
+        Collection<Children> children = this.repository.queryByIds(Arrays.asList(1L));
 
         for (Children child : children) {
             showChildren(child);
@@ -99,14 +99,14 @@ public class MySQLRepositoryImplTest {
 
     @Test
     public void exists() throws GenerateException {
-        boolean b = this.repository.exists(56L);
+        boolean b = this.repository.exists(1L);
         Assert.assertTrue(b);
     }
 
     @Test
     public void update() throws IllegalAccessException, GenerateException {
         Children children = new Children();
-        children.setId(56L);
+        children.setId(1L);
         children.setName("zhangsan");
         children.setAge(18);
         children.setCreateTime(new Date());

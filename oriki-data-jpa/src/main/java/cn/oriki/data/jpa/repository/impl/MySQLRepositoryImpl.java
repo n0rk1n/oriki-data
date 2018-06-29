@@ -4,7 +4,6 @@ import cn.oriki.commons.utils.reflect.entity.FieldTypeNameValue;
 import cn.oriki.data.generate.curd.delete.result.DeleteResult;
 import cn.oriki.data.generate.curd.save.result.SaveResult;
 import cn.oriki.data.generate.curd.update.result.UpdateResult;
-import cn.oriki.data.generate.curd.where.enumeration.ConditionalEnum;
 import cn.oriki.data.generate.exception.GenerateException;
 import cn.oriki.data.jpa.generate.curd.delete.AbstractJpaDelete;
 import cn.oriki.data.jpa.generate.curd.delete.impl.MySQLDeleteImpl;
@@ -25,8 +24,8 @@ import java.util.Objects;
 
 public class MySQLRepositoryImpl<T, ID extends Serializable> extends AbstractJpaRepository<T, ID> {
 
-    public MySQLRepositoryImpl(Class T, Class ID) {
-        super(T, ID);
+    public MySQLRepositoryImpl(Class<T> entityClass, Class<ID> idClass) {
+        super(entityClass, idClass);
     }
 
     @Override
@@ -38,7 +37,7 @@ public class MySQLRepositoryImpl<T, ID extends Serializable> extends AbstractJpa
         fieldTypeNameValues.forEach((fieldTypeNameValue -> {
             String fieldName = fieldTypeNameValue.getName();// 获取属性名称
             Field field = ReflectDatas.getField(entityClass, fieldName);
-            String columnName = super.getColumnName(field); // 转换为标准列名称
+            String columnName = getColumnName(field); // 转换为标准列名称
 
             Serializable value = (Serializable) fieldTypeNameValue.getValue(); // 该值一定为 Serializable 的子类（上述获取已做过滤（ fieldValue insteadof Serializable ））
 
@@ -54,7 +53,7 @@ public class MySQLRepositoryImpl<T, ID extends Serializable> extends AbstractJpa
 
         String primaryKeyColumnName = getPrimaryKeyColumnName(); // 获取 主键列名
 
-        delete.getWhere().andCriteria(primaryKeyColumnName, ConditionalEnum.EQUALS, id);
+        delete.getWhere().equals(primaryKeyColumnName, id);
 
         return executeDelete(delete);
     }
@@ -71,11 +70,11 @@ public class MySQLRepositoryImpl<T, ID extends Serializable> extends AbstractJpa
             {
                 String fieldName = fieldTypeNameValue.getName();// 获取属性名称
                 Field field = ReflectDatas.getField(entityClass, fieldName);
-                columnName = super.getColumnName(field); // 转换为标准列名称
+                columnName = getColumnName(field); // 转换为标准列名称
             }
             Serializable value = (Serializable) fieldTypeNameValue.getValue(); // 该值一定为 Serializable 的子类（上述获取已做过滤（ fieldValue insteadof Serializable ））
 
-            delete.getWhere().andCriteria(columnName, ConditionalEnum.EQUALS, value);
+            delete.getWhere().equals(columnName, value);
         }));
 
         return executeDelete(delete);
@@ -106,13 +105,13 @@ public class MySQLRepositoryImpl<T, ID extends Serializable> extends AbstractJpa
             fieldTypeNameValues.forEach((fieldTypeNameValue -> {
                 String fieldName = fieldTypeNameValue.getName();// 获取属性名称
                 Field field = ReflectDatas.getField(entityClass, fieldName);
-                String columnName = super.getColumnName(field); // 转换为标准列名称
+                String columnName = getColumnName(field); // 转换为标准列名称
                 Serializable value = (Serializable) fieldTypeNameValue.getValue(); // 该值一定为 Serializable 的子类（上述获取已做过滤（ fieldValue insteadof Serializable ））
 
                 update.update(columnName, value);
             }));
 
-            update.getWhere().andCriteria(getPrimaryKeyColumnName(), ConditionalEnum.EQUALS, id); // 拼接 where
+            update.getWhere().equals(getPrimaryKeyColumnName(), id); // 拼接 where
 
             int i = super.executeUpdate(update);
             updateResult.setNumber(i);
@@ -126,7 +125,7 @@ public class MySQLRepositoryImpl<T, ID extends Serializable> extends AbstractJpa
         AbstractJpaQuery query = new MySQLQueryImpl(getTableName());
 
         String primaryKeyColumnName = super.getPrimaryKeyColumnName();
-        query.getWhere().andCriteria(primaryKeyColumnName, ConditionalEnum.EQUALS, id); // 添加查询条件
+        query.getWhere().equals(primaryKeyColumnName, id); // 添加查询条件
 
         query.queryAll(entityClass);
 
@@ -161,10 +160,9 @@ public class MySQLRepositoryImpl<T, ID extends Serializable> extends AbstractJpa
         String primaryKeyColumnName = super.getPrimaryKeyColumnName();
         Field primaryKeyField = getPrimaryKeyField();
         String idFieldName = primaryKeyField.getName();
-        Class<ID> type = (Class<ID>) primaryKeyField.getType();
 
         query.query(primaryKeyColumnName, idFieldName); // select id
-        query.getWhere().andCriteria(primaryKeyColumnName, ConditionalEnum.EQUALS, id); // where id = ?
+        query.getWhere().equals(primaryKeyColumnName, id); // where id = ?
 
         ID value = queryValue(query, idClass);
 

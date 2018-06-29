@@ -25,30 +25,24 @@ public abstract class AbstractJpaSave extends AbstractSave {
         // GOAL:
         // INSERT INTO table_name ( column1 , column2 , column3 ) VALUES ( ? , ? , ? )
         //                                                              value1 value2 value3
-        StringBuffer stringBuffer = new StringBuffer();
-
-        stringBuffer.append(INSERT_INTO_KEY_WORD); // INSERT INTO
-
-        stringBuffer.append(getFrom().getFromName()); // 获取表名
-
-        stringBuffer.append(Generate.LEFT_PARENTHESIS); // (
-
+        StringBuilder stringBuilder = new StringBuilder();
         GenerateResult params = this.generateParams();
-        stringBuffer.append(params.getGenerateResult()); // column1 , column2 , column3
 
-        stringBuffer.append(Generate.RIGHT_PARENTHESIS); // )
+        stringBuilder.append(INSERT_INTO_KEY_WORD); // INSERT INTO
+        stringBuilder.append(getFrom().getFromName()); // 获取表名
 
-        stringBuffer.append(VLAUES_KEY_WORD); // VALUES
+        stringBuilder.append(Generate.LEFT_PARENTHESIS + params.getGenerateResult() + RIGHT_PARENTHESIS); // ( column1 , column2 , column3 )
 
-        stringBuffer.append(Generate.LEFT_PARENTHESIS); // (
-        String join2 = Collections.join(Collections.nCopies(params.getParams().size(), Generate.INJECTION), " , ");
-        stringBuffer.append(join2);
-        stringBuffer.append(Generate.RIGHT_PARENTHESIS);
+        stringBuilder.append(VLAUES_KEY_WORD); // VALUES
+
+        String join2 = Collections.join(Collections.nCopies(params.getParams().size(), Generate.INJECTION), Generate.COMMA);
+        stringBuilder.append(Generate.LEFT_PARENTHESIS + join2 + Generate.RIGHT_PARENTHESIS); // ( ? , ? , ? )
 
         GenerateResult result = new GenerateResult();
-        result.setParams(params.getParams());
-        result.setGenerateResult(stringBuffer.toString());
-
+        {
+            result.setParams(params.getParams());
+            result.setGenerateResult(stringBuilder.toString());
+        }
         return result;
     }
 

@@ -11,7 +11,7 @@ import java.util.Objects;
 public abstract class AbstractSave implements Save {
 
     private From from;
-    private Map<String, Serializable> params;
+    private Map<String, Serializable> params; // TODO 批量插入，应换成 List<Serializable>
 
     public AbstractSave(From from) {
         this.from = from;

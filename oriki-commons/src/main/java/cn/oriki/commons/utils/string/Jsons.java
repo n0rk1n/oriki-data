@@ -1,6 +1,5 @@
 package cn.oriki.commons.utils.string;
 
-import cn.oriki.commons.constants.StringConstants;
 import cn.oriki.commons.utils.collection.Collections;
 import com.alibaba.fastjson.JSON;
 
@@ -41,7 +40,7 @@ public class Jsons {
      */
     public static <S> String toJson(S object) {
         if (Objects.isNull(object)) {
-            return StringConstants.EMPTY_STRING_VALUE; // ""
+            return EMPTY_OBJECT_JSON;
         }
 
         // 为空集合

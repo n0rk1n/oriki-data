@@ -34,8 +34,8 @@ public abstract class AbstractJpaRepository<T, ID extends Serializable> extends 
 
     private JdbcTemplate jdbcTemplate;
 
-    public AbstractJpaRepository(Class T, Class ID) {
-        super(T, ID);
+    public AbstractJpaRepository(Class<T> entityClass, Class<ID> idClass) {
+        super(entityClass, idClass);
     }
 
     /**
@@ -99,7 +99,7 @@ public abstract class AbstractJpaRepository<T, ID extends Serializable> extends 
      */
     protected String getPrimaryKeyColumnName() {
         Field field = getPrimaryKeyField();
-        return this.getColumnName(field);
+        return getColumnName(field);
     }
 
     /**
@@ -124,8 +124,8 @@ public abstract class AbstractJpaRepository<T, ID extends Serializable> extends 
     /**
      * 执行 update 方法操作
      *
-     * @param update
-     * @return
+     * @param update Update 子类
+     * @return 影响行数
      */
     protected int executeUpdate(AbstractJpaUpdate update) throws GenerateException {
         GenerateResult generateResult = update.generate();
@@ -139,8 +139,8 @@ public abstract class AbstractJpaRepository<T, ID extends Serializable> extends 
     /**
      * 执行 save 方法操作
      *
-     * @param save
-     * @return
+     * @param save Save 子类
+     * @return SaveResult
      */
     protected <S extends T> SaveResult<S, ID> executeSave(AbstractJpaSave save, S entity) throws GenerateException, IllegalAccessException {
         GenerateResult generateResult = save.generate();
@@ -181,27 +181,27 @@ public abstract class AbstractJpaRepository<T, ID extends Serializable> extends 
     /**
      * 执行 Query 查询单条数据的时候使用的操作
      *
-     * @param query
-     * @return
-     * @throws GenerateException
+     * @param query Query 子类
+     * @return 查询的结果对象
+     * @throws GenerateException 生成 SQL 异常抛出
      */
     protected T queryOne(AbstractJpaQuery query) throws GenerateException {
         GenerateResult generateResult = query.generate();
         String sql = generateResult.getGenerateResult();
         List<Serializable> params = generateResult.getParams();
 
-        return this.jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<T>(entityClass), params.toArray());
+        return this.jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(entityClass), params.toArray());
     }
 
     /**
      * 执行 Query 查询某个类型值的查询
      *
-     * @param query
-     * @param <S>
-     * @return
-     * @throws GenerateException
+     * @param query Query 子类
+     * @param <E>   范型
+     * @return 查询特定范型的结果
+     * @throws GenerateException 生成 SQL 异常抛出
      */
-    protected <S> S queryValue(AbstractJpaQuery query, Class<S> clazz) throws GenerateException {
+    protected <E> E queryValue(AbstractJpaQuery query, Class<E> clazz) throws GenerateException {
         GenerateResult generateResult = query.generate();
         String sql = generateResult.getGenerateResult();
         List<Serializable> params = generateResult.getParams();
@@ -212,15 +212,16 @@ public abstract class AbstractJpaRepository<T, ID extends Serializable> extends 
     /**
      * 执行 Query 查询数据列表的时候使用的操作
      *
-     * @param query
-     * @return
+     * @param query Query 子类
+     * @return 查询结果集合
+     * @throws GenerateException 生成 SQL 异常抛出
      */
     protected List<T> queryList(AbstractJpaQuery query) throws GenerateException {
         GenerateResult generateResult = query.generate();
         List<Serializable> params = generateResult.getParams();
         String sql = generateResult.getGenerateResult();
 
-        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<T>(entityClass), params.toArray());
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(entityClass), params.toArray());
     }
 
     public JdbcTemplate getJdbcTemplate() {
@@ -232,8 +233,7 @@ public abstract class AbstractJpaRepository<T, ID extends Serializable> extends 
     }
 
     public void setJdbcTemplate(DataSource dataSource) {
-        JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-        this.jdbcTemplate = jdbcTemplate;
+        this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
 }

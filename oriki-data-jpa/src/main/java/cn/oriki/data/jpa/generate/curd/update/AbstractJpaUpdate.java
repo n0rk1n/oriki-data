@@ -36,10 +36,9 @@ public class AbstractJpaUpdate extends AbstractUpdate {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(UPDATE_KEY_WORD); // UPDATE
 
-        String tableName = super.getFrom().getFromName();
-        stringBuilder.append(tableName); // table_name
+        stringBuilder.append(super.getFrom().getFromName()); // table_name
 
-        stringBuilder.append(SET_KEY_WORD);
+        stringBuilder.append(SET_KEY_WORD); // SET
 
         List<String> sp = Lists.newArrayList(); // GOAL : key1 = ?
         List<Serializable> setPar = Lists.newArrayList(); // set 的参数

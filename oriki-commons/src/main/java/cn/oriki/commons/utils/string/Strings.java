@@ -41,10 +41,9 @@ public class Strings {
      * @return 包含 s 返回 true ，不包含或 s 为空字符串返回 false
      * @throws IllegalArgumentException string 为空时抛出的异常
      */
-    public static boolean isContain(String string, CharSequence s) {
-        if (isBlank(string))
-            throw new IllegalArgumentException("input string must be not null");
+    /*public static boolean isContain(String string, CharSequence s) {
+        if (isBlank(string) && isNotBlank(s)) return false;
         return !isBlank(s) && string.contains(s);
-    }
+    }*/
 
 }

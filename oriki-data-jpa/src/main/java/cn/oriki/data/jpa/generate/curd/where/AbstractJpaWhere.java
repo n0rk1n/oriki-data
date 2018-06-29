@@ -30,6 +30,7 @@ public class AbstractJpaWhere extends AbstractWhere {
             //      WHERE ( key1 = ? or key2 = ? ) and ( key3 = ? or key4 = ? ) and ( key5 = ? )
             //                   value1      value2           value3      value4           value5
             StringBuilder stringBuilder = new StringBuilder();
+
             stringBuilder.append(WHERE_KEY_WORD); // WHERE
 
             List<String> cr = Lists.newArrayList();

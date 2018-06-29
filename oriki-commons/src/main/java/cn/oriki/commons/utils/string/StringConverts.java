@@ -15,7 +15,7 @@ public class StringConverts {
      * @param string 可能含全角的 String
      * @return 转换后 String
      */
-    public static String toSBC(String string) {
+    /*public static String toSBC(String string) {
         char[] chars = string.toCharArray();
         StringBuilder stringBuilder = new StringBuilder();
 
@@ -30,7 +30,7 @@ public class StringConverts {
         }
 
         return stringBuilder.toString();
-    }
+    }*/
 
     /**
      * 字符串中半角转全角
@@ -38,7 +38,7 @@ public class StringConverts {
      * @param string 可能含半角的String
      * @return 转换后 String
      */
-    public static String toDBC(String string) {
+    /*public static String toDBC(String string) {
         char[] chars = string.toCharArray();
         StringBuilder stringBuilder = new StringBuilder();
 
@@ -53,7 +53,7 @@ public class StringConverts {
         }
 
         return stringBuilder.toString();
-    }
+    }*/
 
     // Java命名和标准表结构命名的转换--------------------------------------------------------------------------------------
 
@@ -130,7 +130,7 @@ public class StringConverts {
      * @return JavaFieldName
      */
     public static String toJavaFieldName(String SQLColumnName) {
-        if (Strings.isNotBlank(SQLColumnName)) {
+        /*if (Strings.isNotBlank(SQLColumnName)) {
             SQLColumnName = SQLColumnName.toLowerCase();
 
             String[] strings = SQLColumnName.split("_");
@@ -147,8 +147,8 @@ public class StringConverts {
                 }
                 return className.toString();
             }
-        }
-        return SQLColumnName;
+        }*/
+        return toJavaClassName(SQLColumnName, "");
     }
 
     // Java 转换为 SQL ，不存在前缀

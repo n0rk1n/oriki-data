@@ -1,25 +1,30 @@
 package cn.oriki.data.generate.curd.where;
 
-import cn.oriki.commons.utils.collection.Collections;
 import cn.oriki.data.generate.curd.where.entity.Criteria;
 import cn.oriki.data.generate.curd.where.entity.OperatorCreterias;
 import cn.oriki.data.generate.curd.where.enumeration.OperatorEnum;
 import com.google.common.collect.Lists;
 
+import java.util.Collections;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Objects;
 
 public abstract class AbstractWhere implements Where {
 
     private LinkedList<OperatorCreterias> operatorCreterias; // 条件列表
 
+    public AbstractWhere() {
+        operatorCreterias = Lists.newLinkedList();
+    }
+
     @Override
     public void clear() {
-        if (Collections.isNotNullAndHasElements(operatorCreterias)) { // 不为空且有值
-            this.operatorCreterias.clear();
-        } else if (operatorCreterias == null) { // 为空
+        if (Objects.isNull(operatorCreterias)) {
             this.operatorCreterias = Lists.newLinkedList();
+        } else if (this.operatorCreterias.size() > 0) {
+            this.operatorCreterias.clear();
         }
-        // 不为空没有元素，不做处理
     }
 
     @Override
@@ -48,12 +53,8 @@ public abstract class AbstractWhere implements Where {
         return operatorCreteria;
     }
 
-    public LinkedList<OperatorCreterias> getOperatorCreterias() {
-        return operatorCreterias;
-    }
-
-    public AbstractWhere() {
-        operatorCreterias = Lists.newLinkedList();
+    public List<OperatorCreterias> getOperatorCreterias() {
+        return Collections.unmodifiableList(operatorCreterias);
     }
 
 }

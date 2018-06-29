@@ -33,9 +33,9 @@ public class Collections {
      * @param <T>        泛型
      * @return Collection 对象存在 & 没有元素，返回 true
      */
-    public static <T> boolean isNotNullButEmpty(Collection<T> collection) {
+    /*public static <T> boolean isNotNullButEmpty(Collection<T> collection) {
         return Objects.nonNull(collection) && collection.isEmpty();
-    }
+    }*/
 
     /**
      * 判断 Collection 对象未实例化或没有元素

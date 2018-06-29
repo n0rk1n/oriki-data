@@ -17,7 +17,7 @@ public abstract class AbstractJpaFrom extends AbstractFrom {
     public GenerateResult generate() throws GenerateException {
         String tableName = getFromName();
         if (Strings.isNotBlank(tableName)) {
-            String fromTableName = FROM_KEY_WORD + " " + tableName + " "; // FROM table_name ， table_name - 直接为来源名称
+            String fromTableName = FROM_KEY_WORD + tableName + " "; // FROM table_name ， table_name - 直接为来源名称
             return new GenerateResult(fromTableName);
         }
         throw new GenerateException("tableName can't be null");
