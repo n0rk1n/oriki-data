@@ -1,5 +1,6 @@
 package cn.oriki.data.generate.curd.predicate;
 
+import cn.oriki.data.generate.curd.pageable.Pageable;
 import cn.oriki.data.generate.curd.sort.Sort;
 import cn.oriki.data.generate.curd.where.Where;
 
@@ -7,10 +8,12 @@ public class AbstractPredicate implements Predicate {
 
     private Where where;
     private Sort sort;
+    private Pageable pageable;
 
-    public AbstractPredicate(Where where, Sort sort) {
+    public AbstractPredicate(Where where, Sort sort, Pageable pageable) {
         this.where = where;
         this.sort = sort;
+        this.pageable = pageable;
     }
 
     public Where getWhere() {
@@ -27,6 +30,15 @@ public class AbstractPredicate implements Predicate {
 
     public void setSort(Sort sort) {
         this.sort = sort;
+    }
+
+    @Override
+    public Pageable getPageable() {
+        return pageable;
+    }
+
+    public void setPageable(Pageable pageable) {
+        this.pageable = pageable;
     }
 
 }

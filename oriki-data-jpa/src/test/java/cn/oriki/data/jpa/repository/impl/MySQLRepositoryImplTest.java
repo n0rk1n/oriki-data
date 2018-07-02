@@ -6,6 +6,7 @@ import cn.oriki.data.generate.curd.save.result.SaveResult;
 import cn.oriki.data.generate.curd.update.result.UpdateResult;
 import cn.oriki.data.generate.exception.GenerateException;
 import cn.oriki.data.jpa.entity.Children;
+import cn.oriki.data.jpa.generate.curd.pageable.impl.MySQLPageableImpl;
 import cn.oriki.data.jpa.generate.curd.predicate.impl.MySQLPredicateImpl;
 import cn.oriki.data.jpa.generate.curd.sort.impl.MySQLSortImpl;
 import cn.oriki.data.jpa.generate.curd.where.impl.MySQLWhereImpl;
@@ -124,7 +125,7 @@ public class MySQLRepositoryImplTest {
     public void query() throws GenerateException {
         MySQLSortImpl sort = new MySQLSortImpl();
         sort.orderAsc("id");
-        MySQLPredicateImpl predicate = new MySQLPredicateImpl(new MySQLWhereImpl(), sort);
+        MySQLPredicateImpl predicate = new MySQLPredicateImpl(new MySQLWhereImpl(), sort, new MySQLPageableImpl(2, 1));
 
         Iterable<Children> query = this.repository.query(predicate);
 

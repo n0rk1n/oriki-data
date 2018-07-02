@@ -66,6 +66,7 @@ public abstract class AbstractJpaQuery extends AbstractQuery {
 
     @Override
     public GenerateResult generate() throws GenerateException {
+        GenerateResult generateResult = new GenerateResult();
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(SELECT_KEY_WORD); // SELECT
 
@@ -83,21 +84,25 @@ public abstract class AbstractJpaQuery extends AbstractQuery {
         GenerateResult whereResult = getPredicate().getWhere().generate();
         String whereSQL = whereResult.getGenerateResult();
         stringBuilder.append(whereSQL); // where ...
+        generateResult.setParams(whereResult.getParams());
 
         // 添加 sort 排序 sql
         if (Objects.nonNull(getPredicate().getSort()) && 0 != getPredicate().getSort().size()) {
-            GenerateResult generateResult = getPredicate().getSort().generate();
-            String sortSQL = generateResult.getGenerateResult();
+            GenerateResult sortResult = getPredicate().getSort().generate();
+            String sortSQL = sortResult.getGenerateResult();
             if (Strings.isNotBlank(sortSQL)) {
                 stringBuilder.append(sortSQL);
             }
         }
 
-        GenerateResult generateResult = new GenerateResult();
-        {
-            generateResult.setGenerateResult(stringBuilder.toString());
-            generateResult.setParams(whereResult.getParams());
+        // 添加分页数据
+        if (Objects.nonNull(getPredicate().getPageable()) && Objects.nonNull(getPredicate().getPageable().getPageNumber()) && Objects.nonNull(getPredicate().getPageable().getPageSize())) {
+            stringBuilder.append(getPredicate().getPageable().generate().getGenerateResult());
+            // 分页参数
+            generateResult.setParams(getPredicate().getPageable().generate().getParams());
         }
+
+        generateResult.setGenerateResult(stringBuilder.toString());
 
         return generateResult;
     }
