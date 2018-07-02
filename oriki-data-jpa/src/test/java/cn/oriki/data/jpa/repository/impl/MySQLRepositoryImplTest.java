@@ -6,6 +6,9 @@ import cn.oriki.data.generate.curd.save.result.SaveResult;
 import cn.oriki.data.generate.curd.update.result.UpdateResult;
 import cn.oriki.data.generate.exception.GenerateException;
 import cn.oriki.data.jpa.entity.Children;
+import cn.oriki.data.jpa.generate.curd.predicate.impl.MySQLPredicateImpl;
+import cn.oriki.data.jpa.generate.curd.sort.impl.MySQLSortImpl;
+import cn.oriki.data.jpa.generate.curd.where.impl.MySQLWhereImpl;
 import com.alibaba.druid.pool.DruidDataSource;
 import org.junit.Assert;
 import org.junit.Before;
@@ -117,6 +120,19 @@ public class MySQLRepositoryImplTest {
         System.out.println("影响行数：" + updateResult.getNumber());
     }
 
+    @Test
+    public void query() throws GenerateException {
+        MySQLSortImpl sort = new MySQLSortImpl();
+        sort.orderAsc("id");
+        MySQLPredicateImpl predicate = new MySQLPredicateImpl(new MySQLWhereImpl(), sort);
+
+        Iterable<Children> query = this.repository.query(predicate);
+
+        for (Children children : query) {
+            showChildren(children);
+        }
+    }
+
     private void showChildren(Children children) {
         if (Objects.nonNull(children)) {
             System.out.println("id:" + children.getId());
@@ -128,5 +144,6 @@ public class MySQLRepositoryImplTest {
             System.out.println(" ------");
         }
     }
+
 
 }

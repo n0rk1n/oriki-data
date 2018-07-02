@@ -2,6 +2,7 @@ package cn.oriki.data.jpa.repository.impl;
 
 import cn.oriki.commons.utils.reflect.entity.FieldTypeNameValue;
 import cn.oriki.data.generate.curd.delete.result.DeleteResult;
+import cn.oriki.data.generate.curd.predicate.Predicate;
 import cn.oriki.data.generate.curd.save.result.SaveResult;
 import cn.oriki.data.generate.curd.update.result.UpdateResult;
 import cn.oriki.data.generate.exception.GenerateException;
@@ -125,7 +126,7 @@ public class MySQLRepositoryImpl<T, ID extends Serializable> extends AbstractJpa
         AbstractJpaQuery query = new MySQLQueryImpl(getTableName());
 
         String primaryKeyColumnName = super.getPrimaryKeyColumnName();
-        query.getWhere().equals(primaryKeyColumnName, id); // 添加查询条件
+        query.getPredicate().getWhere().equals(primaryKeyColumnName, id); // 添加查询条件
 
         query.queryAll(entityClass);
 
@@ -137,7 +138,7 @@ public class MySQLRepositoryImpl<T, ID extends Serializable> extends AbstractJpa
         AbstractJpaQuery query = new MySQLQueryImpl(getTableName());
 
         String primaryKeyColumnName = super.getPrimaryKeyColumnName();
-        query.getWhere().in(primaryKeyColumnName, ids);
+        query.getPredicate().getWhere().in(primaryKeyColumnName, ids);
 
         query.queryAll(entityClass);
 
@@ -162,11 +163,17 @@ public class MySQLRepositoryImpl<T, ID extends Serializable> extends AbstractJpa
         String idFieldName = primaryKeyField.getName();
 
         query.query(primaryKeyColumnName, idFieldName); // select id
-        query.getWhere().equals(primaryKeyColumnName, id); // where id = ?
+        query.getPredicate().getWhere().equals(primaryKeyColumnName, id); // where id = ?
 
         ID value = queryValue(query, idClass);
 
         return Objects.nonNull(value);
+    }
+
+    @Override
+    public Iterable<T> query(Predicate predicate) throws GenerateException {
+        AbstractJpaQuery query = new MySQLQueryImpl(predicate, getTableName());
+        return queryList(query);
     }
 
 }

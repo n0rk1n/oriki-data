@@ -4,8 +4,8 @@ import cn.oriki.commons.utils.collection.Collections;
 import cn.oriki.commons.utils.string.Strings;
 import cn.oriki.data.generate.Generate;
 import cn.oriki.data.generate.curd.from.From;
+import cn.oriki.data.generate.curd.predicate.Predicate;
 import cn.oriki.data.generate.curd.query.AbstractQuery;
-import cn.oriki.data.generate.curd.where.Where;
 import cn.oriki.data.generate.exception.GenerateException;
 import cn.oriki.data.generate.result.GenerateResult;
 import cn.oriki.data.jpa.repository.AbstractJpaRepository;
@@ -28,10 +28,15 @@ public abstract class AbstractJpaQuery extends AbstractQuery {
 
     private List<String> selectQuery; // 查询字段 key _separator_ alias
 
-    public AbstractJpaQuery(Where where, From from) {
-        super(where, from);
+    public AbstractJpaQuery(Predicate predicate, From from) {
+        super(predicate, from);
         selectQuery = Lists.newArrayList();
     }
+
+    /*public AbstractJpaQuery(Where where, From from) {
+        super(where, from);
+        selectQuery = Lists.newArrayList();
+    }*/
 
     // 不推荐使用
     @Override
@@ -75,9 +80,18 @@ public abstract class AbstractJpaQuery extends AbstractQuery {
         String fromSQL = getFrom().generate().getGenerateResult();
         stringBuilder.append(fromSQL); // from table_name
 
-        GenerateResult whereResult = getWhere().generate();
+        GenerateResult whereResult = getPredicate().getWhere().generate();
         String whereSQL = whereResult.getGenerateResult();
         stringBuilder.append(whereSQL); // where ...
+
+        // 添加 sort 排序 sql
+        if (Objects.nonNull(getPredicate().getSort()) && 0 != getPredicate().getSort().size()) {
+            GenerateResult generateResult = getPredicate().getSort().generate();
+            String sortSQL = generateResult.getGenerateResult();
+            if (Strings.isNotBlank(sortSQL)) {
+                stringBuilder.append(sortSQL);
+            }
+        }
 
         GenerateResult generateResult = new GenerateResult();
         {
