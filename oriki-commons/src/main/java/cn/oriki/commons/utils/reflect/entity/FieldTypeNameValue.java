@@ -13,6 +13,16 @@ public class FieldTypeNameValue {
     private String name; // 成员变量名称
     private Object value; // 成员变量的值
 
+    public FieldTypeNameValue(Class<?> type, String name, Object value) {
+        // 保证 type 和 name 不能为 null
+        if (Objects.isNull(type) || Objects.isNull(name))
+            throw new IllegalArgumentException(getClass().getName() + " class instance fail , because fieldType and fieldName must be not null");
+
+        this.type = type;
+        this.name = name;
+        this.value = value;
+    }
+
     public Class<?> getType() {
         return type;
     }
@@ -40,16 +50,6 @@ public class FieldTypeNameValue {
     }
 
     public void setValue(Object value) {
-        this.value = value;
-    }
-
-    public FieldTypeNameValue(Class<?> type, String name, Object value) {
-        // 保证 type 和 name 不能为 null
-        if (Objects.isNull(type) || Objects.isNull(name))
-            throw new IllegalArgumentException(getClass().getName() + " class instance fail , because fieldType and fieldName must be not null");
-
-        this.type = type;
-        this.name = name;
         this.value = value;
     }
 

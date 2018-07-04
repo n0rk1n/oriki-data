@@ -58,7 +58,7 @@ public class Collections {
      * @param <T>        泛型
      * @return 拼接后的字符串
      */
-    public static <T> String join(final Collection<T> collection, final String separator, String prefix, String suffix) {
+    public static <T> String join(Collection<T> collection, String separator, String prefix, String suffix) {
         return prefix + join(collection, separator) + suffix;
     }
 
@@ -72,7 +72,7 @@ public class Collections {
      * @param <T>        泛型
      * @return 拼接后字符串
      */
-    public static <T> String join(Collection<T> collection, final String separator) {
+    public static <T> String join(Collection<T> collection, String separator) {
         collection = collection.stream().filter(Objects::nonNull).collect(Collectors.toList()); // 过滤集合中为 null 元素
         return StringUtils.join(collection, separator);
     }
