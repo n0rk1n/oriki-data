@@ -1,7 +1,7 @@
 package cn.oriki.data.generate.curd.update;
 
-import cn.oriki.data.generate.curd.from.From;
-import cn.oriki.data.generate.curd.where.Where;
+import cn.oriki.data.generate.base.from.AbstractFrom;
+import cn.oriki.data.generate.base.where.AbstractWhere;
 import com.google.common.collect.Maps;
 
 import java.io.Serializable;
@@ -11,11 +11,11 @@ import java.util.Objects;
 
 public abstract class AbstractUpdate implements Update {
 
-    private Where where;
-    private From from;
+    private AbstractWhere where;
+    private AbstractFrom from;
     private Map<String, Serializable> setParams;
 
-    public AbstractUpdate(Where where, From from) {
+    public AbstractUpdate(AbstractWhere where, AbstractFrom from) {
         this.where = where;
         this.from = from;
         setParams = Maps.newHashMap();
@@ -29,11 +29,11 @@ public abstract class AbstractUpdate implements Update {
         setParams.put(key, value);
     }
 
-    public Where getWhere() {
+    public AbstractWhere getWhere() {
         return where;
     }
 
-    public From getFrom() {
+    public AbstractFrom getFrom() {
         return from;
     }
 

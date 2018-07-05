@@ -1,6 +1,6 @@
 package cn.oriki.data.generate.curd.save;
 
-import cn.oriki.data.generate.curd.from.From;
+import cn.oriki.data.generate.base.from.AbstractFrom;
 import com.google.common.collect.Maps;
 
 import java.io.Serializable;
@@ -10,25 +10,24 @@ import java.util.Objects;
 
 public abstract class AbstractSave implements Save {
 
-    private From from;
+    private AbstractFrom from;
     private Map<String, Serializable> params; // TODO 批量插入，应换成 List<Serializable>
 
-    public AbstractSave(From from) {
+    public AbstractSave(AbstractFrom from) {
         this.from = from;
         params = Maps.newHashMap();
     }
 
     @Override
     public void save(String key, Serializable value) {
-        // 如果 params 为空，创建并添加
-        if (Objects.isNull(params)) {
+        if (Objects.isNull(params)) { // 如果 params 为空，创建并添加
             params = Maps.newHashMap();
         }
-        // 直接添加
-        params.put(key, value);
+
+        params.put(key, value); // 直接添加
     }
 
-    public From getFrom() {
+    public AbstractFrom getFrom() {
         return from;
     }
 

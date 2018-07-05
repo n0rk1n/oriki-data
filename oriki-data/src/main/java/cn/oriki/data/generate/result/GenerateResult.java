@@ -9,7 +9,7 @@ import java.util.Objects;
 public class GenerateResult {
 
     private String generateResult; // 生成 sql 语句片段
-    private List<Serializable> params; // 语句对应注入参数，不为空，但可以没有元素
+    private List<Serializable> params; // 语句对应注入参数，如果没有参数，为 null 或空集合
 
     public String getGenerateResult() {
         return generateResult;

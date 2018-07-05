@@ -2,10 +2,10 @@ package cn.oriki.data.jpa.generate.curd.update;
 
 import cn.oriki.commons.utils.collection.Collections;
 import cn.oriki.data.generate.Generate;
-import cn.oriki.data.generate.curd.from.From;
+import cn.oriki.data.generate.base.from.AbstractFrom;
+import cn.oriki.data.generate.base.where.AbstractWhere;
+import cn.oriki.data.generate.base.where.enumeration.ConditionalEnum;
 import cn.oriki.data.generate.curd.update.AbstractUpdate;
-import cn.oriki.data.generate.curd.where.Where;
-import cn.oriki.data.generate.curd.where.enumeration.ConditionalEnum;
 import cn.oriki.data.generate.exception.GenerateException;
 import cn.oriki.data.generate.result.GenerateResult;
 import com.google.common.collect.Lists;
@@ -20,7 +20,7 @@ public class AbstractJpaUpdate extends AbstractUpdate {
     private static final String UPDATE_KEY_WORD = " UPDATE ";
     private static final String SET_KEY_WORD = " SET ";
 
-    public AbstractJpaUpdate(Where where, From from) {
+    public AbstractJpaUpdate(AbstractWhere where, AbstractFrom from) {
         super(where, from);
     }
 

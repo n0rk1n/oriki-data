@@ -7,8 +7,8 @@ package cn.oriki.data.utils.reflect;
  */
 public interface ReflectConstants {
 
-    String GETTER_METHOD_PREFIX = "get";
+//    String GETTER_METHOD_PREFIX = "get";
 
-    String SETTER_METHOD_PREFIX = "set";
+//    String SETTER_METHOD_PREFIX = "set";
 
 }

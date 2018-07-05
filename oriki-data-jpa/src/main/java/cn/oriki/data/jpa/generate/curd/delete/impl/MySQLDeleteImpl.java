@@ -1,8 +1,8 @@
 package cn.oriki.data.jpa.generate.curd.delete.impl;
 
 import cn.oriki.data.jpa.generate.curd.delete.AbstractJpaDelete;
-import cn.oriki.data.jpa.generate.curd.from.impl.MySQLFromImpl;
-import cn.oriki.data.jpa.generate.curd.where.impl.MySQLWhereImpl;
+import cn.oriki.data.jpa.generate.base.from.impl.MySQLFromImpl;
+import cn.oriki.data.jpa.generate.base.where.impl.MySQLWhereImpl;
 
 public class MySQLDeleteImpl extends AbstractJpaDelete {
 

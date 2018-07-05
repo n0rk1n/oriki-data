@@ -1,24 +1,24 @@
 package cn.oriki.data.generate.curd.delete;
 
-import cn.oriki.data.generate.curd.from.From;
-import cn.oriki.data.generate.curd.where.Where;
+import cn.oriki.data.generate.base.from.AbstractFrom;
+import cn.oriki.data.generate.base.where.AbstractWhere;
 
 public abstract class AbstractDelete implements Delete {
 
-    private Where where;
-    private From from;
+    private AbstractWhere where;
+    private AbstractFrom from;
 
-    public AbstractDelete(Where where, From from) {
+    public AbstractDelete(AbstractWhere where, AbstractFrom from) {
         this.where = where;
         this.from = from;
     }
 
-    public Where getWhere() {
+    public AbstractWhere getWhere() {
         return where;
     }
 
-    public From getFrom() {
+    public AbstractFrom getFrom() {
         return from;
     }
-
+    
 }

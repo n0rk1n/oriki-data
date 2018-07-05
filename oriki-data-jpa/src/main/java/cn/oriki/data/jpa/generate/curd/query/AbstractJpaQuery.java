@@ -3,8 +3,8 @@ package cn.oriki.data.jpa.generate.curd.query;
 import cn.oriki.commons.utils.collection.Collections;
 import cn.oriki.commons.utils.string.Strings;
 import cn.oriki.data.generate.Generate;
-import cn.oriki.data.generate.curd.from.From;
-import cn.oriki.data.generate.curd.predicate.Predicate;
+import cn.oriki.data.generate.base.from.AbstractFrom;
+import cn.oriki.data.generate.base.predicate.AbstractPredicate;
 import cn.oriki.data.generate.curd.query.AbstractQuery;
 import cn.oriki.data.generate.exception.GenerateException;
 import cn.oriki.data.generate.result.GenerateResult;
@@ -28,20 +28,15 @@ public abstract class AbstractJpaQuery extends AbstractQuery {
 
     private List<String> selectQuery; // 查询字段 key _separator_ alias
 
-    public AbstractJpaQuery(Predicate predicate, From from) {
+    public AbstractJpaQuery(AbstractPredicate predicate, AbstractFrom from) {
         super(predicate, from);
         selectQuery = Lists.newArrayList();
     }
 
-    /*public AbstractJpaQuery(Where where, From from) {
-        super(where, from);
-        selectQuery = Lists.newArrayList();
-    }*/
 
-    // 不推荐使用
     @Override
     @Deprecated
-    public void query(String key) {
+    public void query(String key) { // 不推荐使用
         addSelect(key, NO_ALIAS);
     }
 

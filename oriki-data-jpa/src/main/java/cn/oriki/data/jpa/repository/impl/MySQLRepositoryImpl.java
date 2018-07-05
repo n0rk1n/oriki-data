@@ -1,8 +1,8 @@
 package cn.oriki.data.jpa.repository.impl;
 
 import cn.oriki.commons.utils.reflect.entity.FieldTypeNameValue;
+import cn.oriki.data.generate.base.predicate.AbstractPredicate;
 import cn.oriki.data.generate.curd.delete.result.DeleteResult;
-import cn.oriki.data.generate.curd.predicate.Predicate;
 import cn.oriki.data.generate.curd.save.result.SaveResult;
 import cn.oriki.data.generate.curd.update.result.UpdateResult;
 import cn.oriki.data.generate.exception.GenerateException;
@@ -171,7 +171,7 @@ public class MySQLRepositoryImpl<T, ID extends Serializable> extends AbstractJpa
     }
 
     @Override
-    public Iterable<T> query(Predicate predicate) throws GenerateException {
+    public Iterable<T> query(AbstractPredicate predicate) throws GenerateException {
         AbstractJpaQuery query = new MySQLQueryImpl(predicate, getTableName());
         return queryList(query);
     }

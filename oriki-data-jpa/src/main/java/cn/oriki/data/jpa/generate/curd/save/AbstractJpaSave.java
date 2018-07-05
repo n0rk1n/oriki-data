@@ -2,7 +2,7 @@ package cn.oriki.data.jpa.generate.curd.save;
 
 import cn.oriki.commons.utils.collection.Collections;
 import cn.oriki.data.generate.Generate;
-import cn.oriki.data.generate.curd.from.From;
+import cn.oriki.data.generate.base.from.AbstractFrom;
 import cn.oriki.data.generate.curd.save.AbstractSave;
 import cn.oriki.data.generate.exception.GenerateException;
 import cn.oriki.data.generate.result.GenerateResult;
@@ -16,7 +16,7 @@ public abstract class AbstractJpaSave extends AbstractSave {
     private static final String INSERT_INTO_KEY_WORD = "INSERT INTO ";
     private static final String VLAUES_KEY_WORD = " VALUES ";
 
-    public AbstractJpaSave(From from) {
+    public AbstractJpaSave(AbstractFrom from) {
         super(from);
     }
 

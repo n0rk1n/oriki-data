@@ -1,8 +1,8 @@
 package cn.oriki.data.jpa.generate.curd.delete;
 
+import cn.oriki.data.generate.base.from.AbstractFrom;
+import cn.oriki.data.generate.base.where.AbstractWhere;
 import cn.oriki.data.generate.curd.delete.AbstractDelete;
-import cn.oriki.data.generate.curd.from.From;
-import cn.oriki.data.generate.curd.where.Where;
 import cn.oriki.data.generate.exception.GenerateException;
 import cn.oriki.data.generate.result.GenerateResult;
 
@@ -10,7 +10,7 @@ public class AbstractJpaDelete extends AbstractDelete {
 
     private static final String DELETE_KEY_WORD = " DELETE ";
 
-    public AbstractJpaDelete(Where where, From from) {
+    public AbstractJpaDelete(AbstractWhere where, AbstractFrom from) {
         super(where, from);
     }
 
