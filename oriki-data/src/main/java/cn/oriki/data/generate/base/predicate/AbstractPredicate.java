@@ -65,14 +65,26 @@ public abstract class AbstractPredicate implements Predicate, Where, Sort, Pagea
         return where;
     }
 
+    public void setWhere(AbstractWhere where) {
+        this.where = where;
+    }
+
     @Override
     public AbstractSort getSort() {
         return sort;
     }
 
+    public void setSort(AbstractSort sort) {
+        this.sort = sort;
+    }
+
     @Override
     public AbstractPageable getPageable() {
         return pageable;
+    }
+
+    public void setPageable(AbstractPageable pageable) {
+        this.pageable = pageable;
     }
 
 }

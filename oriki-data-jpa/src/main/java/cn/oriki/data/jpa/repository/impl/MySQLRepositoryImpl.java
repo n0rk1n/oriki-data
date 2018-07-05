@@ -2,6 +2,9 @@ package cn.oriki.data.jpa.repository.impl;
 
 import cn.oriki.commons.utils.reflect.entity.FieldTypeNameValue;
 import cn.oriki.data.generate.base.predicate.AbstractPredicate;
+import cn.oriki.data.generate.base.where.AbstractWhere;
+import cn.oriki.data.generate.base.where.entity.Criteria;
+import cn.oriki.data.generate.base.where.enumeration.ConditionalEnum;
 import cn.oriki.data.generate.curd.delete.result.DeleteResult;
 import cn.oriki.data.generate.curd.save.result.SaveResult;
 import cn.oriki.data.generate.curd.update.result.UpdateResult;
@@ -16,6 +19,7 @@ import cn.oriki.data.jpa.generate.curd.update.AbstractJpaUpdate;
 import cn.oriki.data.jpa.generate.curd.update.impl.MySQLUpdateImpl;
 import cn.oriki.data.jpa.repository.AbstractJpaRepository;
 import cn.oriki.data.utils.reflect.ReflectDatas;
+import com.google.common.collect.Lists;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
@@ -171,9 +175,48 @@ public class MySQLRepositoryImpl<T, ID extends Serializable> extends AbstractJpa
     }
 
     @Override
+    public <S extends T> Long count(S entity) throws GenerateException {
+        MySQLQueryImpl query = new MySQLQueryImpl(getTableName());
+
+        query.count();
+
+        List<FieldTypeNameValue> fieldTypeNameValues = ReflectDatas.getFieldTypeNameValuesWithValuesIsNotNull(entity);
+
+        List<Criteria> criterias = Lists.newArrayList();
+
+        for (FieldTypeNameValue fieldTypeNameValue : fieldTypeNameValues) {
+            Criteria criteria = new Criteria();
+            criteria.setKey(fieldTypeNameValue.getName());
+            criteria.setConditional(ConditionalEnum.EQUALS);
+            criteria.setValue((Serializable) fieldTypeNameValue.getValue());
+            criterias.add(criteria);
+        }
+
+        query.getPredicate().getWhere().andCriteria(criterias.toArray(new Criteria[0]));
+
+        return queryValue(query, Long.class);
+    }
+
+    @Override
+    public <S extends T> Long count(AbstractWhere where) throws GenerateException {
+        MySQLQueryImpl query = new MySQLQueryImpl(getTableName());
+        query.count();
+        query.getPredicate().setWhere(where);
+        return queryValue(query, Long.class);
+    }
+
+    @Override
     public Iterable<T> query(AbstractPredicate predicate) throws GenerateException {
         AbstractJpaQuery query = new MySQLQueryImpl(predicate, getTableName());
         return queryList(query);
+    }
+
+    @Override
+    public <S extends T> Long count(AbstractPredicate predicate) throws GenerateException {
+        AbstractJpaQuery query = new MySQLQueryImpl(predicate, getTableName());
+        query.setPredicate(predicate);
+        query.count();
+        return queryValue(query, Long.class);
     }
 
 }

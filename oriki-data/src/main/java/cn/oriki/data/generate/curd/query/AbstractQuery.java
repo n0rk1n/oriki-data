@@ -18,6 +18,10 @@ public abstract class AbstractQuery implements Query {
         return predicate;
     }
 
+    public void setPredicate(AbstractPredicate predicate) {
+        this.predicate = predicate;
+    }
+
     public AbstractFrom getFrom() {
         return from;
     }

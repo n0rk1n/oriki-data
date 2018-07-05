@@ -6,6 +6,7 @@ import cn.oriki.data.generate.Generate;
 import cn.oriki.data.generate.base.where.AbstractWhere;
 import cn.oriki.data.generate.base.where.entity.Criteria;
 import cn.oriki.data.generate.base.where.entity.OperatorCreterias;
+import cn.oriki.data.generate.base.where.enumeration.ConditionalEnum;
 import cn.oriki.data.generate.base.where.enumeration.OperatorEnum;
 import cn.oriki.data.generate.exception.GenerateException;
 import cn.oriki.data.generate.result.GenerateResult;
@@ -13,6 +14,7 @@ import com.google.common.collect.Lists;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 
 public abstract class AbstractJpaWhere extends AbstractWhere {
 
@@ -44,10 +46,17 @@ public abstract class AbstractJpaWhere extends AbstractWhere {
                 List<Serializable> criteriaValues = Lists.newArrayList();
 
                 for (Criteria criteria : criterias) {
-                    String s = criteria.getKey() + criteria.getConditional().getConditional() + Generate.INJECTION; // key = ?
+                    Serializable value = criteria.getValue();
+
+                    String s;
+                    if (Objects.nonNull(value)) {
+                        s = criteria.getKey() + criteria.getConditional().getConditional() + Generate.INJECTION; // key = ?
+                        criteriaValues.add(criteria.getValue());
+                    } else {
+                        s = criteria.getKey() + ConditionalEnum.IS.getConditional() + " NULL "; // key is null
+                    }
 
                     criteriaString.add(s);
-                    criteriaValues.add(criteria.getValue());
                 }
                 String join = Collections.join(criteriaString, operator.getOperator(), Generate.LEFT_PARENTHESIS, Generate.RIGHT_PARENTHESIS); // ( key = ? and key2 = ? )
 

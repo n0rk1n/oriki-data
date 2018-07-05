@@ -20,6 +20,7 @@ public abstract class AbstractJpaQuery extends AbstractQuery {
 
     private static final String SELECT_KEY_WORD = "select ";
     private static final String SELECT_ALL_KEY_WORD = " * ";
+    private static final String COUNT_1_KEY_WORD = " COUNT(1) ";
 
     //    private static final String SEPARATOR = "_separator_";
     private static final String NO_ALIAS = "@noAlias@";
@@ -43,6 +44,16 @@ public abstract class AbstractJpaQuery extends AbstractQuery {
     @Override
     public void query(String key, String alias) {
         addSelect(key, alias);
+    }
+
+    @Override
+    public void count() {
+        if (Objects.nonNull(this.selectQuery)) {
+            selectQuery.clear();
+        } else {
+            selectQuery = Lists.newArrayList();
+        }
+        addSelect(COUNT_1_KEY_WORD, " COUNT ");
     }
 
     /**
@@ -104,6 +115,8 @@ public abstract class AbstractJpaQuery extends AbstractQuery {
 
     // 添加查询字段
     private void addSelect(String key, String alias) {
+        selectQuery.remove(COUNT_1_KEY_WORD + AS + " COUNT "); // 任何情况移除 count(1) as count
+
         if (Objects.isNull(selectQuery)) {
             selectQuery = Lists.newArrayList();
         }

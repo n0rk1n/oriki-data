@@ -9,4 +9,6 @@ public interface Query extends Generate {
 
     void query(String key, String alias); // 查询特定 key ，并使用别名
 
+    void count(); // 查询数量
+
 }

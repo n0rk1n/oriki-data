@@ -1,5 +1,6 @@
 package cn.oriki.data.repository;
 
+import cn.oriki.data.generate.base.where.AbstractWhere;
 import cn.oriki.data.generate.curd.delete.result.DeleteResult;
 import cn.oriki.data.generate.curd.save.result.SaveResult;
 import cn.oriki.data.generate.curd.update.result.UpdateResult;
@@ -27,5 +28,9 @@ public interface CURDRepository<T, ID extends Serializable> extends Repository<T
     Collection<T> queryAll() throws GenerateException;
 
     boolean exists(ID id) throws GenerateException;
+
+    <S extends T> Long count(S entity) throws GenerateException;
+
+    <S extends T> Long count(AbstractWhere where) throws GenerateException;
 
 }

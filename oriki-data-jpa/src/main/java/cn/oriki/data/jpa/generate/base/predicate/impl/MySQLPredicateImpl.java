@@ -1,14 +1,14 @@
 package cn.oriki.data.jpa.generate.base.predicate.impl;
 
-import cn.oriki.data.generate.base.pageable.AbstractPageable;
-import cn.oriki.data.generate.base.sort.AbstractSort;
-import cn.oriki.data.generate.base.where.AbstractWhere;
+import cn.oriki.data.jpa.generate.base.pageable.impl.MySQLPageableImpl;
 import cn.oriki.data.jpa.generate.base.predicate.AbstractJpaPredict;
+import cn.oriki.data.jpa.generate.base.sort.impl.MySQLSortImpl;
+import cn.oriki.data.jpa.generate.base.where.impl.MySQLWhereImpl;
 
 public class MySQLPredicateImpl extends AbstractJpaPredict {
 
-    public MySQLPredicateImpl(AbstractWhere where, AbstractSort sort, AbstractPageable pageable) {
-        super(where, sort, pageable);
+    public MySQLPredicateImpl() {
+        super(new MySQLWhereImpl(), new MySQLSortImpl(), new MySQLPageableImpl(null, null)); // 默认不分页
     }
 
 }

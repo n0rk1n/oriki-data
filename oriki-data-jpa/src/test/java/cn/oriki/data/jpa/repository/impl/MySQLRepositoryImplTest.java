@@ -6,7 +6,6 @@ import cn.oriki.data.generate.curd.save.result.SaveResult;
 import cn.oriki.data.generate.curd.update.result.UpdateResult;
 import cn.oriki.data.generate.exception.GenerateException;
 import cn.oriki.data.jpa.entity.Children;
-import cn.oriki.data.jpa.generate.base.pageable.impl.MySQLPageableImpl;
 import cn.oriki.data.jpa.generate.base.predicate.impl.MySQLPredicateImpl;
 import cn.oriki.data.jpa.generate.base.sort.impl.MySQLSortImpl;
 import cn.oriki.data.jpa.generate.base.where.impl.MySQLWhereImpl;
@@ -125,13 +124,35 @@ public class MySQLRepositoryImplTest {
     public void query() throws GenerateException {
         MySQLSortImpl sort = new MySQLSortImpl();
         sort.orderAsc("id");
-        MySQLPredicateImpl predicate = new MySQLPredicateImpl(new MySQLWhereImpl(), sort, new MySQLPageableImpl(2, 1));
+        MySQLPredicateImpl predicate = new MySQLPredicateImpl();
 
         Iterable<Children> query = this.repository.query(predicate);
 
         for (Children children : query) {
             showChildren(children);
         }
+    }
+
+    @Test
+    public void count() throws GenerateException {
+        Children children = new Children();
+        children.setName("zhangsan");
+        children.setAge(18);
+
+        Long count = this.repository.count(children);
+        System.out.println("数据库总数：" + count);
+    }
+
+    @Test
+    public void count1() throws GenerateException {
+        Long count = this.repository.count(new MySQLWhereImpl());
+        System.out.println("数据库总数：" + count);
+    }
+
+    @Test
+    public void count2() throws GenerateException {
+        Long count = this.repository.count(new MySQLPredicateImpl());
+        System.out.println("数据库总数：" + count);
     }
 
     private void showChildren(Children children) {
@@ -145,6 +166,5 @@ public class MySQLRepositoryImplTest {
             System.out.println(" ------");
         }
     }
-
 
 }
