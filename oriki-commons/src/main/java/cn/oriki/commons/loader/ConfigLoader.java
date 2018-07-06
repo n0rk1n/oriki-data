@@ -1,15 +1,21 @@
 package cn.oriki.commons.loader;
 
-import cn.oriki.commons.constants.StringConstants;
+import cn.oriki.commons.utils.string.Strings;
+import com.google.common.collect.Maps;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Properties;
 
 /**
  * ConfigLoader 配置文件加载器
+ * <p>
+ * 可以加载多个配置映射文件
+ * <p>
+ * TODO 后加载映射出现重复 key 会覆盖前面添加的映射，请小心配置
  *
  * @author oriki.wang
  */
@@ -18,15 +24,26 @@ public class ConfigLoader extends Properties {
     private static final long serialVersionUID = 2036439234035849247L;
 
     private String[] resourceFiles; // 加载器加载配置文件数组集合
-    private Map<String, String> properties; // 加载器加载所有配置映射集合
+    private Map<String, String> properties = Maps.newHashMap(); // 加载器加载所有配置映射集合
 
-    public ConfigLoader(String configFilePath) {
-        String[] configFilePaths = configFilePath.split(StringConstants.COMMON_SEPARATOR);
+    public ConfigLoader(String... configFilePaths) {
         resourceFiles = configFilePaths; // 获取的多个配置文件
-
-        for (String resourceFile : resourceFiles) {
-            this.load(resourceFile);
+        for (String configFilePath : configFilePaths) {
+            if (Strings.isNotBlank(configFilePath)) {
+                this.load(configFilePath);
+            }
         }
+
+    }
+
+    @Override
+    public String getProperty(String key) {
+        return properties.get(key);
+    }
+
+    @Override
+    public String getProperty(String key, String defaultValue) {
+        return properties.getOrDefault(key, defaultValue);
     }
 
     /**
@@ -42,7 +59,7 @@ public class ConfigLoader extends Properties {
     public Boolean getBooleanProperty(String key) {
         Boolean b = null;
 
-        String _value = this.getProperty(key);
+        String _value = properties.get(key);
         if (Objects.nonNull(_value)) {
             _value = _value.trim();
             if (Boolean.TRUE.toString().equals(_value))
@@ -72,16 +89,21 @@ public class ConfigLoader extends Properties {
     private void load(String resourceFile) {
         try (InputStream inputStream = ConfigLoader.class.getClassLoader().getResourceAsStream(resourceFile)) {
             if (Objects.isNull(inputStream))
-                throw new RuntimeException("instance classLoader failed , we can't get resource");
+                throw new RuntimeException("instance configLoader failed , we can't get resource");
 
             super.load(inputStream);
+
+            super.keySet().stream().map((e) -> (String) e).forEach((object) ->
+                    properties.put(object, super.getProperty(object).trim()) // 去除前后空格
+            );
+            super.clear();
         } catch (IOException e) {
             throw new RuntimeException("failed loading config from : " + resourceFile, e);
         }
     }
 
     public Map<String, String> getProperties() {
-        return properties;
+        return Collections.unmodifiableMap(properties);
     }
 
     public String[] getResourceFiles() {
