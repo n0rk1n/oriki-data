@@ -6,9 +6,9 @@ import cn.oriki.data.generate.curd.save.result.SaveResult;
 import cn.oriki.data.generate.curd.update.result.UpdateResult;
 import cn.oriki.data.generate.exception.GenerateException;
 import cn.oriki.data.jpa.entity.Children;
-import cn.oriki.data.jpa.generate.base.predicate.impl.MySQLPredicateImpl;
-import cn.oriki.data.jpa.generate.base.sort.impl.MySQLSortImpl;
-import cn.oriki.data.jpa.generate.base.where.impl.MySQLWhereImpl;
+import cn.oriki.data.jpa.generate.base.predicate.impl.MySqlPredicateImpl;
+import cn.oriki.data.jpa.generate.base.sort.impl.MySqlSortImpl;
+import cn.oriki.data.jpa.generate.base.where.impl.MySqlWhereImpl;
 import com.alibaba.druid.pool.DruidDataSource;
 import org.junit.Assert;
 import org.junit.Before;
@@ -19,9 +19,9 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Objects;
 
-public class MySQLRepositoryImplTest {
+public class MySqlRepositoryImplTest {
 
-    private MySQLRepositoryImpl<Children, Long> repository;
+    private MySqlRepositoryImpl<Children, Long> repository;
 
     @Before
     public void before() {
@@ -32,7 +32,7 @@ public class MySQLRepositoryImplTest {
         dataSource.setUsername(configLoader.getProperty("oriki.csf-mysql.mysql.userName"));
         dataSource.setPassword(configLoader.getProperty("oriki.csf-mysql.mysql.password"));
 
-        repository = new MySQLRepositoryImpl<>(Children.class, Long.class);
+        repository = new MySqlRepositoryImpl<>(Children.class, Long.class);
         repository.setJdbcTemplate(dataSource);
 
         configLoader.clear();
@@ -104,7 +104,7 @@ public class MySQLRepositoryImplTest {
     @Test
     public void exists() throws GenerateException {
         boolean b = this.repository.exists(1L);
-        Assert.assertTrue(b);
+        Assert.assertFalse(b);
     }
 
     @Test
@@ -122,9 +122,9 @@ public class MySQLRepositoryImplTest {
 
     @Test
     public void query() throws GenerateException {
-        MySQLSortImpl sort = new MySQLSortImpl();
+        MySqlSortImpl sort = new MySqlSortImpl();
         sort.orderAsc("id");
-        MySQLPredicateImpl predicate = new MySQLPredicateImpl();
+        MySqlPredicateImpl predicate = new MySqlPredicateImpl();
 
         Iterable<Children> query = this.repository.query(predicate);
 
@@ -145,20 +145,20 @@ public class MySQLRepositoryImplTest {
 
     @Test
     public void count1() throws GenerateException {
-        Long count = this.repository.count(new MySQLWhereImpl());
+        Long count = this.repository.count(new MySqlWhereImpl());
         System.out.println("数据库总数：" + count);
     }
 
     @Test
     public void count2() throws GenerateException {
-        Long count = this.repository.count(new MySQLPredicateImpl());
+        Long count = this.repository.count(new MySqlPredicateImpl());
         System.out.println("数据库总数：" + count);
     }
 
     @Test
     public void queryAll1() throws GenerateException {
-        MySQLWhereImpl where = new MySQLWhereImpl();
-        where.equals("name","zhangsan");
+        MySqlWhereImpl where = new MySqlWhereImpl();
+        where.equals("name", "zhangsan");
 
         Collection<Children> children = this.repository.queryAll(where);
         for (Children child : children) {
@@ -177,6 +177,5 @@ public class MySQLRepositoryImplTest {
             System.out.println(" ------");
         }
     }
-
-
+    
 }

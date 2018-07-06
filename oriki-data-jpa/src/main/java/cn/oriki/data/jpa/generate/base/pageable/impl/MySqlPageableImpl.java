@@ -8,11 +8,11 @@ import cn.oriki.data.jpa.generate.base.pageable.AbstractJpaPageable;
 
 import java.util.Arrays;
 
-public class MySQLPageableImpl extends AbstractJpaPageable {
+public class MySqlPageableImpl extends AbstractJpaPageable {
 
     private final static String LIMIT_KEY_WORD = " LIMIT ";
 
-    public MySQLPageableImpl(Integer pageNumber, Integer pageSize) {
+    public MySqlPageableImpl(Integer pageNumber, Integer pageSize) {
         super(pageNumber, pageSize);
     }
 

@@ -10,13 +10,13 @@ import cn.oriki.data.generate.curd.save.result.SaveResult;
 import cn.oriki.data.generate.curd.update.result.UpdateResult;
 import cn.oriki.data.generate.exception.GenerateException;
 import cn.oriki.data.jpa.generate.curd.delete.AbstractJpaDelete;
-import cn.oriki.data.jpa.generate.curd.delete.impl.MySQLDeleteImpl;
+import cn.oriki.data.jpa.generate.curd.delete.impl.MySqlDeleteImpl;
 import cn.oriki.data.jpa.generate.curd.query.AbstractJpaQuery;
-import cn.oriki.data.jpa.generate.curd.query.impl.MySQLQueryImpl;
+import cn.oriki.data.jpa.generate.curd.query.impl.MySqlQueryImpl;
 import cn.oriki.data.jpa.generate.curd.save.AbstractJpaSave;
-import cn.oriki.data.jpa.generate.curd.save.impl.MySQLSaveImpl;
+import cn.oriki.data.jpa.generate.curd.save.impl.MySqlSaveImpl;
 import cn.oriki.data.jpa.generate.curd.update.AbstractJpaUpdate;
-import cn.oriki.data.jpa.generate.curd.update.impl.MySQLUpdateImpl;
+import cn.oriki.data.jpa.generate.curd.update.impl.MySqlUpdateImpl;
 import cn.oriki.data.jpa.repository.AbstractJpaRepository;
 import cn.oriki.data.utils.reflect.ReflectDatas;
 import com.google.common.collect.Lists;
@@ -27,15 +27,15 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
-public class MySQLRepositoryImpl<T, ID extends Serializable> extends AbstractJpaRepository<T, ID> {
+public class MySqlRepositoryImpl<T, ID extends Serializable> extends AbstractJpaRepository<T, ID> {
 
-    public MySQLRepositoryImpl(Class<T> entityClass, Class<ID> idClass) {
+    public MySqlRepositoryImpl(Class<T> entityClass, Class<ID> idClass) {
         super(entityClass, idClass);
     }
 
     @Override
     public <S extends T> SaveResult<S, ID> save(S entity) throws GenerateException, IllegalAccessException {
-        AbstractJpaSave save = new MySQLSaveImpl(getTableName());
+        AbstractJpaSave save = new MySqlSaveImpl(getTableName());
 
         List<FieldTypeNameValue> fieldTypeNameValues = ReflectDatas.getFieldTypeNameValues(entity);// 获取包含null值的属性 TODO 后续使用
 
@@ -54,7 +54,7 @@ public class MySQLRepositoryImpl<T, ID extends Serializable> extends AbstractJpa
 
     @Override
     public DeleteResult deleteById(ID id) throws GenerateException {
-        AbstractJpaDelete delete = new MySQLDeleteImpl(getTableName());
+        AbstractJpaDelete delete = new MySqlDeleteImpl(getTableName());
 
         String primaryKeyColumnName = getPrimaryKeyColumnName(); // 获取 主键列名
 
@@ -65,7 +65,7 @@ public class MySQLRepositoryImpl<T, ID extends Serializable> extends AbstractJpa
 
     @Override
     public DeleteResult delete(T entity) throws GenerateException {
-        AbstractJpaDelete delete = new MySQLDeleteImpl(getTableName());
+        AbstractJpaDelete delete = new MySqlDeleteImpl(getTableName());
 
         // 获取存在值的 FieldTypeNameValue , 添加作为存入列
         List<FieldTypeNameValue> fieldTypeNameValues = ReflectDatas.getFieldTypeNameValuesWithValuesIsNotNull(entity);
@@ -87,7 +87,7 @@ public class MySQLRepositoryImpl<T, ID extends Serializable> extends AbstractJpa
 
     @Override
     public DeleteResult deleteAll() throws GenerateException {
-        AbstractJpaDelete delete = new MySQLDeleteImpl(getTableName());
+        AbstractJpaDelete delete = new MySqlDeleteImpl(getTableName());
         return super.executeDelete(delete);
     }
 
@@ -104,7 +104,7 @@ public class MySQLRepositoryImpl<T, ID extends Serializable> extends AbstractJpa
             updateResult.setNumber(saveResult.getNumber());
         } else {
             // 更新操作
-            AbstractJpaUpdate update = new MySQLUpdateImpl(getTableName());
+            AbstractJpaUpdate update = new MySqlUpdateImpl(getTableName());
 
             List<FieldTypeNameValue> fieldTypeNameValues = ReflectDatas.getFieldTypeNameValues(entity);// 获取包含null值的属性
             fieldTypeNameValues.forEach((fieldTypeNameValue -> {
@@ -127,7 +127,7 @@ public class MySQLRepositoryImpl<T, ID extends Serializable> extends AbstractJpa
 
     @Override
     public T queryById(ID id) throws GenerateException {
-        AbstractJpaQuery query = new MySQLQueryImpl(getTableName());
+        AbstractJpaQuery query = new MySqlQueryImpl(getTableName());
 
         String primaryKeyColumnName = super.getPrimaryKeyColumnName();
         query.getPredicate().getWhere().equals(primaryKeyColumnName, id); // 添加查询条件
@@ -139,7 +139,7 @@ public class MySQLRepositoryImpl<T, ID extends Serializable> extends AbstractJpa
 
     @Override
     public Collection<T> queryByIds(Collection<ID> ids) throws GenerateException {
-        AbstractJpaQuery query = new MySQLQueryImpl(getTableName());
+        AbstractJpaQuery query = new MySqlQueryImpl(getTableName());
 
         String primaryKeyColumnName = super.getPrimaryKeyColumnName();
         query.getPredicate().getWhere().in(primaryKeyColumnName, ids);
@@ -151,7 +151,7 @@ public class MySQLRepositoryImpl<T, ID extends Serializable> extends AbstractJpa
 
     @Override
     public Collection<T> queryAll() throws GenerateException {
-        AbstractJpaQuery query = new MySQLQueryImpl(getTableName());
+        AbstractJpaQuery query = new MySqlQueryImpl(getTableName());
 
         query.queryAll(entityClass); // 查询所有字段
 
@@ -160,7 +160,7 @@ public class MySQLRepositoryImpl<T, ID extends Serializable> extends AbstractJpa
 
     @Override
     public Collection<T> queryAll(AbstractWhere where) throws GenerateException {
-        MySQLQueryImpl query = new MySQLQueryImpl(getTableName());
+        MySqlQueryImpl query = new MySqlQueryImpl(getTableName());
 
         query.getPredicate().setWhere(where);
         query.queryAll(entityClass);
@@ -170,7 +170,7 @@ public class MySQLRepositoryImpl<T, ID extends Serializable> extends AbstractJpa
 
     @Override
     public boolean exists(ID id) throws GenerateException {
-        AbstractJpaQuery query = new MySQLQueryImpl(getTableName());
+        AbstractJpaQuery query = new MySqlQueryImpl(getTableName());
 
         String primaryKeyColumnName = super.getPrimaryKeyColumnName();
         Field primaryKeyField = getPrimaryKeyField();
@@ -186,7 +186,7 @@ public class MySQLRepositoryImpl<T, ID extends Serializable> extends AbstractJpa
 
     @Override
     public <S extends T> Long count(S entity) throws GenerateException {
-        MySQLQueryImpl query = new MySQLQueryImpl(getTableName());
+        MySqlQueryImpl query = new MySqlQueryImpl(getTableName());
 
         query.count();
 
@@ -209,7 +209,7 @@ public class MySQLRepositoryImpl<T, ID extends Serializable> extends AbstractJpa
 
     @Override
     public <S extends T> Long count(AbstractWhere where) throws GenerateException {
-        MySQLQueryImpl query = new MySQLQueryImpl(getTableName());
+        MySqlQueryImpl query = new MySqlQueryImpl(getTableName());
         query.count();
         query.getPredicate().setWhere(where);
         return queryValue(query, Long.class);
@@ -217,13 +217,13 @@ public class MySQLRepositoryImpl<T, ID extends Serializable> extends AbstractJpa
 
     @Override
     public Iterable<T> query(AbstractPredicate predicate) throws GenerateException {
-        AbstractJpaQuery query = new MySQLQueryImpl(predicate, getTableName());
+        AbstractJpaQuery query = new MySqlQueryImpl(predicate, getTableName());
         return queryList(query);
     }
 
     @Override
     public <S extends T> Long count(AbstractPredicate predicate) throws GenerateException {
-        AbstractJpaQuery query = new MySQLQueryImpl(predicate, getTableName());
+        AbstractJpaQuery query = new MySqlQueryImpl(predicate, getTableName());
         query.setPredicate(predicate);
         query.count();
         return queryValue(query, Long.class);

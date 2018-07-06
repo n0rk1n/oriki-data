@@ -5,7 +5,7 @@ import cn.oriki.data.generate.exception.GenerateException;
 
 import java.io.Serializable;
 
-public interface PagingAndSortRepository<T, ID extends Serializable> extends CURDRepository<T, ID> {
+public interface PagingAndSortRepository<T, ID extends Serializable> extends CurdRepository<T, ID> {
 
     Iterable<T> query(AbstractPredicate predicate) throws GenerateException;
 

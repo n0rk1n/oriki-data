@@ -2,9 +2,9 @@ package cn.oriki.data.jpa.generate.base.from.impl;
 
 import cn.oriki.data.jpa.generate.base.from.AbstractJpaFrom;
 
-public class MySQLFromImpl extends AbstractJpaFrom {
+public class MySqlFromImpl extends AbstractJpaFrom {
 
-    public MySQLFromImpl(String tableName) {
+    public MySqlFromImpl(String tableName) {
         super(tableName);
     }
 

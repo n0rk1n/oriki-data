@@ -9,7 +9,7 @@ import cn.oriki.data.generate.exception.GenerateException;
 import java.io.Serializable;
 import java.util.Collection;
 
-public interface CURDRepository<T, ID extends Serializable> extends Repository<T, ID> {
+public interface CurdRepository<T, ID extends Serializable> extends Repository<T, ID> {
 
     <S extends T> SaveResult<S, ID> save(S entity) throws GenerateException, IllegalAccessException;
 
