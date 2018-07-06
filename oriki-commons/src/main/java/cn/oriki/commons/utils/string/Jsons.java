@@ -44,7 +44,7 @@ public class Jsons {
         }
 
         // 为空集合
-        if (Collections.isCollection(object) && Collections.isNullOrEmpty((Collection) object)) {
+        if (Collections.isCollection(object) && Collections.isNullOrEmpty((Collection<?>) object)) {
             return EMPTY_COLLECTION_JSON;
         }
 

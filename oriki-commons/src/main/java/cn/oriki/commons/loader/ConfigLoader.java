@@ -12,6 +12,8 @@ import java.util.Properties;
  */
 public class ConfigLoader extends Properties {
 
+    private static final long serialVersionUID = 2036439234035849247L;
+
     private String resourceFile;
 
     public ConfigLoader(String configFilePath) {

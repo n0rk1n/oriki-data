@@ -13,6 +13,7 @@ import java.text.ParseException;
 public class ReflectDatas extends Reflects {
 
     // 转换 ID
+    @SuppressWarnings("unchecked")
     public static <ID> ID parseId(Class<ID> idClass, String idString) throws ParseException {
         if (Byte.class.equals(idClass)) {
             return (ID) Byte.valueOf(idString);

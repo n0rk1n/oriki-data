@@ -166,7 +166,7 @@ public class Reflects {
      * @param annotation 特定注解的字节码文件
      * @return 特定注解对象
      */
-    public static <C extends Annotation> Annotation getAnnotation(Class clazz, Class<C> annotation) {
+    public static <C extends Annotation> Annotation getAnnotation(Class<?> clazz, Class<C> annotation) {
         return clazz.getDeclaredAnnotation(annotation);
     }
 
