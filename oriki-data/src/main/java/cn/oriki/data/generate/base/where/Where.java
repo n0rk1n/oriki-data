@@ -5,6 +5,8 @@ import cn.oriki.data.generate.base.where.enumeration.ConditionalEnum;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public interface Where {
 
@@ -16,11 +18,15 @@ public interface Where {
 
     /**
      * in 方法，转换 in 为 or 参数
+     * <p>
+     * 效率考虑
      *
      * @param key    键名（可以是列名）
      * @param values 值的集合
      */
     default <E extends Serializable> void in(String key, Collection<E> values) {
+        values = values.stream().filter((e) -> Objects.nonNull(e)).collect(Collectors.toList());
+
         Criteria[] criterias = new Criteria[values.size()];
         int index = 0;
 
@@ -63,6 +69,24 @@ public interface Where {
             criteria.setKey(key);
             criteria.setConditional(ConditionalEnum.LESS_THAN);
             criteria.setValue(value);
+        }
+        return criteria;
+    }
+
+    default Criteria isNull(String key) {
+        Criteria criteria = new Criteria();
+        {
+            criteria.setKey(key);
+            criteria.setConditional(ConditionalEnum.IS);
+        }
+        return criteria;
+    }
+
+    default Criteria isNotNull(String key) {
+        Criteria criteria = new Criteria();
+        {
+            criteria.setKey(key);
+            criteria.setConditional(ConditionalEnum.IS_NOT);
         }
         return criteria;
     }

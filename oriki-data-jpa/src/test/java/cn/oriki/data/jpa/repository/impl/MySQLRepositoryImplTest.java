@@ -155,6 +155,17 @@ public class MySQLRepositoryImplTest {
         System.out.println("数据库总数：" + count);
     }
 
+    @Test
+    public void queryAll1() throws GenerateException {
+        MySQLWhereImpl where = new MySQLWhereImpl();
+        where.equals("name","zhangsan");
+
+        Collection<Children> children = this.repository.queryAll(where);
+        for (Children child : children) {
+            showChildren(child);
+        }
+    }
+
     private void showChildren(Children children) {
         if (Objects.nonNull(children)) {
             System.out.println("id:" + children.getId());
@@ -166,5 +177,6 @@ public class MySQLRepositoryImplTest {
             System.out.println(" ------");
         }
     }
+
 
 }

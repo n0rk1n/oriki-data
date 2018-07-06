@@ -27,6 +27,8 @@ public interface CURDRepository<T, ID extends Serializable> extends Repository<T
 
     Collection<T> queryAll() throws GenerateException;
 
+    Collection<T> queryAll(AbstractWhere where) throws GenerateException;
+
     boolean exists(ID id) throws GenerateException;
 
     <S extends T> Long count(S entity) throws GenerateException;

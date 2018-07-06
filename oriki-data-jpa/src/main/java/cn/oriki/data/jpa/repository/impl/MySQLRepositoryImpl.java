@@ -159,6 +159,16 @@ public class MySQLRepositoryImpl<T, ID extends Serializable> extends AbstractJpa
     }
 
     @Override
+    public Collection<T> queryAll(AbstractWhere where) throws GenerateException {
+        MySQLQueryImpl query = new MySQLQueryImpl(getTableName());
+
+        query.getPredicate().setWhere(where);
+        query.queryAll(entityClass);
+
+        return queryList(query);
+    }
+
+    @Override
     public boolean exists(ID id) throws GenerateException {
         AbstractJpaQuery query = new MySQLQueryImpl(getTableName());
 

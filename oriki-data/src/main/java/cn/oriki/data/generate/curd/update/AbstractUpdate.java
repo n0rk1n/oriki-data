@@ -33,8 +33,16 @@ public abstract class AbstractUpdate implements Update {
         return where;
     }
 
+    public void setWhere(AbstractWhere where) {
+        this.where = where;
+    }
+
     public AbstractFrom getFrom() {
         return from;
+    }
+
+    public void setFrom(AbstractFrom from) {
+        this.from = from;
     }
 
     public Map<String, Serializable> getSetParams() {

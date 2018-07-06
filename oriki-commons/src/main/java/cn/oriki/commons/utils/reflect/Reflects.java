@@ -22,21 +22,6 @@ public class Reflects {
     private static final String CLASS_PATH_SEPARATOR = "\\."; // 全路径分隔符
 
     /**
-     * 获取字节码对象
-     *
-     * @param classPath 全路径
-     * @return 字节码对象
-     * @throws ClassNotFoundException 全路径不能反射情况下抛出
-     */
-    /*public static Class getClass(String classPath) throws ClassNotFoundException {
-        if (Strings.isBlank(classPath)) {
-            return null;
-        }
-
-        return Class.forName(classPath);
-    }*/
-
-    /**
      * 截取字节码文件的类名（如 java.lang.Object ， 截取获得 Object）
      *
      * @param clazz 字节码文件

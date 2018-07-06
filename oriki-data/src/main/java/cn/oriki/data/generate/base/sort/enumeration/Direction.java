@@ -14,12 +14,12 @@ public enum Direction {
         return order;
     }
 
-    public boolean isAsc() {
-        return this.equals(ASC);
-    }
+//    public boolean isAsc() {
+//        return this.equals(ASC);
+//    }
 
-    public boolean isDesc() {
-        return this.equals(DESC);
-    }
+//    public boolean isDesc() {
+//        return this.equals(DESC);
+//    }
 
 }

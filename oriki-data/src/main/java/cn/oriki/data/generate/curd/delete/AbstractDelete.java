@@ -17,8 +17,16 @@ public abstract class AbstractDelete implements Delete {
         return where;
     }
 
+    public void setWhere(AbstractWhere where) {
+        this.where = where;
+    }
+
     public AbstractFrom getFrom() {
         return from;
+    }
+
+    public void setFrom(AbstractFrom from) {
+        this.from = from;
     }
     
 }
