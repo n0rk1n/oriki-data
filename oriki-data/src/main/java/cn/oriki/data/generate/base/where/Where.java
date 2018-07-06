@@ -47,7 +47,7 @@ public interface Where {
         andCriteria(criteria);
     }
 
-    /*default Criteria greaterThan(String key, Serializable value) {
+    default Criteria greaterThan(String key, Serializable value) {
         Criteria criteria = new Criteria();
         {
             criteria.setKey(key);
@@ -65,6 +65,6 @@ public interface Where {
             criteria.setValue(value);
         }
         return criteria;
-    }*/
+    }
 
 }
