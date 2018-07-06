@@ -9,7 +9,7 @@ import cn.oriki.data.generate.base.where.Where;
  *
  * @author oriki.wang
  */
-public interface Predicate {
+public interface Predicate extends Where, Sort, Pageable {
 
     Where getWhere();
 

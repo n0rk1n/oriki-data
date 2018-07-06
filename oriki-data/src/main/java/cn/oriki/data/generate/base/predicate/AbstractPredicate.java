@@ -1,15 +1,12 @@
 package cn.oriki.data.generate.base.predicate;
 
 import cn.oriki.data.generate.base.pageable.AbstractPageable;
-import cn.oriki.data.generate.base.pageable.Pageable;
 import cn.oriki.data.generate.base.sort.AbstractSort;
-import cn.oriki.data.generate.base.sort.Sort;
 import cn.oriki.data.generate.base.sort.enumeration.Direction;
 import cn.oriki.data.generate.base.where.AbstractWhere;
-import cn.oriki.data.generate.base.where.Where;
 import cn.oriki.data.generate.base.where.entity.Criteria;
 
-public abstract class AbstractPredicate implements Predicate, Where, Sort, Pageable {
+public abstract class AbstractPredicate implements Predicate {
 
     private AbstractWhere where;
     private AbstractSort sort;
