@@ -123,8 +123,9 @@ public class MySqlRepositoryImplTest {
     @Test
     public void query() throws GenerateException {
         MySqlSortImpl sort = new MySqlSortImpl();
-        sort.orderAsc("id");
+        sort.orderDesc("id");
         MySqlPredicateImpl predicate = new MySqlPredicateImpl();
+        predicate.setSort(sort);
 
         Iterable<Children> query = this.repository.query(predicate);
 
@@ -177,5 +178,5 @@ public class MySqlRepositoryImplTest {
             System.out.println(" ------");
         }
     }
-    
+
 }

@@ -46,14 +46,18 @@ public abstract class AbstractJpaWhere extends AbstractWhere {
                 List<Serializable> criteriaValues = Lists.newArrayList();
 
                 for (Criteria criteria : criterias) {
-                    Serializable value = criteria.getValue();
-
                     String s;
-                    if (Objects.nonNull(value)) {
-                        s = criteria.getKey() + criteria.getConditional().getConditional() + Generate.INJECTION; // key = ?
-                        criteriaValues.add(criteria.getValue());
+                    if (!ConditionalEnum.IS_NOT.equals(criteria.getConditional())) {
+                        Serializable value = criteria.getValue();
+
+                        if (Objects.nonNull(value)) {
+                            s = criteria.getKey() + criteria.getConditional().getConditional() + Generate.INJECTION; // key = ?
+                            criteriaValues.add(criteria.getValue());
+                        } else {
+                            s = criteria.getKey() + ConditionalEnum.IS.getConditional() + " NULL "; // key is null
+                        }
                     } else {
-                        s = criteria.getKey() + ConditionalEnum.IS.getConditional() + " NULL "; // key is null
+                        s = criteria.getKey() + ConditionalEnum.IS_NOT.getConditional() + " NULL "; // key is null
                     }
 
                     criteriaString.add(s);
