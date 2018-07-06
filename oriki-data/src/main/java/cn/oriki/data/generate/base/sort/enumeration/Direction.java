@@ -1,8 +1,20 @@
 package cn.oriki.data.generate.base.sort.enumeration;
 
+/**
+ * 排序顺序枚举
+ *
+ * @author oriki
+ */
 public enum Direction {
 
-    ASC(" ASC "), DESC(" DESC ");
+    /**
+     * 升序
+     */
+    ASC(" ASC "),
+    /**
+     * 降序
+     */
+    DESC(" DESC ");
 
     private String order;
 

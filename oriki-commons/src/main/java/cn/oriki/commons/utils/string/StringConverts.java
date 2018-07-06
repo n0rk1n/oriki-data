@@ -90,27 +90,27 @@ public class StringConverts {
     /**
      * SQLTableName to JavaClassName （ eg : 特定前缀 + customer_information -> CustomerInfomation ）
      *
-     * @param SQLTableName 标准表名（含前缀）
+     * @param tableName 标准表名（含前缀）
      * @return 标准Java类名
      */
-    public static String toJavaClassName(String SQLTableName, String prefix) {
-        if (Strings.isNotBlank(SQLTableName)) {
-            SQLTableName = SQLTableName.toLowerCase();
+    public static String toJavaClassName(String tableName, String prefix) {
+        if (Strings.isNotBlank(tableName)) {
+            tableName = tableName.toLowerCase();
             // 去除常用前缀
-            SQLTableName = SQLTableName.replaceFirst(prefix, "");
+            tableName = tableName.replaceFirst(prefix, "");
 
-            String[] strings = SQLTableName.split("_");
+            String[] strings = tableName.split("_");
             if (strings.length == 1) {
-                return firstLetterUpper(SQLTableName);
+                return firstLetterUpper(tableName);
             } else {
-                StringBuilder _className = new StringBuilder();
+                StringBuilder classNameTemp = new StringBuilder();
                 for (String string : strings) {
-                    _className.append(firstLetterUpper(string));
+                    classNameTemp.append(firstLetterUpper(string));
                 }
-                return _className.toString();
+                return classNameTemp.toString();
             }
         }
-        return SQLTableName;
+        return tableName;
     }
 
     /**
@@ -126,29 +126,11 @@ public class StringConverts {
     /**
      * SQLColumnName to JavaFieldName （ eg : user_name -> userName ）
      *
-     * @param SQLColumnName 标准列名
+     * @param columnName 标准列名
      * @return JavaFieldName
      */
-    public static String toJavaFieldName(String SQLColumnName) {
-        /*if (Strings.isNotBlank(SQLColumnName)) {
-            SQLColumnName = SQLColumnName.toLowerCase();
-
-            String[] strings = SQLColumnName.split("_");
-            if (strings.length == 1) {
-                return firstLetterUpper(SQLColumnName);
-            } else {
-                StringBuilder className = new StringBuilder();
-                for (int i = 0; i < strings.length; i++) {
-                    if (i == 0) {
-                        className.append(strings[i]);
-                    } else {
-                        className.append(firstLetterUpper(strings[i]));
-                    }
-                }
-                return className.toString();
-            }
-        }*/
-        return toJavaClassName(SQLColumnName, "");
+    public static String toJavaFieldName(String columnName) {
+        return toJavaClassName(columnName, "");
     }
 
     // Java 转换为 SQL ，不存在前缀
@@ -160,7 +142,8 @@ public class StringConverts {
     private static String toSQLName(String javaName, String prefix) {
         char[] chars = javaName.toCharArray();
         StringBuilder stringBuilder = new StringBuilder();
-        if (Strings.isNotBlank(prefix)) { // 如有前缀进行拼接
+        // 如有前缀进行拼接
+        if (Strings.isNotBlank(prefix)) {
             stringBuilder.append(prefix);
         }
 

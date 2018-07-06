@@ -65,25 +65,28 @@ public abstract class AbstractRepository<T, ID extends Serializable> implements 
      * @return 被 @PrimaryKey 标识的属性
      */
     protected Field getPrimaryKeyField() {
-        List<Field> fields = ReflectDatas.getFields(entityClass); // 获取实体及其父类的 Fields
+        // 获取实体及其父类的 Fields
+        List<Field> fields = ReflectDatas.getFields(entityClass);
 
-        Field _field = null;
+        Field fieldTemp = null;
         int count = 0;
 
         for (Field field : fields) {
             List<Annotation> annotations = ReflectDatas.getAnnotations(field);
             for (Annotation annotation : annotations) {
                 if (PrimaryKey.class.equals(annotation.annotationType())) {
-                    _field = field;
+                    fieldTemp = field;
                     count++;
 
-                    if (count > 1)  // 有且只有一个
+                    // 有且只有一个
+                    if (count > 1) {
                         break;
+                    }
                 }
             }
         }
-        if (Objects.nonNull(_field) && count == 1) {
-            return _field;
+        if (Objects.nonNull(fieldTemp) && count == 1) {
+            return fieldTemp;
         }
         throw new IllegalArgumentException("we need only one @PrimaryKey but find more than 1");
     }

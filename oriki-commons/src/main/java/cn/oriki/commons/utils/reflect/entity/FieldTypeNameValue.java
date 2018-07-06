@@ -15,8 +15,9 @@ public class FieldTypeNameValue {
 
     public FieldTypeNameValue(Class<?> type, String name, Object value) {
         // 保证 type 和 name 不能为 null
-        if (Objects.isNull(type) || Objects.isNull(name))
+        if (Objects.isNull(type) || Objects.isNull(name)) {
             throw new IllegalArgumentException(getClass().getName() + " class instance fail , because fieldType and fieldName must be not null");
+        }
 
         this.type = type;
         this.name = name;
@@ -28,8 +29,9 @@ public class FieldTypeNameValue {
     }
 
     public void setType(Class<?> type) {
-        if (Objects.isNull(type))
+        if (Objects.isNull(type)) {
             throw new IllegalArgumentException("fieldType must be not null");
+        }
 
         this.type = type;
     }
@@ -39,8 +41,10 @@ public class FieldTypeNameValue {
     }
 
     public void setName(String name) {
-        if (Objects.isNull(name))
+        if (Objects.isNull(name)) {
             throw new IllegalArgumentException("fieldName must be not null");
+        }
+
 
         this.name = name;
     }

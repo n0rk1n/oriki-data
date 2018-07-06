@@ -1,8 +1,32 @@
 package cn.oriki.data.generate.base.where.enumeration;
 
+/**
+ * 条件运算符枚举
+ *
+ * @author oriki
+ */
 public enum ConditionalEnum {
 
-    EQUALS(" = "), GREATER_THAN(" > "), LESS_THAN(" < "), IS(" IS "), IS_NOT(" IS NOT ");
+    /**
+     * 等于
+     */
+    EQUALS(" = "),
+    /**
+     * 大于
+     */
+    GREATER_THAN(" > "),
+    /**
+     * 小于
+     */
+    LESS_THAN(" < "),
+    /**
+     * 为空（使用
+     */
+    IS(" IS "),
+    /**
+     * 不为空（使用
+     */
+    IS_NOT(" IS NOT ");
 
     private String conditional;
 

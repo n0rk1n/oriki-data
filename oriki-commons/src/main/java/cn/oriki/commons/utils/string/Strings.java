@@ -15,11 +15,14 @@ public class Strings {
      */
     public static boolean isBlank(CharSequence string) {
         int strLength;
-        if (string != null && (strLength = string.length()) != 0)
+        if (string != null && (strLength = string.length()) != 0) {
             for (int i = 0; i < strLength; ++i) {
-                if (!Character.isWhitespace(string.charAt(i)))
+                if (!Character.isWhitespace(string.charAt(i))) {
                     return false;
+                }
             }
+        }
+
         return true;
     }
 

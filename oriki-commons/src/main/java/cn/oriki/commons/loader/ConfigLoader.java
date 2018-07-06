@@ -59,13 +59,15 @@ public class ConfigLoader extends Properties {
     public Boolean getBooleanProperty(String key) {
         Boolean b = null;
 
-        String _value = properties.get(key);
-        if (Objects.nonNull(_value)) {
-            _value = _value.trim();
-            if (Boolean.TRUE.toString().equals(_value))
+        String valueTemp = properties.get(key);
+        if (Objects.nonNull(valueTemp)) {
+            valueTemp = valueTemp.trim();
+            if (Boolean.TRUE.toString().equals(valueTemp)) {
                 b = Boolean.TRUE;
-            else if (Boolean.FALSE.toString().equals(_value))
+            } else if (Boolean.FALSE.toString().equals(valueTemp)) {
                 b = Boolean.FALSE;
+            }
+
         }
         return b;
     }
@@ -88,13 +90,14 @@ public class ConfigLoader extends Properties {
     // 未获取流或 IO 异常会抛出
     private void load(String resourceFile) {
         try (InputStream inputStream = ConfigLoader.class.getClassLoader().getResourceAsStream(resourceFile)) {
-            if (Objects.isNull(inputStream))
+            if (Objects.isNull(inputStream)) {
                 throw new RuntimeException("instance configLoader failed , we can't get resource");
+            }
 
             super.load(inputStream);
-
             super.keySet().stream().map((e) -> (String) e).forEach((object) ->
-                    properties.put(object, super.getProperty(object).trim()) // 去除前后空格
+                    // 去除前后空格
+                    properties.put(object, super.getProperty(object).trim())
             );
             super.clear();
         } catch (IOException e) {

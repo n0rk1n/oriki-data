@@ -36,7 +36,6 @@ public abstract class AbstractJpaQuery extends AbstractQuery {
 
 
     @Override
-    @Deprecated
     public void query(String key) { // 不推荐使用
         addSelect(key, NO_ALIAS);
     }
@@ -120,8 +119,9 @@ public abstract class AbstractJpaQuery extends AbstractQuery {
         if (Objects.isNull(selectQuery)) {
             selectQuery = Lists.newArrayList();
         }
-        if (Strings.isNotBlank(key) && Strings.isNotBlank(alias))
+        if (Strings.isNotBlank(key) && Strings.isNotBlank(alias)){
             selectQuery.add(key + AS + alias);
+        }
         if (Strings.isNotBlank(key) && Strings.isBlank(alias)) {
             selectQuery.add(key);
         }

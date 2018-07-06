@@ -52,7 +52,8 @@ public class Reflects {
      * @return 对象中所有成员变量
      */
     public static <T> List<Field> getFields(Class<T> clazz) {
-        return getFields(Lists.newArrayList(), clazz); // 递归获取父类 Field
+        // 递归获取父类 Field
+        return getFields(Lists.newArrayList(), clazz);
     }
 
     /**
@@ -65,12 +66,14 @@ public class Reflects {
      */
     public static <T> Field getField(Class<T> clazz, String fieldName) {
         Field field = null;
-        if (Strings.isBlank(fieldName))
+        if (Strings.isBlank(fieldName)) {
             return null;
+        }
 
-        for (Field _field : getFields(clazz)) { // 获取所有属性
-            if (fieldName.equals(_field.getName())) {
-                field = _field;
+        // 获取所有属性
+        for (Field fieldTemp : getFields(clazz)) {
+            if (fieldName.equals(fieldTemp.getName())) {
+                field = fieldTemp;
                 break;
             }
         }

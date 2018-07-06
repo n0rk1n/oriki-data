@@ -1,8 +1,20 @@
 package cn.oriki.data.generate.base.where.enumeration;
 
+/**
+ * 逻辑运算符枚举
+ *
+ * @author oriki
+ */
 public enum OperatorEnum {
 
-    AND(" AND "), OR(" OR ");
+    /**
+     * 逻辑与
+     */
+    AND(" AND "),
+    /**
+     * 逻辑或
+     */
+    OR(" OR ");
 
     private String operator;
 
