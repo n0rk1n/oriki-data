@@ -6,7 +6,6 @@ import cn.oriki.data.generate.curd.save.result.SaveResult;
 import cn.oriki.data.generate.curd.update.result.UpdateResult;
 import cn.oriki.data.generate.exception.GenerateException;
 import cn.oriki.data.jpa.entity.Children;
-import cn.oriki.data.jpa.generate.base.predicate.impl.MySqlPredicateImpl;
 import cn.oriki.data.jpa.generate.base.sort.JpaSortImpl;
 import cn.oriki.data.jpa.generate.base.where.JpaWhereImpl;
 import com.alibaba.druid.pool.DruidDataSource;
@@ -53,7 +52,7 @@ public class MySqlRepositoryImplTest {
 
     @Test
     public void deleteById() throws GenerateException {
-        DeleteResult delete = this.repository.deleteById(59L);
+        DeleteResult delete = this.repository.deleteById(61L);
         System.out.println("删除的元素个数：" + delete.getNumber());
     }
 

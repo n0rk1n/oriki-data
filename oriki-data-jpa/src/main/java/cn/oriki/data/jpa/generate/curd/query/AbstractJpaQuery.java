@@ -4,6 +4,8 @@ import cn.oriki.commons.utils.string.Strings;
 import cn.oriki.data.generate.base.from.AbstractFrom;
 import cn.oriki.data.generate.base.predicate.AbstractPredicate;
 import cn.oriki.data.generate.curd.query.AbstractQuery;
+import cn.oriki.data.generate.exception.GenerateException;
+import cn.oriki.data.generate.result.GenerateResult;
 import cn.oriki.data.jpa.repository.AbstractJpaRepository;
 import cn.oriki.data.utils.reflect.ReflectDatas;
 import com.google.common.collect.Lists;
@@ -79,6 +81,17 @@ public abstract class AbstractJpaQuery extends AbstractQuery {
         if (Strings.isNotBlank(key) && Strings.isBlank(alias)) {
             selectQuery.add(key);
         }
+    }
+
+    protected void setSortImpl(StringBuilder stringBuilder) throws GenerateException {
+        if (Objects.nonNull(getPredicate().getSort()) && 0 != getPredicate().getSort().size()) {
+            GenerateResult sortResult = getPredicate().getSort().generate();
+            String sortSQL = sortResult.getGenerateResult();
+            if (Strings.isNotBlank(sortSQL)) {
+                stringBuilder.append(sortSQL);
+            }
+        }
+
     }
 
     public List<String> getSelectQuery() {
