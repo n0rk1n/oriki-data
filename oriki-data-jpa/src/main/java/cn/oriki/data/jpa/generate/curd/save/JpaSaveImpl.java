@@ -11,12 +11,12 @@ import java.io.Serializable;
 import java.util.Map;
 import java.util.Set;
 
-public abstract class AbstractJpaSave extends AbstractSave {
+public class JpaSaveImpl extends AbstractSave {
 
     private static final String INSERT_INTO_KEY_WORD = "INSERT INTO ";
     private static final String VLAUES_KEY_WORD = " VALUES ";
 
-    public AbstractJpaSave(AbstractFrom from) {
+    public JpaSaveImpl(AbstractFrom from) {
         super(from);
     }
 

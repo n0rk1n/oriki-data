@@ -6,11 +6,11 @@ import cn.oriki.data.generate.curd.delete.AbstractDelete;
 import cn.oriki.data.generate.exception.GenerateException;
 import cn.oriki.data.generate.result.GenerateResult;
 
-public class AbstractJpaDelete extends AbstractDelete {
+public class JpaDeleteImpl extends AbstractDelete {
 
     private static final String DELETE_KEY_WORD = " DELETE ";
 
-    public AbstractJpaDelete(AbstractWhere where, AbstractFrom from) {
+    public JpaDeleteImpl(AbstractWhere where, AbstractFrom from) {
         super(where, from);
     }
 

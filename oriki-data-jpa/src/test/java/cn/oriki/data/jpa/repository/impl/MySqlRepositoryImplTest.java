@@ -7,17 +7,14 @@ import cn.oriki.data.generate.curd.update.result.UpdateResult;
 import cn.oriki.data.generate.exception.GenerateException;
 import cn.oriki.data.jpa.entity.Children;
 import cn.oriki.data.jpa.generate.base.predicate.impl.MySqlPredicateImpl;
-import cn.oriki.data.jpa.generate.base.sort.impl.MySqlSortImpl;
-import cn.oriki.data.jpa.generate.base.where.impl.MySqlWhereImpl;
+import cn.oriki.data.jpa.generate.base.sort.JpaSortImpl;
+import cn.oriki.data.jpa.generate.base.where.JpaWhereImpl;
 import com.alibaba.druid.pool.DruidDataSource;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Objects;
+import java.util.*;
 
 public class MySqlRepositoryImplTest {
 
@@ -49,9 +46,9 @@ public class MySqlRepositoryImplTest {
 
         System.out.println("影响行数：" + saveResult.getNumber());
         Iterable<Children> entities = saveResult.getEntities();
-        entities.forEach((entity) -> {
-            System.out.println("插入数据的返回id：" + entity.getId());
-        });
+        entities.forEach((entity) ->
+                System.out.println("插入数据的返回id：" + entity.getId())
+        );
     }
 
     @Test
@@ -85,7 +82,7 @@ public class MySqlRepositoryImplTest {
 
     @Test
     public void queryByIds() throws GenerateException {
-        Collection<Children> children = this.repository.queryByIds(Arrays.asList(1L));
+        Collection<Children> children = this.repository.queryByIds(Collections.singletonList(1L));
 
         for (Children child : children) {
             showChildren(child);
@@ -122,7 +119,7 @@ public class MySqlRepositoryImplTest {
 
     @Test
     public void query() throws GenerateException {
-        MySqlSortImpl sort = new MySqlSortImpl();
+        JpaSortImpl sort = new JpaSortImpl();
         sort.orderDesc("id");
         MySqlPredicateImpl predicate = new MySqlPredicateImpl();
         predicate.setSort(sort);
@@ -146,7 +143,7 @@ public class MySqlRepositoryImplTest {
 
     @Test
     public void count1() throws GenerateException {
-        Long count = this.repository.count(new MySqlWhereImpl());
+        Long count = this.repository.count(new JpaWhereImpl());
         System.out.println("数据库总数：" + count);
     }
 
@@ -158,7 +155,7 @@ public class MySqlRepositoryImplTest {
 
     @Test
     public void queryAll1() throws GenerateException {
-        MySqlWhereImpl where = new MySqlWhereImpl();
+        JpaWhereImpl where = new JpaWhereImpl();
         where.equals("name", "zhangsan");
 
         Collection<Children> children = this.repository.queryAll(where);

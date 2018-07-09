@@ -9,14 +9,13 @@ import cn.oriki.data.generate.curd.delete.result.DeleteResult;
 import cn.oriki.data.generate.curd.save.result.SaveResult;
 import cn.oriki.data.generate.curd.update.result.UpdateResult;
 import cn.oriki.data.generate.exception.GenerateException;
-import cn.oriki.data.jpa.generate.curd.delete.AbstractJpaDelete;
-import cn.oriki.data.jpa.generate.curd.delete.impl.MySqlDeleteImpl;
+import cn.oriki.data.jpa.generate.base.from.JpaFromImpl;
+import cn.oriki.data.jpa.generate.base.where.JpaWhereImpl;
+import cn.oriki.data.jpa.generate.curd.delete.JpaDeleteImpl;
 import cn.oriki.data.jpa.generate.curd.query.AbstractJpaQuery;
 import cn.oriki.data.jpa.generate.curd.query.impl.MySqlQueryImpl;
-import cn.oriki.data.jpa.generate.curd.save.AbstractJpaSave;
-import cn.oriki.data.jpa.generate.curd.save.impl.MySqlSaveImpl;
-import cn.oriki.data.jpa.generate.curd.update.AbstractJpaUpdate;
-import cn.oriki.data.jpa.generate.curd.update.impl.MySqlUpdateImpl;
+import cn.oriki.data.jpa.generate.curd.save.JpaSaveImpl;
+import cn.oriki.data.jpa.generate.curd.update.JpaUpdateImpl;
 import cn.oriki.data.jpa.repository.AbstractJpaRepository;
 import cn.oriki.data.utils.reflect.ReflectDatas;
 import com.google.common.collect.Lists;
@@ -35,10 +34,9 @@ public class MySqlRepositoryImpl<T, ID extends Serializable> extends AbstractJpa
 
     @Override
     public <S extends T> SaveResult<S, ID> save(S entity) throws GenerateException, IllegalAccessException {
-        AbstractJpaSave save = new MySqlSaveImpl(getTableName());
+        JpaSaveImpl save = getSaveImpl();
 
         List<FieldTypeNameValue> fieldTypeNameValues = ReflectDatas.getFieldTypeNameValues(entity);// 获取包含null值的属性 TODO 后续使用
-
         fieldTypeNameValues.forEach((fieldTypeNameValue -> {
             String fieldName = fieldTypeNameValue.getName();// 获取属性名称
             Field field = ReflectDatas.getField(entityClass, fieldName);
@@ -54,7 +52,7 @@ public class MySqlRepositoryImpl<T, ID extends Serializable> extends AbstractJpa
 
     @Override
     public DeleteResult deleteById(ID id) throws GenerateException {
-        AbstractJpaDelete delete = new MySqlDeleteImpl(getTableName());
+        JpaDeleteImpl delete = getDeleteImpl();
 
         String primaryKeyColumnName = getPrimaryKeyColumnName(); // 获取 主键列名
 
@@ -65,7 +63,7 @@ public class MySqlRepositoryImpl<T, ID extends Serializable> extends AbstractJpa
 
     @Override
     public DeleteResult delete(T entity) throws GenerateException {
-        AbstractJpaDelete delete = new MySqlDeleteImpl(getTableName());
+        JpaDeleteImpl delete = getDeleteImpl();
 
         // 获取存在值的 FieldTypeNameValue , 添加作为存入列
         List<FieldTypeNameValue> fieldTypeNameValues = ReflectDatas.getFieldTypeNameValuesWithValuesIsNotNull(entity);
@@ -87,7 +85,7 @@ public class MySqlRepositoryImpl<T, ID extends Serializable> extends AbstractJpa
 
     @Override
     public DeleteResult deleteAll() throws GenerateException {
-        AbstractJpaDelete delete = new MySqlDeleteImpl(getTableName());
+        JpaDeleteImpl delete = getDeleteImpl();
         return super.executeDelete(delete);
     }
 
@@ -100,15 +98,17 @@ public class MySqlRepositoryImpl<T, ID extends Serializable> extends AbstractJpa
 
         if (Objects.isNull(id)) {
             SaveResult<S, ID> saveResult = save(entity);
-            updateResult.isUpdate(false); // 为 save 操作
-            updateResult.setNumber(saveResult.getNumber());
+            {
+                updateResult.isUpdate(false); // 为 save 操作
+                updateResult.setNumber(saveResult.getNumber());
+            }
         } else {
             // 更新操作
-            AbstractJpaUpdate update = new MySqlUpdateImpl(getTableName());
+            JpaUpdateImpl update = new JpaUpdateImpl(new JpaWhereImpl(), new JpaFromImpl(getTableName()));
 
             List<FieldTypeNameValue> fieldTypeNameValues = ReflectDatas.getFieldTypeNameValues(entity);// 获取包含null值的属性
             fieldTypeNameValues.forEach((fieldTypeNameValue -> {
-                String fieldName = fieldTypeNameValue.getName();// 获取属性名称
+                String fieldName = fieldTypeNameValue.getName(); // 获取属性名称
                 Field field = ReflectDatas.getField(entityClass, fieldName);
                 String columnName = getColumnName(field); // 转换为标准列名称
                 Serializable value = (Serializable) fieldTypeNameValue.getValue(); // 该值一定为 Serializable 的子类（上述获取已做过滤（ fieldValue insteadof Serializable ））
@@ -119,7 +119,9 @@ public class MySqlRepositoryImpl<T, ID extends Serializable> extends AbstractJpa
             update.getWhere().equals(getPrimaryKeyColumnName(), id); // 拼接 where
 
             int i = super.executeUpdate(update);
-            updateResult.setNumber(i);
+            {
+                updateResult.setNumber(i);
+            }
         }
 
         return updateResult;
@@ -208,7 +210,7 @@ public class MySqlRepositoryImpl<T, ID extends Serializable> extends AbstractJpa
     }
 
     @Override
-    public <S extends T> Long count(AbstractWhere where) throws GenerateException {
+    public Long count(AbstractWhere where) throws GenerateException {
         MySqlQueryImpl query = new MySqlQueryImpl(getTableName());
         query.count();
         query.getPredicate().setWhere(where);
@@ -222,9 +224,8 @@ public class MySqlRepositoryImpl<T, ID extends Serializable> extends AbstractJpa
     }
 
     @Override
-    public <S extends T> Long count(AbstractPredicate predicate) throws GenerateException {
+    public Long count(AbstractPredicate predicate) throws GenerateException {
         AbstractJpaQuery query = new MySqlQueryImpl(predicate, getTableName());
-        query.setPredicate(predicate);
         query.count();
         return queryValue(query, Long.class);
     }

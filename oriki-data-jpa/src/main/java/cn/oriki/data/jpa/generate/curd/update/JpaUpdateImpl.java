@@ -15,12 +15,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class AbstractJpaUpdate extends AbstractUpdate {
+public class JpaUpdateImpl extends AbstractUpdate {
 
     private static final String UPDATE_KEY_WORD = " UPDATE ";
     private static final String SET_KEY_WORD = " SET ";
 
-    public AbstractJpaUpdate(AbstractWhere where, AbstractFrom from) {
+    public JpaUpdateImpl(AbstractWhere where, AbstractFrom from) {
         super(where, from);
     }
 

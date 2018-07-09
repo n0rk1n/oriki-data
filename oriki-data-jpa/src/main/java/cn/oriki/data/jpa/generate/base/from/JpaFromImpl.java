@@ -5,11 +5,11 @@ import cn.oriki.data.generate.base.from.AbstractFrom;
 import cn.oriki.data.generate.exception.GenerateException;
 import cn.oriki.data.generate.result.GenerateResult;
 
-public abstract class AbstractJpaFrom extends AbstractFrom {
+public class JpaFromImpl extends AbstractFrom {
 
     private static final String FROM_KEY_WORD = " FROM ";
 
-    public AbstractJpaFrom(String tableName) {
+    public JpaFromImpl(String tableName) {
         super(tableName);
     }
 

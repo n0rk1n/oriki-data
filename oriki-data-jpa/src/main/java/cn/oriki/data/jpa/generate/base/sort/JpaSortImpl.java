@@ -10,7 +10,7 @@ import cn.oriki.data.generate.result.GenerateResult;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public abstract class AbstractJpaSort extends AbstractSort {
+public class JpaSortImpl extends AbstractSort {
 
     private static final String ORDER_BY_KEY_WORD = " ORDER BY ";
 

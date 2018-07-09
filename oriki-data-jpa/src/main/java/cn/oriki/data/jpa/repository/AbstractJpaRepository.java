@@ -8,10 +8,12 @@ import cn.oriki.data.generate.curd.delete.result.DeleteResult;
 import cn.oriki.data.generate.curd.save.result.SaveResult;
 import cn.oriki.data.generate.exception.GenerateException;
 import cn.oriki.data.generate.result.GenerateResult;
-import cn.oriki.data.jpa.generate.curd.delete.AbstractJpaDelete;
+import cn.oriki.data.jpa.generate.base.from.JpaFromImpl;
+import cn.oriki.data.jpa.generate.base.where.JpaWhereImpl;
+import cn.oriki.data.jpa.generate.curd.delete.JpaDeleteImpl;
 import cn.oriki.data.jpa.generate.curd.query.AbstractJpaQuery;
-import cn.oriki.data.jpa.generate.curd.save.AbstractJpaSave;
-import cn.oriki.data.jpa.generate.curd.update.AbstractJpaUpdate;
+import cn.oriki.data.jpa.generate.curd.save.JpaSaveImpl;
+import cn.oriki.data.jpa.generate.curd.update.JpaUpdateImpl;
 import cn.oriki.data.repository.AbstractRepository;
 import cn.oriki.data.utils.reflect.ReflectDatas;
 import com.google.common.collect.Lists;
@@ -37,6 +39,14 @@ public abstract class AbstractJpaRepository<T, ID extends Serializable> extends 
 
     public AbstractJpaRepository(Class<T> entityClass, Class<ID> idClass) {
         super(entityClass, idClass);
+    }
+
+    protected JpaSaveImpl getSaveImpl() {
+        return new JpaSaveImpl(new JpaFromImpl(getTableName()));
+    }
+
+    protected JpaDeleteImpl getDeleteImpl() {
+        return new JpaDeleteImpl(new JpaWhereImpl(), new JpaFromImpl(getTableName()));
     }
 
     /**
@@ -108,7 +118,7 @@ public abstract class AbstractJpaRepository<T, ID extends Serializable> extends 
      *
      * @return delete 操作结果
      */
-    protected DeleteResult executeDelete(AbstractJpaDelete delete) throws GenerateException {
+    protected DeleteResult executeDelete(JpaDeleteImpl delete) throws GenerateException {
         GenerateResult generateResult = delete.generate();
         String sql = generateResult.getGenerateResult();
         List<Serializable> params = generateResult.getParams();
@@ -128,7 +138,7 @@ public abstract class AbstractJpaRepository<T, ID extends Serializable> extends 
      * @param update Update 子类
      * @return 影响行数
      */
-    protected int executeUpdate(AbstractJpaUpdate update) throws GenerateException {
+    protected int executeUpdate(JpaUpdateImpl update) throws GenerateException {
         GenerateResult generateResult = update.generate();
 
         String sql = generateResult.getGenerateResult();
@@ -143,7 +153,7 @@ public abstract class AbstractJpaRepository<T, ID extends Serializable> extends 
      * @param save Save 子类
      * @return SaveResult
      */
-    protected <S extends T> SaveResult<S, ID> executeSave(AbstractJpaSave save, S entity) throws GenerateException, IllegalAccessException {
+    protected <S extends T> SaveResult<S, ID> executeSave(JpaSaveImpl save, S entity) throws GenerateException, IllegalAccessException {
         GenerateResult generateResult = save.generate();
         String sql = generateResult.getGenerateResult();
         List<Serializable> params = generateResult.getParams();

@@ -16,7 +16,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
-public abstract class AbstractJpaWhere extends AbstractWhere {
+public class JpaWhereImpl extends AbstractWhere {
 
     private static final String WHERE_KEY_WORD = " WHERE ";
 
@@ -57,7 +57,7 @@ public abstract class AbstractJpaWhere extends AbstractWhere {
                             s = criteria.getKey() + ConditionalEnum.IS.getConditional() + " NULL "; // key is null
                         }
                     } else {
-                        s = criteria.getKey() + ConditionalEnum.IS_NOT.getConditional() + " NULL "; // key is null
+                        s = criteria.getKey() + ConditionalEnum.IS_NOT.getConditional() + " NULL "; // key is not null
                     }
 
                     criteriaString.add(s);
