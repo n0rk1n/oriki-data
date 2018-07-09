@@ -8,22 +8,23 @@ public abstract class AbstractFrom implements From, Generate {
     private String fromName; // 来源名称
 
     public AbstractFrom(String fromName) {
+        checkFromName(fromName);
         setFromName(fromName);
     }
 
     @Override
     public void from(String fromName) {
+        checkFromName(fromName);
         setFromName(fromName);
     }
 
     // 设置 fromName
     private void setFromName(String fromName) {
-        check(fromName);
         this.fromName = fromName;
     }
 
     // 检查 fromName 是否合法
-    private void check(String fromName) {
+    private void checkFromName(String fromName) {
         if (Strings.isBlank(fromName)) {
             throw new IllegalArgumentException("can't set fromName null");
         }

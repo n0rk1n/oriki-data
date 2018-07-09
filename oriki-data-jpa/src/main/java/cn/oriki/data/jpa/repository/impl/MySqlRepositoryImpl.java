@@ -9,8 +9,6 @@ import cn.oriki.data.generate.curd.delete.result.DeleteResult;
 import cn.oriki.data.generate.curd.save.result.SaveResult;
 import cn.oriki.data.generate.curd.update.result.UpdateResult;
 import cn.oriki.data.generate.exception.GenerateException;
-import cn.oriki.data.jpa.generate.base.from.JpaFromImpl;
-import cn.oriki.data.jpa.generate.base.where.JpaWhereImpl;
 import cn.oriki.data.jpa.generate.curd.delete.JpaDeleteImpl;
 import cn.oriki.data.jpa.generate.curd.query.AbstractJpaQuery;
 import cn.oriki.data.jpa.generate.curd.query.impl.MySqlQueryImpl;
@@ -56,7 +54,7 @@ public class MySqlRepositoryImpl<T, ID extends Serializable> extends AbstractJpa
 
         String primaryKeyColumnName = getPrimaryKeyColumnName(); // 获取 主键列名
 
-        delete.getWhere().equals(primaryKeyColumnName, id);
+        delete.equals(primaryKeyColumnName, id);
 
         return executeDelete(delete);
     }
@@ -77,7 +75,7 @@ public class MySqlRepositoryImpl<T, ID extends Serializable> extends AbstractJpa
             }
             Serializable value = (Serializable) fieldTypeNameValue.getValue(); // 该值一定为 Serializable 的子类（上述获取已做过滤（ fieldValue insteadof Serializable ））
 
-            delete.getWhere().equals(columnName, value);
+            delete.equals(columnName, value);
         }));
 
         return executeDelete(delete);
@@ -104,7 +102,7 @@ public class MySqlRepositoryImpl<T, ID extends Serializable> extends AbstractJpa
             }
         } else {
             // 更新操作
-            JpaUpdateImpl update = new JpaUpdateImpl(new JpaWhereImpl(), new JpaFromImpl(getTableName()));
+            JpaUpdateImpl update = getUpdateImpl();
 
             List<FieldTypeNameValue> fieldTypeNameValues = ReflectDatas.getFieldTypeNameValues(entity);// 获取包含null值的属性
             fieldTypeNameValues.forEach((fieldTypeNameValue -> {
@@ -116,7 +114,7 @@ public class MySqlRepositoryImpl<T, ID extends Serializable> extends AbstractJpa
                 update.update(columnName, value);
             }));
 
-            update.getWhere().equals(getPrimaryKeyColumnName(), id); // 拼接 where
+            update.equals(getPrimaryKeyColumnName(), id); // 拼接 where
 
             int i = super.executeUpdate(update);
             {
@@ -132,7 +130,7 @@ public class MySqlRepositoryImpl<T, ID extends Serializable> extends AbstractJpa
         AbstractJpaQuery query = new MySqlQueryImpl(getTableName());
 
         String primaryKeyColumnName = super.getPrimaryKeyColumnName();
-        query.getPredicate().getWhere().equals(primaryKeyColumnName, id); // 添加查询条件
+        query.equals(primaryKeyColumnName, id); // 添加查询条件
 
         query.queryAll(entityClass);
 
@@ -144,7 +142,7 @@ public class MySqlRepositoryImpl<T, ID extends Serializable> extends AbstractJpa
         AbstractJpaQuery query = new MySqlQueryImpl(getTableName());
 
         String primaryKeyColumnName = super.getPrimaryKeyColumnName();
-        query.getPredicate().getWhere().in(primaryKeyColumnName, ids);
+        query.in(primaryKeyColumnName, ids);
 
         query.queryAll(entityClass);
 
@@ -179,7 +177,7 @@ public class MySqlRepositoryImpl<T, ID extends Serializable> extends AbstractJpa
         String idFieldName = primaryKeyField.getName();
 
         query.query(primaryKeyColumnName, idFieldName); // select id
-        query.getPredicate().getWhere().equals(primaryKeyColumnName, id); // where id = ?
+        query.equals(primaryKeyColumnName, id); // where id = ?
 
         ID value = queryValue(query, idClass);
 
@@ -204,7 +202,7 @@ public class MySqlRepositoryImpl<T, ID extends Serializable> extends AbstractJpa
             criterias.add(criteria);
         }
 
-        query.getPredicate().getWhere().andCriteria(criterias.toArray(new Criteria[0]));
+        query.andCriteria(criterias.toArray(new Criteria[0]));
 
         return queryValue(query, Long.class);
     }

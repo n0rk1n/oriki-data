@@ -6,7 +6,9 @@ import cn.oriki.data.generate.base.from.AbstractFrom;
 import cn.oriki.data.generate.base.predicate.AbstractPredicate;
 import cn.oriki.data.generate.exception.GenerateException;
 import cn.oriki.data.generate.result.GenerateResult;
+import cn.oriki.data.jpa.generate.base.from.JpaFromImpl;
 import cn.oriki.data.jpa.generate.base.pageable.impl.OraclePageableImpl;
+import cn.oriki.data.jpa.generate.base.predicate.JpaPredictImpl;
 import cn.oriki.data.jpa.generate.curd.query.AbstractJpaQuery;
 
 import java.util.Objects;
@@ -15,6 +17,10 @@ public class OracleQueryImpl extends AbstractJpaQuery {
 
     public OracleQueryImpl(AbstractPredicate predicate, AbstractFrom from) {
         super(predicate, from);
+    }
+
+    public OracleQueryImpl(String tableName) {
+        super(new JpaPredictImpl(new OraclePageableImpl(null, null)), new JpaFromImpl(tableName));
     }
 
     @Override

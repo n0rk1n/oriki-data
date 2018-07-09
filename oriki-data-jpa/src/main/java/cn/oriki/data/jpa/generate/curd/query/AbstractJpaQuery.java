@@ -20,6 +20,7 @@ public abstract class AbstractJpaQuery extends AbstractQuery {
     protected static final String SELECT_KEY_WORD = "select ";
     protected static final String SELECT_ALL_KEY_WORD = " * ";
     protected static final String COUNT_1_KEY_WORD = " COUNT(1) ";
+    protected static final String COUNT_ALIAS = " COUNT ";
 
     //    private static final String SEPARATOR = "_separator_";
     private static final String NO_ALIAS = "@noAlias@";
@@ -32,7 +33,6 @@ public abstract class AbstractJpaQuery extends AbstractQuery {
         super(predicate, from);
         selectQuery = Lists.newArrayList();
     }
-
 
     @Override
     public void query(String key) { // 不推荐使用
@@ -51,7 +51,7 @@ public abstract class AbstractJpaQuery extends AbstractQuery {
         } else {
             selectQuery = Lists.newArrayList();
         }
-        addSelect(COUNT_1_KEY_WORD, " COUNT ");
+        addSelect(COUNT_1_KEY_WORD, COUNT_ALIAS);
     }
 
     /**
@@ -70,7 +70,7 @@ public abstract class AbstractJpaQuery extends AbstractQuery {
 
     // 添加查询字段
     private void addSelect(String key, String alias) {
-        selectQuery.remove(COUNT_1_KEY_WORD + AS + " COUNT "); // 任何情况移除 count(1) as count
+        selectQuery.remove(COUNT_1_KEY_WORD + AS + COUNT_ALIAS); // 任何情况移除 count(1) as count
 
         if (Objects.isNull(selectQuery)) {
             selectQuery = Lists.newArrayList();
@@ -84,7 +84,7 @@ public abstract class AbstractJpaQuery extends AbstractQuery {
     }
 
     protected void setSortImpl(StringBuilder stringBuilder) throws GenerateException {
-        if (Objects.nonNull(getPredicate().getSort()) && 0 != getPredicate().getSort().size()) {
+        if (Objects.nonNull(getPredicate().getSort()) && 0 != getPredicate().getSort().sortSize()) {
             GenerateResult sortResult = getPredicate().getSort().generate();
             String sortSQL = sortResult.getGenerateResult();
             if (Strings.isNotBlank(sortSQL)) {

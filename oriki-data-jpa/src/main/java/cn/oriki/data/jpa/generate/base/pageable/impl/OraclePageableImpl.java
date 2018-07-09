@@ -21,13 +21,17 @@ public class OraclePageableImpl extends AbstractJpaPageable {
         GenerateResult generateResult = new GenerateResult();
         StringBuilder stringBuilder = new StringBuilder();
 
-        stringBuilder.append(" SELECT a1.* FROM ( ");
-        stringBuilder.append(SEPARATOR_KEY_WORD);
-        stringBuilder.append(") a1 WHERE rn BETWEEN ? AND ?");
+        if (getPageNumber() == null || getPageSize() == null) {
+            stringBuilder.append(" " + SEPARATOR_KEY_WORD + " ");
+        } else {
+            stringBuilder.append(" SELECT a1.* FROM ( ");
+            stringBuilder.append(SEPARATOR_KEY_WORD);
+            stringBuilder.append(") a1 WHERE rn BETWEEN ? AND ?");
 
-        Integer pageNumber = getPageNumber();
-        Integer pageSize = getPageSize();
-        generateResult.setParams(Arrays.asList((pageNumber - 1) * pageSize, (pageNumber - 1) * pageSize + pageSize));
+            Integer pageNumber = getPageNumber();
+            Integer pageSize = getPageSize();
+            generateResult.setParams(Arrays.asList((pageNumber - 1) * pageSize, (pageNumber - 1) * pageSize + pageSize));
+        }
 
         return generateResult;
     }

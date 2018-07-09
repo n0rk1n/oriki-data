@@ -72,7 +72,7 @@ public class DateTimes {
      * @param localDateTime LocalDateTime 对象
      * @return 时间字符串
      */
-    public static String formatNormalDate(LocalDateTime localDateTime) {
+    public static String formatDate(LocalDateTime localDateTime) {
         return format(localDateTime, DateTimeConstants.NORMAL_DATE_PATTERN);
     }
 
@@ -82,7 +82,7 @@ public class DateTimes {
      * @param localDateTime LocalDateTime 对象
      * @return 时间字符串
      */
-    public static String formatNormalTime(LocalDateTime localDateTime) {
+    public static String formatTime(LocalDateTime localDateTime) {
         return format(localDateTime, DateTimeConstants.NORMAL_TIME_PATTERN);
     }
 
@@ -92,7 +92,7 @@ public class DateTimes {
      * @param localDateTime LocalDateTime 对象
      * @return 时间字符串
      */
-    public static String formatNormalDateTime(LocalDateTime localDateTime) {
+    public static String formatDateTime(LocalDateTime localDateTime) {
         return format(localDateTime, DateTimeConstants.NORMAL_DATETIME_PATTERN);
     }
 

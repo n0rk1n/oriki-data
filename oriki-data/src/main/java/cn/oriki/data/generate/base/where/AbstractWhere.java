@@ -31,26 +31,25 @@ public abstract class AbstractWhere implements Where, Generate {
     @Override
     public void andCriteria(Criteria... criterias) {
         if (criterias.length > 0) {
-            OperatorCreterias creterias = createOperatorCreteria(OperatorEnum.AND, criterias);
-            this.operatorCreterias.addLast(creterias); // and 条件添加到结尾
+            OperatorCreterias operatorCreterias = createOperatorCreteria(OperatorEnum.AND, criterias);
+            this.operatorCreterias.addLast(operatorCreterias); // and 条件添加到结尾
         }
     }
 
     @Override
     public void orCriteria(Criteria... criterias) {
         if (criterias.length > 0) {
-            OperatorCreterias creterias = createOperatorCreteria(OperatorEnum.OR, criterias);
-            this.operatorCreterias.addFirst(creterias); // or 条件添加到开头
+            OperatorCreterias operatorCreterias = createOperatorCreteria(OperatorEnum.OR, criterias);
+            this.operatorCreterias.addFirst(operatorCreterias); // or 条件添加到开头
         }
     }
 
     // 添加条件，关系符使用 operator
     private OperatorCreterias createOperatorCreteria(OperatorEnum operator, Criteria... keyConditionalValues) {
         OperatorCreterias operatorCreteria = new OperatorCreterias();
-        {
-            operatorCreteria.setOperator(operator);
-            operatorCreteria.setCriterias(Lists.newArrayList(keyConditionalValues));
-        }
+        operatorCreteria.setOperator(operator);
+        operatorCreteria.setCriterias(Lists.newArrayList(keyConditionalValues));
+
         return operatorCreteria;
     }
 

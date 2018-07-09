@@ -29,13 +29,12 @@ public class MySqlPageableImpl extends AbstractJpaPageable {
 
         if (pageNumber == null || pageSize == null) {
             generateResult.setGenerateResult(StringConstants.EMPTY_STRING_VALUE);
-            return generateResult;
+        } else {
+            stringBuilder.append(" ? " + Generate.COMMA + " ? ");
+
+            generateResult.setGenerateResult(stringBuilder.toString());
+            generateResult.setParams(Arrays.asList((pageNumber - 1) * pageSize, pageSize));
         }
-
-        stringBuilder.append(" ? " + Generate.COMMA + " ? ");
-
-        generateResult.setGenerateResult(stringBuilder.toString());
-        generateResult.setParams(Arrays.asList((pageNumber - 1) * pageSize, pageSize));
 
         return generateResult;
     }

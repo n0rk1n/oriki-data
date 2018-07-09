@@ -2,10 +2,10 @@ package cn.oriki.data.jpa.generate.curd.save;
 
 import cn.oriki.commons.utils.collection.Collections;
 import cn.oriki.data.generate.Generate;
-import cn.oriki.data.generate.base.from.AbstractFrom;
 import cn.oriki.data.generate.curd.save.AbstractSave;
 import cn.oriki.data.generate.exception.GenerateException;
 import cn.oriki.data.generate.result.GenerateResult;
+import cn.oriki.data.jpa.generate.base.from.JpaFromImpl;
 
 import java.io.Serializable;
 import java.util.Map;
@@ -16,8 +16,8 @@ public class JpaSaveImpl extends AbstractSave {
     private static final String INSERT_INTO_KEY_WORD = "INSERT INTO ";
     private static final String VLAUES_KEY_WORD = " VALUES ";
 
-    public JpaSaveImpl(AbstractFrom from) {
-        super(from);
+    public JpaSaveImpl(String tableName) {
+        super(new JpaFromImpl(tableName));
     }
 
     @Override
@@ -36,7 +36,7 @@ public class JpaSaveImpl extends AbstractSave {
         stringBuilder.append(VLAUES_KEY_WORD); // VALUES
 
         String join2 = Collections.join(Collections.nCopies(params.getParams().size(), Generate.INJECTION), Generate.COMMA);
-        stringBuilder.append(Generate.LEFT_PARENTHESIS + join2 + Generate.RIGHT_PARENTHESIS); // ( ? , ? , ? )
+        stringBuilder.append(Generate.LEFT_PARENTHESIS + join2 + RIGHT_PARENTHESIS); // ( ? , ? , ? )
 
         GenerateResult result = new GenerateResult();
         {

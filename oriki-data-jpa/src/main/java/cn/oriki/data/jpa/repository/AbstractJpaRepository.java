@@ -8,8 +8,6 @@ import cn.oriki.data.generate.curd.delete.result.DeleteResult;
 import cn.oriki.data.generate.curd.save.result.SaveResult;
 import cn.oriki.data.generate.exception.GenerateException;
 import cn.oriki.data.generate.result.GenerateResult;
-import cn.oriki.data.jpa.generate.base.from.JpaFromImpl;
-import cn.oriki.data.jpa.generate.base.where.JpaWhereImpl;
 import cn.oriki.data.jpa.generate.curd.delete.JpaDeleteImpl;
 import cn.oriki.data.jpa.generate.curd.query.AbstractJpaQuery;
 import cn.oriki.data.jpa.generate.curd.save.JpaSaveImpl;
@@ -42,11 +40,15 @@ public abstract class AbstractJpaRepository<T, ID extends Serializable> extends 
     }
 
     protected JpaSaveImpl getSaveImpl() {
-        return new JpaSaveImpl(new JpaFromImpl(getTableName()));
+        return new JpaSaveImpl(getTableName());
     }
 
     protected JpaDeleteImpl getDeleteImpl() {
-        return new JpaDeleteImpl(new JpaWhereImpl(), new JpaFromImpl(getTableName()));
+        return new JpaDeleteImpl(getTableName());
+    }
+
+    protected JpaUpdateImpl getUpdateImpl() {
+        return new JpaUpdateImpl(getTableName());
     }
 
     /**

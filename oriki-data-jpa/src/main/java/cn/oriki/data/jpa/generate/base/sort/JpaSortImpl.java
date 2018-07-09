@@ -24,12 +24,11 @@ public class JpaSortImpl extends AbstractSort {
                 orderEntity.getOrder() + orderEntity.getDirection().getOrder()
         ).collect(Collectors.toList());
 
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(ORDER_BY_KEY_WORD);
-        stringBuilder.append(Collections.join(list, Generate.COMMA));
+        String stringBuilder = ORDER_BY_KEY_WORD +
+                Collections.join(list, Generate.COMMA);
 
         GenerateResult generateResult = new GenerateResult();
-        generateResult.setGenerateResult(stringBuilder.toString());
+        generateResult.setGenerateResult(stringBuilder);
         return generateResult;
     }
 

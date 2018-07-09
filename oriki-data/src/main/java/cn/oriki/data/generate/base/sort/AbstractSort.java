@@ -16,7 +16,7 @@ public abstract class AbstractSort implements Sort, Generate {
     private List<OrderEntity> orders; // 考虑排序优先级，
 
     public AbstractSort() {
-        orders = Lists.newArrayList();
+        checkOrders();
     }
 
     /**
@@ -25,7 +25,7 @@ public abstract class AbstractSort implements Sort, Generate {
      * @param keys 排序字段
      */
     public AbstractSort(String... keys) { // keys 传值建议 > 2
-        orders = Lists.newArrayList();
+        checkOrders();
         for (String key : keys) {
             addSort(key, NORMAL_ORDER);
         }
@@ -33,27 +33,32 @@ public abstract class AbstractSort implements Sort, Generate {
 
     @Override
     public void addSort(String key, Direction direction) {
+        checkOrders();
+        addOrder(key, direction);
+    }
+
+    @Override
+    public Integer sortSize() {
+        checkOrders();
+        return orders.size();
+    }
+
+    // 检查 orders 是否存在
+    private void checkOrders() {
         if (Objects.isNull(orders)) {
             orders = Lists.newArrayList();
         }
+    }
+
+    private void addOrder(String key, Direction direction) {
         OrderEntity orderEntity = new OrderEntity();
-        {
-            orderEntity.setOrder(key);
-            orderEntity.setDirection(direction);
-        }
+        orderEntity.setOrder(key);
+        orderEntity.setDirection(direction);
         orders.add(orderEntity);
     }
 
     public List<OrderEntity> getOrders() {
         return Collections.unmodifiableList(orders);
-    }
-
-    @Override
-    public Integer size() {
-        if (Objects.nonNull(orders)) {
-            return orders.size();
-        }
-        return 0;
     }
 
 }

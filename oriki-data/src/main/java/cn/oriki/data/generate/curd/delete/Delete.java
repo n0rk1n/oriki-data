@@ -1,8 +1,6 @@
 package cn.oriki.data.generate.curd.delete;
 
-import cn.oriki.data.generate.Generate;
-
-public interface Delete extends Generate {
+public interface Delete {
 
     // 其余删除方式条件遵循 Where
 

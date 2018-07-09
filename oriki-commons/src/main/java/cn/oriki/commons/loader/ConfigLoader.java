@@ -24,7 +24,7 @@ public class ConfigLoader extends Properties {
     private static final long serialVersionUID = 2036439234035849247L;
 
     private String[] resourceFiles; // 加载器加载配置文件数组集合
-    private Map<String, String> properties = Maps.newHashMap(); // 加载器加载所有配置映射集合
+    private Map<String, String> properties = Maps.newHashMap(); // 加载器加载所有配置映射集合，同名映射后加载会覆盖先加载配置
 
     public ConfigLoader(String... configFilePaths) {
         resourceFiles = configFilePaths; // 获取的多个配置文件
@@ -33,7 +33,6 @@ public class ConfigLoader extends Properties {
                 this.load(configFilePath);
             }
         }
-
     }
 
     @Override
@@ -101,7 +100,8 @@ public class ConfigLoader extends Properties {
             );
             super.clear();
         } catch (IOException e) {
-            throw new RuntimeException("failed loading config from : " + resourceFile, e);
+            super.clear();
+//            throw new RuntimeException("failed loading config from : " + resourceFile, e);
         }
     }
 

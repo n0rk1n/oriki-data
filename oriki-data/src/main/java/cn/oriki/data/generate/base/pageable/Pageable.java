@@ -6,4 +6,6 @@ public interface Pageable {
 
     Integer getPageSize();
 
+    void set(Integer pageNumber, Integer pageSize);
+
 }

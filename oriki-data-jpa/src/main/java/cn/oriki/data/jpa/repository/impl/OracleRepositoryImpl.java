@@ -12,7 +12,6 @@ import cn.oriki.data.generate.exception.GenerateException;
 import cn.oriki.data.jpa.generate.base.from.JpaFromImpl;
 import cn.oriki.data.jpa.generate.base.pageable.impl.OraclePageableImpl;
 import cn.oriki.data.jpa.generate.base.predicate.JpaPredictImpl;
-import cn.oriki.data.jpa.generate.base.where.JpaWhereImpl;
 import cn.oriki.data.jpa.generate.curd.delete.JpaDeleteImpl;
 import cn.oriki.data.jpa.generate.curd.query.AbstractJpaQuery;
 import cn.oriki.data.jpa.generate.curd.query.impl.OracleQueryImpl;
@@ -106,7 +105,7 @@ public class OracleRepositoryImpl<T, ID extends Serializable> extends AbstractJp
             }
         } else {
             // 更新操作
-            JpaUpdateImpl update = new JpaUpdateImpl(new JpaWhereImpl(), new JpaFromImpl(getTableName()));
+            JpaUpdateImpl update = getUpdateImpl();
 
             List<FieldTypeNameValue> fieldTypeNameValues = ReflectDatas.getFieldTypeNameValues(entity);// 获取包含null值的属性
             fieldTypeNameValues.forEach((fieldTypeNameValue -> {

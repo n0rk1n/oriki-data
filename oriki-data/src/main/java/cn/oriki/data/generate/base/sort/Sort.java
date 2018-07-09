@@ -18,6 +18,6 @@ public interface Sort {
         }
     }
 
-    Integer size(); // 用于判断是否有排序条件，传 size （比起 boolean ） 更通用一些
+    Integer sortSize(); // 用于判断是否有排序条件，传 size （比起 boolean ） 更通用一些
 
 }

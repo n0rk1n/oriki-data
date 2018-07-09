@@ -6,6 +6,8 @@ import cn.oriki.data.generate.base.predicate.AbstractPredicate;
 import cn.oriki.data.generate.exception.GenerateException;
 import cn.oriki.data.generate.result.GenerateResult;
 import cn.oriki.data.jpa.generate.base.from.JpaFromImpl;
+import cn.oriki.data.jpa.generate.base.pageable.impl.MySqlPageableImpl;
+import cn.oriki.data.jpa.generate.base.predicate.JpaPredictImpl;
 import cn.oriki.data.jpa.generate.curd.query.AbstractJpaQuery;
 
 import java.util.Objects;
@@ -43,9 +45,12 @@ public class MySqlQueryImpl extends AbstractJpaQuery {
 
         // 添加分页数据
         if (Objects.nonNull(getPredicate().getPageable()) && Objects.nonNull(getPredicate().getPageable().getPageNumber()) && Objects.nonNull(getPredicate().getPageable().getPageSize())) {
-            stringBuilder.append(getPredicate().getPageable().generate().getGenerateResult());
-            // 分页参数
-            generateResult.setParams(getPredicate().getPageable().generate().getParams());
+            GenerateResult pageResult = getPredicate().getPageable().generate();
+            if (Collections.isNotNullAndHasElements(pageResult.getParams())) {
+                stringBuilder.append(pageResult.getGenerateResult());
+                // 分页参数
+                generateResult.setParams(pageResult.getParams());
+            }
         }
 
         generateResult.setGenerateResult(stringBuilder.toString());
@@ -54,7 +59,7 @@ public class MySqlQueryImpl extends AbstractJpaQuery {
     }
 
     public MySqlQueryImpl(String tableName) {
-        super(new MySqlPredicateImpl(), new JpaFromImpl(tableName));
+        super(new JpaPredictImpl(new MySqlPageableImpl(null, null)), new JpaFromImpl(tableName));
     }
 
     public MySqlQueryImpl(AbstractPredicate predicate, String tableName) {

@@ -6,7 +6,7 @@ import cn.oriki.data.generate.base.sort.enumeration.Direction;
 import cn.oriki.data.generate.base.where.AbstractWhere;
 import cn.oriki.data.generate.base.where.entity.Criteria;
 
-public abstract class AbstractPredicate implements Predicate {
+public abstract class AbstractPredicate implements Predicate { // 不需进行 generate
 
     private AbstractWhere where;
     private AbstractSort sort;
@@ -36,8 +36,8 @@ public abstract class AbstractPredicate implements Predicate {
     }
 
     @Override
-    public Integer size() {
-        return this.sort.size();
+    public Integer sortSize() {
+        return this.sort.sortSize();
     }
 
     @Override
@@ -53,6 +53,11 @@ public abstract class AbstractPredicate implements Predicate {
     @Override
     public void orCriteria(Criteria... criterias) {
         this.where.orCriteria(criterias);
+    }
+
+    @Override
+    public void set(Integer pageNumber, Integer pageSize) {
+        this.pageable.set(pageNumber, pageSize);
     }
 
     // -----------------------------------------------------------------------------------------------------------------

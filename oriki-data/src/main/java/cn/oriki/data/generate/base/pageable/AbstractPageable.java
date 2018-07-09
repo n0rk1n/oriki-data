@@ -8,9 +8,24 @@ public abstract class AbstractPageable implements Pageable, Generate {
     private Integer pageNumber;
     private Integer pageSize;
 
+    public AbstractPageable(Integer pageNumber, Integer pageSize) {
+        this.pageNumber = pageNumber;
+        this.pageSize = pageSize;
+    }
+
+    @Override
+    public void set(Integer pageNumber, Integer pageSize) {
+        this.pageNumber = pageNumber;
+        this.pageSize = pageSize;
+    }
+
     @Override
     public Integer getPageNumber() {
         return pageNumber;
+    }
+
+    public void setPageNumber(Integer pageNumber) {
+        this.pageNumber = pageNumber;
     }
 
     @Override
@@ -18,8 +33,7 @@ public abstract class AbstractPageable implements Pageable, Generate {
         return pageSize;
     }
 
-    public AbstractPageable(Integer pageNumber, Integer pageSize) {
-        this.pageNumber = pageNumber;
+    public void setPageSize(Integer pageSize) {
         this.pageSize = pageSize;
     }
 

@@ -12,9 +12,9 @@ public interface Where {
 
     void clear(); // 清空所有条件
 
-    void andCriteria(Criteria... criterias); // 与关系添加条件
+    void andCriteria(Criteria... criterias); // 添加与关系条件
 
-    void orCriteria(Criteria... criterias); // 或关系添加条件
+    void orCriteria(Criteria... criterias); // 添加或关系条件
 
     /**
      * in 方法，转换 in 为 or 参数
@@ -25,18 +25,13 @@ public interface Where {
      * @param values 值的集合
      */
     default <E extends Serializable> void in(String key, Collection<E> values) {
-        values = values.stream().filter((e) -> Objects.nonNull(e)).collect(Collectors.toList());
+        values = values.stream().filter(Objects::nonNull).collect(Collectors.toList());
 
         Criteria[] criterias = new Criteria[values.size()];
         int index = 0;
 
         for (Serializable value : values) {
-            Criteria criteria = new Criteria();
-            {
-                criteria.setKey(key);
-                criteria.setConditional(ConditionalEnum.EQUALS);
-                criteria.setValue(value);
-            }
+            Criteria criteria = createCriteria(key, ConditionalEnum.EQUALS, value);
             criterias[index] = criteria;
             index++;
         }
@@ -44,49 +39,46 @@ public interface Where {
     }
 
     default void equals(String key, Serializable value) {
-        Criteria criteria = new Criteria();
-        {
-            criteria.setKey(key);
-            criteria.setConditional(ConditionalEnum.EQUALS);
-            criteria.setValue(value);
-        }
+        Criteria criteria = createCriteria(key, ConditionalEnum.EQUALS, value);
         andCriteria(criteria);
     }
 
-    default Criteria greaterThan(String key, Serializable value) {
+    default void greaterThan(String key, Serializable value) {
+        Criteria criteria = createCriteria(key, ConditionalEnum.GREATER_THAN, value);
+        andCriteria(criteria);
+    }
+
+    default void greaterThanAndEquals(String key, Serializable value) {
+        Criteria criteria = createCriteria(key, ConditionalEnum.GREATER_THAN_AND_EQUALS, value);
+        andCriteria(criteria);
+    }
+
+    default void lessThan(String key, Serializable value) {
+        Criteria criteria = createCriteria(key, ConditionalEnum.LESS_THAN, value);
+        andCriteria(criteria);
+    }
+
+    default void lessThanAndEquals(String key, Serializable value) {
+        Criteria criteria = createCriteria(key, ConditionalEnum.LESS_THAN_AND_EQUALS, value);
+        andCriteria(criteria);
+    }
+
+    default void isNull(String key) {
+        Criteria criteria = createCriteria(key, ConditionalEnum.IS, null); // 不设置 value 值
+        andCriteria(criteria);
+    }
+
+    default void isNotNull(String key) {
+        Criteria criteria = createCriteria(key, ConditionalEnum.IS_NOT, null); // 不设置 value 值
+        andCriteria(criteria);
+    }
+
+    default Criteria createCriteria(String key, ConditionalEnum conditionalEnum, Serializable value) {
         Criteria criteria = new Criteria();
         {
             criteria.setKey(key);
-            criteria.setConditional(ConditionalEnum.GREATER_THAN);
+            criteria.setConditional(conditionalEnum);
             criteria.setValue(value);
-        }
-        return criteria;
-    }
-
-    default Criteria lessThan(String key, Serializable value) {
-        Criteria criteria = new Criteria();
-        {
-            criteria.setKey(key);
-            criteria.setConditional(ConditionalEnum.LESS_THAN);
-            criteria.setValue(value);
-        }
-        return criteria;
-    }
-
-    default Criteria isNull(String key) {
-        Criteria criteria = new Criteria();
-        {
-            criteria.setKey(key);
-            criteria.setConditional(ConditionalEnum.IS);
-        }
-        return criteria;
-    }
-
-    default Criteria isNotNull(String key) {
-        Criteria criteria = new Criteria();
-        {
-            criteria.setKey(key);
-            criteria.setConditional(ConditionalEnum.IS_NOT);
         }
         return criteria;
     }

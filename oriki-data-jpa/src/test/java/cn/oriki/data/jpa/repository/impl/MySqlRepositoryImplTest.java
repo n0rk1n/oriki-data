@@ -6,7 +6,8 @@ import cn.oriki.data.generate.curd.save.result.SaveResult;
 import cn.oriki.data.generate.curd.update.result.UpdateResult;
 import cn.oriki.data.generate.exception.GenerateException;
 import cn.oriki.data.jpa.entity.Children;
-import cn.oriki.data.jpa.generate.base.sort.JpaSortImpl;
+import cn.oriki.data.jpa.generate.base.pageable.impl.MySqlPageableImpl;
+import cn.oriki.data.jpa.generate.base.predicate.JpaPredictImpl;
 import cn.oriki.data.jpa.generate.base.where.JpaWhereImpl;
 import com.alibaba.druid.pool.DruidDataSource;
 import org.junit.Assert;
@@ -52,7 +53,7 @@ public class MySqlRepositoryImplTest {
 
     @Test
     public void deleteById() throws GenerateException {
-        DeleteResult delete = this.repository.deleteById(61L);
+        DeleteResult delete = this.repository.deleteById(63L);
         System.out.println("删除的元素个数：" + delete.getNumber());
     }
 
@@ -75,13 +76,13 @@ public class MySqlRepositoryImplTest {
 
     @Test
     public void queryById() throws GenerateException {
-        Children children = this.repository.queryById(1L);
+        Children children = this.repository.queryById(64L);
         showChildren(children);
     }
 
     @Test
     public void queryByIds() throws GenerateException {
-        Collection<Children> children = this.repository.queryByIds(Collections.singletonList(1L));
+        Collection<Children> children = this.repository.queryByIds(Collections.singletonList(64L));
 
         for (Children child : children) {
             showChildren(child);
@@ -99,8 +100,8 @@ public class MySqlRepositoryImplTest {
 
     @Test
     public void exists() throws GenerateException {
-        boolean b = this.repository.exists(1L);
-        Assert.assertFalse(b);
+        boolean b = this.repository.exists(64L);
+        Assert.assertTrue(b);
     }
 
     @Test
@@ -118,10 +119,8 @@ public class MySqlRepositoryImplTest {
 
     @Test
     public void query() throws GenerateException {
-        JpaSortImpl sort = new JpaSortImpl();
-        sort.orderDesc("id");
-        MySqlPredicateImpl predicate = new MySqlPredicateImpl();
-        predicate.setSort(sort);
+        JpaPredictImpl predicate = new JpaPredictImpl(new MySqlPageableImpl(null, null));
+        predicate.orderDesc("id");
 
         Iterable<Children> query = this.repository.query(predicate);
 
@@ -142,13 +141,15 @@ public class MySqlRepositoryImplTest {
 
     @Test
     public void count1() throws GenerateException {
-        Long count = this.repository.count(new JpaWhereImpl());
+        JpaWhereImpl jpaWhere = new JpaWhereImpl();
+        jpaWhere.in("id", Arrays.asList(1L, 2L, 3L));
+        Long count = this.repository.count(jpaWhere);
         System.out.println("数据库总数：" + count);
     }
 
     @Test
     public void count2() throws GenerateException {
-        Long count = this.repository.count(new MySqlPredicateImpl());
+        Long count = this.repository.count(new JpaPredictImpl(new MySqlPageableImpl(null, null)));
         System.out.println("数据库总数：" + count);
     }
 

@@ -16,9 +16,17 @@ public enum ConditionalEnum {
      */
     GREATER_THAN(" > "),
     /**
+     * 大于等于
+     */
+    GREATER_THAN_AND_EQUALS(" >="),
+    /**
      * 小于
      */
     LESS_THAN(" < "),
+    /**
+     * 小于等于
+     */
+    LESS_THAN_AND_EQUALS(" <= "),
     /**
      * 为空（使用
      */
