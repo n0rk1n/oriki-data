@@ -91,7 +91,6 @@ public abstract class AbstractJpaQuery extends AbstractQuery {
                 stringBuilder.append(sortSQL);
             }
         }
-
     }
 
     public List<String> getSelectQuery() {

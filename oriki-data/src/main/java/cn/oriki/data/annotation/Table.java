@@ -11,4 +11,8 @@ public @interface Table {
 
     String name();
 
+    String source() default "";
+
+    String sourceType() default "";
+
 }

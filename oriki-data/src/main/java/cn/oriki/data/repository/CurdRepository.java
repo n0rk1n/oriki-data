@@ -33,6 +33,6 @@ public interface CurdRepository<T, ID extends Serializable> extends Repository<T
 
     <S extends T> Long count(S entity) throws GenerateException;
 
-    <S extends T> Long count(AbstractWhere where) throws GenerateException;
+    Long count(AbstractWhere where) throws GenerateException;
 
 }

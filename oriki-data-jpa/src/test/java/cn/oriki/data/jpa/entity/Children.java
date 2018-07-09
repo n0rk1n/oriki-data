@@ -1,8 +1,9 @@
 package cn.oriki.data.jpa.entity;
 
 import cn.oriki.data.annotation.PrimaryKey;
+import cn.oriki.data.annotation.Table;
 
-//@Table(name = "nihao")
+@Table(name = "nihao")
 public class Children extends Parent {
 
     @PrimaryKey
