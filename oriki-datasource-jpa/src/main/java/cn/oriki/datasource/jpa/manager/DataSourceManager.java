@@ -75,7 +75,7 @@ public class DataSourceManager {
                 String url = "oriki." + sourceKey + ".url";
                 String username = "oriki." + sourceKey + ".userName";
                 String password = "oriki." + sourceKey + ".password";
-                DataSourceInfo dataSourceInfo = createDataSourceInfo(driverClass, url, username, password);
+                DataSourceInfo dataSourceInfo = createDataSourceInfo(configLoader2.getProperty(driverClass), configLoader2.getProperty(url), configLoader2.getProperty(username), configLoader2.getProperty(password));
                 createDataSource(sourceKey, dataSourceInfo);
             });
         }

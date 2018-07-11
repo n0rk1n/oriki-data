@@ -17,6 +17,7 @@ import cn.oriki.data.jpa.generate.curd.save.JpaSaveImpl;
 import cn.oriki.data.jpa.generate.curd.update.JpaUpdateImpl;
 import cn.oriki.data.repository.AbstractRepository;
 import cn.oriki.data.utils.reflect.ReflectDatas;
+import cn.oriki.datasource.jpa.manager.DataSourceManager;
 import com.google.common.collect.Lists;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -40,6 +41,14 @@ public abstract class AbstractJpaRepositorys<T, ID extends Serializable> extends
 
     public AbstractJpaRepositorys(Class<T> entityClass, Class<ID> idClass) {
         super(entityClass, idClass);
+        Table table = (Table) ReflectDatas.getAnnotation(entityClass, Table.class);
+        if (Objects.nonNull(table)) {
+            String s = table.sourceKey();
+            if (Strings.isNotBlank(s)) {
+                DataSource dataSource = DataSourceManager.getInstance().chooseDataSource(s);
+                setJdbcTemplate(dataSource);
+            }
+        }
     }
 
     /**

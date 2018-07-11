@@ -3,7 +3,7 @@ package cn.oriki.data.jpa.entity;
 import cn.oriki.data.annotation.PrimaryKey;
 import cn.oriki.data.annotation.Table;
 
-@Table(name = "nihao")
+@Table(name = "t_children", sourceKey = "csf")
 public class Children extends Parent {
 
     @PrimaryKey

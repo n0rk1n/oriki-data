@@ -9,7 +9,6 @@ import cn.oriki.data.jpa.entity.Children;
 import cn.oriki.data.jpa.generate.base.pageable.impl.MySqlPageableImpl;
 import cn.oriki.data.jpa.generate.base.predicate.JpaPredictImpl;
 import cn.oriki.data.jpa.generate.base.where.JpaWhereImpl;
-import com.alibaba.druid.pool.DruidDataSource;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,14 +22,14 @@ public class MySqlRepositoryImplTest {
     @Before
     public void before() {
         ConfigLoader configLoader = new ConfigLoader("oriki-commons-datasource.properties");
-        DruidDataSource dataSource = new DruidDataSource();
-        dataSource.setDriverClassName(configLoader.getProperty("oriki.csf-mysql.mysql.driverClass"));
-        dataSource.setUrl(configLoader.getProperty("oriki.csf-mysql.mysql.url"));
-        dataSource.setUsername(configLoader.getProperty("oriki.csf-mysql.mysql.userName"));
-        dataSource.setPassword(configLoader.getProperty("oriki.csf-mysql.mysql.password"));
+//        DruidDataSource dataSource = new DruidDataSource();
+//        dataSource.setDriverClassName(configLoader.getProperty("oriki.csf-mysql.mysql.driverClass"));
+//        dataSource.setUrl(configLoader.getProperty("oriki.csf-mysql.mysql.url"));
+//        dataSource.setUsername(configLoader.getProperty("oriki.csf-mysql.mysql.userName"));
+//        dataSource.setPassword(configLoader.getProperty("oriki.csf-mysql.mysql.password"));
 
         repository = new MySqlRepositoryImpl<>(Children.class, Long.class);
-        repository.setJdbcTemplate(dataSource);
+//        repository.setJdbcTemplate(dataSource);
 
         configLoader.clear();
     }
