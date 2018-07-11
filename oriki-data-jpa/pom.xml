@@ -16,7 +16,7 @@
         <dependency>
             <groupId>cn.oriki.project</groupId>
             <artifactId>oriki-data</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>mysql</groupId>
