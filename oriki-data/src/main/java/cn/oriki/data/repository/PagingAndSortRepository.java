@@ -9,6 +9,6 @@ public interface PagingAndSortRepository<T, ID extends Serializable> extends Cur
 
     Iterable<T> query(AbstractPredicate predicate) throws GenerateException;
 
-    <S extends T> Long count(AbstractPredicate predicate) throws GenerateException;
+    Long count(AbstractPredicate predicate) throws GenerateException;
 
 }

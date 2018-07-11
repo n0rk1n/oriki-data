@@ -4,17 +4,17 @@ import cn.oriki.data.generate.base.sort.enumeration.Direction;
 
 public interface Sort {
 
-    void addSort(String key, Direction direction);
+    void sort(String key, Direction direction);
 
     default void orderAsc(String... keys) { // 为防止 keys 相同会出现随机排序问题（某些情况），建议 keys 传值 > 2
         for (String key : keys) {
-            addSort(key, Direction.ASC);
+            sort(key, Direction.ASC);
         }
     }
 
     default void orderDesc(String... keys) { // 为防止 keys 相同会出现随机排序问题（某些情况），建议 keys 传值 > 2
         for (String key : keys) {
-            addSort(key, Direction.DESC);
+            sort(key, Direction.DESC);
         }
     }
 

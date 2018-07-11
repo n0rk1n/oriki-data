@@ -75,11 +75,10 @@ public interface Where {
 
     default Criteria createCriteria(String key, ConditionalEnum conditionalEnum, Serializable value) {
         Criteria criteria = new Criteria();
-        {
-            criteria.setKey(key);
-            criteria.setConditional(conditionalEnum);
-            criteria.setValue(value);
-        }
+        criteria.setKey(key);
+        criteria.setConditional(conditionalEnum);
+        criteria.setValue(value);
+
         return criteria;
     }
 

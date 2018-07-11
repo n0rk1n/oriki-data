@@ -23,11 +23,11 @@ public class ConfigLoader extends Properties {
 
     private static final long serialVersionUID = 2036439234035849247L;
 
-    private String[] resourceFiles; // 加载器加载配置文件数组集合
+    //    private String[] resourceFiles; // 加载器加载配置文件数组集合
     private Map<String, String> properties = Maps.newHashMap(); // 加载器加载所有配置映射集合，同名映射后加载会覆盖先加载配置
 
     public ConfigLoader(String... configFilePaths) {
-        resourceFiles = configFilePaths; // 获取的多个配置文件
+//        resourceFiles = configFilePaths; // 获取的多个配置文件
         for (String configFilePath : configFilePaths) {
             if (Strings.isNotBlank(configFilePath)) {
                 this.load(configFilePath);
@@ -59,14 +59,13 @@ public class ConfigLoader extends Properties {
         Boolean b = null;
 
         String valueTemp = properties.get(key);
-        if (Objects.nonNull(valueTemp)) {
+        if (Strings.isNotBlank(valueTemp)) {
             valueTemp = valueTemp.trim();
             if (Boolean.TRUE.toString().equals(valueTemp)) {
                 b = Boolean.TRUE;
             } else if (Boolean.FALSE.toString().equals(valueTemp)) {
                 b = Boolean.FALSE;
             }
-
         }
         return b;
     }
@@ -94,14 +93,16 @@ public class ConfigLoader extends Properties {
             }
 
             super.load(inputStream);
-            super.keySet().stream().map((e) -> (String) e).forEach((object) ->
-                    // 去除前后空格
-                    properties.put(object, super.getProperty(object).trim())
-            );
-            super.clear();
+            super.keySet().forEach((object) -> {
+                String key = (String) object;
+                // 去除前后空格
+                properties.put(key, super.getProperty(key).trim());
+            });
         } catch (IOException e) {
-            super.clear();
+            e.printStackTrace();
 //            throw new RuntimeException("failed loading config from : " + resourceFile, e);
+        } finally {
+            super.clear();
         }
     }
 
@@ -109,8 +110,8 @@ public class ConfigLoader extends Properties {
         return Collections.unmodifiableMap(properties);
     }
 
-    public String[] getResourceFiles() {
+    /*public String[] getResourceFiles() {
         return resourceFiles;
-    }
+    }*/
 
 }

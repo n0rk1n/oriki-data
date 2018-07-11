@@ -13,7 +13,7 @@ public abstract class AbstractSort implements Sort, Generate {
 
     private static final Direction NORMAL_ORDER = Direction.ASC;
 
-    private List<OrderEntity> orders; // 考虑排序优先级，
+    private List<OrderEntity> orders; // 考虑排序优先级， List
 
     public AbstractSort() {
         checkOrders();
@@ -27,12 +27,12 @@ public abstract class AbstractSort implements Sort, Generate {
     public AbstractSort(String... keys) { // keys 传值建议 > 2
         checkOrders();
         for (String key : keys) {
-            addSort(key, NORMAL_ORDER);
+            sort(key, NORMAL_ORDER);
         }
     }
 
     @Override
-    public void addSort(String key, Direction direction) {
+    public void sort(String key, Direction direction) {
         checkOrders();
         addOrder(key, direction);
     }

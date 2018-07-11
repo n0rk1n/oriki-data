@@ -32,4 +32,11 @@ public class JpaSortImpl extends AbstractSort {
         return generateResult;
     }
 
+    public JpaSortImpl() {
+    }
+
+    public JpaSortImpl(String... keys) {
+        super(keys);
+    }
+
 }

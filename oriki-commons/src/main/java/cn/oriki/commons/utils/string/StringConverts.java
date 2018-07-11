@@ -134,9 +134,9 @@ public class StringConverts {
     }
 
     // Java 转换为 SQL ，不存在前缀
-//    private static String toSQLName(String javaName) {
-//        return toSQLName(javaName, "");
-//    }
+    /*private static String toSQLName(String javaName) {
+        return toSQLName(javaName, "");
+    }*/
 
     // Java 转换为 SQL ，存在前缀
     private static String toSQLName(String javaName, String prefix) {

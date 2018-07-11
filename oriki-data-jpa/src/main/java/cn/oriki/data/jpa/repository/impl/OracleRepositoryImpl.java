@@ -4,7 +4,6 @@ import cn.oriki.data.generate.base.predicate.AbstractPredicate;
 import cn.oriki.data.generate.base.where.AbstractWhere;
 import cn.oriki.data.generate.base.where.entity.Criteria;
 import cn.oriki.data.generate.exception.GenerateException;
-import cn.oriki.data.jpa.generate.base.from.JpaFromImpl;
 import cn.oriki.data.jpa.generate.base.pageable.impl.OraclePageableImpl;
 import cn.oriki.data.jpa.generate.base.predicate.JpaPredictImpl;
 import cn.oriki.data.jpa.generate.curd.query.AbstractJpaQuery;
@@ -24,7 +23,7 @@ public class OracleRepositoryImpl<T, ID extends Serializable> extends AbstractJp
     }
 
     private AbstractJpaQuery getQueryImpl() {
-        return new OracleQueryImpl(new JpaPredictImpl(new OraclePageableImpl(null, null)), new JpaFromImpl(getTableName()));
+        return new OracleQueryImpl(new JpaPredictImpl(new OraclePageableImpl(null, null)), getTableName());
     }
 
     @Override

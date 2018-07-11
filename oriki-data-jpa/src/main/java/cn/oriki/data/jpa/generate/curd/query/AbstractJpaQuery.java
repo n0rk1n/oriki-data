@@ -1,6 +1,7 @@
 package cn.oriki.data.jpa.generate.curd.query;
 
 import cn.oriki.commons.utils.string.Strings;
+import cn.oriki.data.generate.Generate;
 import cn.oriki.data.generate.base.from.AbstractFrom;
 import cn.oriki.data.generate.base.predicate.AbstractPredicate;
 import cn.oriki.data.generate.curd.query.AbstractQuery;
@@ -81,6 +82,21 @@ public abstract class AbstractJpaQuery extends AbstractQuery {
         if (Strings.isNotBlank(key) && Strings.isBlank(alias)) {
             selectQuery.add(key);
         }
+    }
+
+    protected void setSelectImpl(StringBuilder stringBuilder) throws GenerateException {
+        stringBuilder.append(SELECT_KEY_WORD); // SELECT
+        // 获取所有属性
+        if (getSelectQuery().size() == 0) {
+            stringBuilder.append(SELECT_ALL_KEY_WORD); // select * TODO 不使用别名可能会存在录入数据问题。最好保证 selectQuery 数据 > 0 ;
+        } else {
+            String join = cn.oriki.commons.utils.collection.Collections.join(getSelectQuery(), Generate.COMMA);
+            stringBuilder.append(join);
+        }
+    }
+
+    protected void setFromImpl(StringBuilder stringBuilder) throws GenerateException {
+        stringBuilder.append(getFrom().generate().getGenerateResult()); // from table_name
     }
 
     protected void setSortImpl(StringBuilder stringBuilder) throws GenerateException {

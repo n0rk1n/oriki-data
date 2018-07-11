@@ -52,12 +52,12 @@ public class ConfigLoaderTest {
         });
     }
 
-    @Test
+    /*@Test
     public void getPath() {
         String[] resourceFiles = configLoader.getResourceFiles();
         for (String resourceFile : resourceFiles) {
             System.out.println(resourceFile);
         }
-    }
+    }*/
 
 }

@@ -22,56 +22,61 @@ public class JpaWhereImpl extends AbstractWhere {
 
     @Override
     public GenerateResult generate() throws GenerateException {
-        GenerateResult generateResult = new GenerateResult();
+        try {
+            List<OperatorCreterias> operatorCreterias = getOperatorCreterias();
 
-        List<OperatorCreterias> operatorCreterias = getOperatorCreterias();
-        if (operatorCreterias.size() == 0) { // 没有条件，返回空字符串用于拼接
-            generateResult.setGenerateResult(StringConstants.EMPTY_STRING_VALUE);
-        } else {
-            // GOAL:
-            //      WHERE ( key1 = ? or key2 = ? ) and ( key3 = ? or key4 = ? ) and ( key5 = ? )
-            //                   value1      value2           value3      value4           value5
-            StringBuilder stringBuilder = new StringBuilder();
+            if (operatorCreterias.size() == 0) {
+                // 没有条件，返回空字符串用于拼接
+                return new GenerateResult(StringConstants.EMPTY_STRING_VALUE);
+            } else {
+                GenerateResult generateResult = new GenerateResult();
+                // GOAL:
+                //      WHERE ( key1 = ? or key2 = ? ) and ( key3 = ? or key4 = ? ) and ( key5 = ? )
+                //                   value1      value2           value3      value4           value5
+                StringBuilder stringBuilder = new StringBuilder();
 
-            stringBuilder.append(WHERE_KEY_WORD); // WHERE
+                stringBuilder.append(WHERE_KEY_WORD); // WHERE
 
-            List<String> cr = Lists.newArrayList();
-            // GOAL : ( key1 = ? or key2 = ? ) and ( key3 = ? or key4 = ? ) and ( key5 = ? )
-            for (OperatorCreterias operatorCreteria : operatorCreterias) {
-                OperatorEnum operator = operatorCreteria.getOperator(); // and | or
-                List<Criteria> criterias = operatorCreteria.getCriterias(); // keyN _conditional_ valueN *n
+                List<String> criteriaLists = Lists.newArrayList();
+                // GOAL : ( key1 = ? or key2 = ? ) and ( key3 = ? or key4 = ? ) and ( key5 = ? )
+                for (OperatorCreterias operatorCreteria : operatorCreterias) {
+                    OperatorEnum operator = operatorCreteria.getOperator(); // and | or
+                    List<Criteria> criterias = operatorCreteria.getCriterias(); // keyN _conditional_ valueN *n
 
-                // 结果参数
-                List<String> criteriaString = Lists.newArrayList();
-                List<Serializable> criteriaValues = Lists.newArrayList();
+                    // 结果参数
+                    List<String> criteriaString = Lists.newArrayList();
+                    List<Serializable> criteriaValues = Lists.newArrayList();
 
-                for (Criteria criteria : criterias) {
-                    String s;
-                    if (!ConditionalEnum.IS_NOT.equals(criteria.getConditional())) {
-                        Serializable value = criteria.getValue();
-
-                        if (Objects.nonNull(value)) {
-                            s = criteria.getKey() + criteria.getConditional().getConditional() + Generate.INJECTION; // key = ?
-                            criteriaValues.add(criteria.getValue());
+                    for (Criteria criteria : criterias) {
+                        String s;
+                        if (ConditionalEnum.IS.equals(criteria.getConditional())) {
+                            s = criteria.getKey() + criteria.getConditional().getConditional() + " NULL "; // key is null
+                        } else if (ConditionalEnum.IS_NOT.equals(criteria.getConditional())) {
+                            s = criteria.getKey() + criteria.getConditional().getConditional() + " NULL "; // key is not null
                         } else {
-                            s = criteria.getKey() + ConditionalEnum.IS.getConditional() + " NULL "; // key is null
+                            Serializable value = criteria.getValue();
+                            if (Objects.nonNull(value)) {
+                                s = criteria.getKey() + criteria.getConditional().getConditional() + Generate.INJECTION; // key = ?
+                                criteriaValues.add(criteria.getValue());
+                            } else {
+                                s = criteria.getKey() + ConditionalEnum.IS.getConditional() + " NULL "; // key is null
+                            }
                         }
-                    } else {
-                        s = criteria.getKey() + ConditionalEnum.IS_NOT.getConditional() + " NULL "; // key is not null
+                        criteriaString.add(s);
                     }
+                    String join = Collections.join(criteriaString, operator.getOperator(), Generate.LEFT_PARENTHESIS, Generate.RIGHT_PARENTHESIS); // ( key = ? and key2 = ? )
 
-                    criteriaString.add(s);
+                    criteriaLists.add(join);
+                    generateResult.setParams(criteriaValues); // 为result 添加参数
                 }
-                String join = Collections.join(criteriaString, operator.getOperator(), Generate.LEFT_PARENTHESIS, Generate.RIGHT_PARENTHESIS); // ( key = ? and key2 = ? )
+                stringBuilder.append(Collections.join(criteriaLists, OperatorEnum.AND.getOperator())); // ( key1 = ? or key2 = ? ) and ( key3 = ? or key4 = ? ) and ( key5 = ? )
 
-                cr.add(join);
-                generateResult.setParams(criteriaValues); // 为result 添加参数
+                generateResult.setGenerateResult(stringBuilder.toString());
+                return generateResult;
             }
-            stringBuilder.append(Collections.join(cr, OperatorEnum.AND.getOperator())); // ( key1 = ? or key2 = ? ) and ( key3 = ? or key4 = ? ) and ( key5 = ? )
-
-            generateResult.setGenerateResult(stringBuilder.toString());
+        } catch (Exception e) {
+            throw new GenerateException("generate where SQL failed");
         }
-        return generateResult;
     }
 
     // 添加条件，关系符使用 operator

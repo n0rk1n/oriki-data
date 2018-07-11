@@ -61,8 +61,8 @@ public abstract class AbstractQuery implements Query, Predicate, Generate {
     }
 
     @Override
-    public void addSort(String key, Direction direction) {
-        this.predicate.getSort().addSort(key, direction);
+    public void sort(String key, Direction direction) {
+        this.predicate.getSort().sort(key, direction);
     }
 
     @Override

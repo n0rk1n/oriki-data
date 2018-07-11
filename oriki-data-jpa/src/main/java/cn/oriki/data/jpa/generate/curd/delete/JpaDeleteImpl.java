@@ -29,10 +29,10 @@ public class JpaDeleteImpl extends AbstractDelete {
         GenerateResult whereResult = super.getWhere().generate();
         stringBuilder.append(whereResult.getGenerateResult());
 
-        // 拼接参数
-        result.setParams(whereResult.getParams());
         // 拼接语句
         result.setGenerateResult(stringBuilder.toString());
+        // 拼接参数
+        result.setParams(whereResult.getParams());
 
         return result;
     }

@@ -31,8 +31,8 @@ public abstract class AbstractPredicate implements Predicate { // 不需进行 g
     }
 
     @Override
-    public void addSort(String key, Direction direction) {
-        this.sort.addSort(key, direction);
+    public void sort(String key, Direction direction) {
+        this.sort.sort(key, direction);
     }
 
     @Override

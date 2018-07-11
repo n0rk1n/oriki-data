@@ -6,6 +6,11 @@ import cn.oriki.data.jpa.generate.base.pageable.AbstractJpaPageable;
 
 import java.util.Arrays;
 
+/**
+ * Oracle 的分页 sql 生成，需要进行前后拼接
+ *
+ * @author oriki.wang
+ */
 public class OraclePageableImpl extends AbstractJpaPageable {
 
     public final static String SEPARATOR_KEY_WORD = "@separator@";
@@ -32,6 +37,7 @@ public class OraclePageableImpl extends AbstractJpaPageable {
             Integer pageSize = getPageSize();
             generateResult.setParams(Arrays.asList((pageNumber - 1) * pageSize, (pageNumber - 1) * pageSize + pageSize));
         }
+        generateResult.setGenerateResult(stringBuilder.toString());
 
         return generateResult;
     }

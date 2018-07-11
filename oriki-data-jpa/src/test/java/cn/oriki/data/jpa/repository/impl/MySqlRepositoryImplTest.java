@@ -1,6 +1,5 @@
 package cn.oriki.data.jpa.repository.impl;
 
-import cn.oriki.commons.loader.ConfigLoader;
 import cn.oriki.data.generate.curd.delete.result.DeleteResult;
 import cn.oriki.data.generate.curd.save.result.SaveResult;
 import cn.oriki.data.generate.curd.update.result.UpdateResult;
@@ -21,7 +20,7 @@ public class MySqlRepositoryImplTest {
 
     @Before
     public void before() {
-        ConfigLoader configLoader = new ConfigLoader("oriki-commons-datasource.properties");
+//        ConfigLoader configLoader = new ConfigLoader("oriki-commons-datasource.properties");
 //        DruidDataSource dataSource = new DruidDataSource();
 //        dataSource.setDriverClassName(configLoader.getProperty("oriki.csf-mysql.mysql.driverClass"));
 //        dataSource.setUrl(configLoader.getProperty("oriki.csf-mysql.mysql.url"));
@@ -31,7 +30,7 @@ public class MySqlRepositoryImplTest {
         repository = new MySqlRepositoryImpl<>(Children.class, Long.class);
 //        repository.setJdbcTemplate(dataSource);
 
-        configLoader.clear();
+//        configLoader.clear();
     }
 
     @Test
@@ -52,7 +51,7 @@ public class MySqlRepositoryImplTest {
 
     @Test
     public void deleteById() throws GenerateException {
-        DeleteResult delete = this.repository.deleteById(63L);
+        DeleteResult delete = this.repository.deleteById(68L);
         System.out.println("删除的元素个数：" + delete.getNumber());
     }
 

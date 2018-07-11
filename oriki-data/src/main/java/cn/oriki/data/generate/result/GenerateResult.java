@@ -32,15 +32,18 @@ public class GenerateResult {
     }
 
     public void setParam(Serializable param) {
-        if (this.params == null) {
-            this.params = Lists.newArrayList(param); // 添加集合并添加元素
-        } else {
-            this.params.add(param); // 向后追加
+        checkParams();
+        this.params.add(param); // 向后追加
+    }
+
+    // 判断 params 为空创建集合
+    private void checkParams() {
+        if (Objects.isNull(params)) {
+            this.params = Lists.newArrayList(); // 添加集合并添加元素
         }
     }
 
     public GenerateResult() {
-        params = Lists.newArrayList();
     }
 
     public GenerateResult(String generateResult) {
