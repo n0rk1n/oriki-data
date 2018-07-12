@@ -19,11 +19,6 @@ public class Container {
         return Collections.unmodifiableMap(contains);
     }
 
-    public void setContains(Map<String, DataSource> contains) {
-        checkContains();
-        this.contains.putAll(contains);
-    }
-
     public void setContains(String key, DataSource dataSource) {
         checkContains();
         this.contains.put(key, dataSource);

@@ -114,4 +114,8 @@ public class ConfigLoader extends Properties {
         return resourceFiles;
     }*/
 
+    public void clear() {
+        this.properties.clear();
+    }
+
 }
