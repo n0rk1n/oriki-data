@@ -3,6 +3,7 @@ package cn.oriki.commons.utils.reflect;
 import cn.oriki.commons.utils.reflect.entity.FieldTypeNameValue;
 import cn.oriki.commons.utils.string.Strings;
 import com.google.common.collect.Lists;
+import lombok.NonNull;
 
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
@@ -19,7 +20,10 @@ import java.util.stream.Collectors;
  */
 public class Reflects {
 
-    private static final String CLASS_PATH_SEPARATOR = "\\."; // 全路径分隔符
+    /**
+     * 全路径分隔符
+     */
+    private static final String CLASS_PATH_SEPARATOR = "\\.";
 
     /**
      * 截取字节码文件的类名（如 java.lang.Object ， 截取获得 Object）
@@ -158,10 +162,18 @@ public class Reflects {
         return clazz.getDeclaredAnnotation(annotation);
     }
 
-    // 递归，获取 Class 本身及其父类中成员变量
-    private static <T> List<Field> getFields(List<Field> list, Class<T> clazz) {
+    /**
+     * 递归，获取 Class 本身及其父类中成员变量
+     *
+     * @param list  存储集合
+     * @param clazz Class 对象
+     * @param <T>   泛型
+     * @return 存储集合
+     */
+    private static <T> List<Field> getFields(@NonNull List<Field> list, Class<T> clazz) {
         Field[] fields = clazz.getDeclaredFields();
-        list.addAll(Arrays.asList(fields)); // 存入本字节码文件所有 Field
+        // 存入本字节码文件所有 Field
+        list.addAll(Arrays.asList(fields));
         Class<? super T> superclass = clazz.getSuperclass();
         if (Objects.nonNull(superclass) && !Object.class.equals(superclass.getName())) {
             getFields(list, superclass);
@@ -169,13 +181,18 @@ public class Reflects {
         return list;
     }
 
-    // 获取对象中对应成员变量的FieldTypeNameValue对象
-    private static <S> FieldTypeNameValue getFieldTypeNameValue(Field field, S entity) throws IllegalAccessException {
-        if (Objects.isNull(field)) {
-            throw new RuntimeException("field can't be null");
-        }
-
-        field.setAccessible(true); // 设置 Field 对象权限
+    /**
+     * 获取对象中对应成员变量的FieldTypeNameValue对象
+     *
+     * @param field  对应想要获取实体类中属性的 Field 对象
+     * @param entity 实体类
+     * @param <S>    泛型
+     * @return FieldTypeNameValue 对象
+     * @throws IllegalAccessException field 对象获取值不成功时抛出的异常
+     */
+    private static <S> FieldTypeNameValue getFieldTypeNameValue(@NonNull Field field, S entity) throws IllegalAccessException {
+        // 设置 Field 对象权限
+        field.setAccessible(true);
 
         Object o = field.get(entity);
         return new FieldTypeNameValue(field.getType(), field.getName(), o);

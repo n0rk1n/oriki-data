@@ -1,5 +1,7 @@
 package cn.oriki.commons.utils.string;
 
+import lombok.NonNull;
+
 /**
  * Strings
  *
@@ -13,9 +15,9 @@ public class Strings {
      * @param string 待检验字符串
      * @return 待检验字符串为 null 或 "" 返回true
      */
-    public static boolean isBlank(CharSequence string) {
+    public static boolean isBlank(@NonNull CharSequence string) {
         int strLength;
-        if (string != null && (strLength = string.length()) != 0) {
+        if ((strLength = string.length()) != 0) {
             for (int i = 0; i < strLength; ++i) {
                 if (!Character.isWhitespace(string.charAt(i))) {
                     return false;
@@ -31,7 +33,7 @@ public class Strings {
      * @param string 待检验字符串
      * @return 待检验字符串不为 null 且不为 "" 返回true
      */
-    public static boolean isNotBlank(CharSequence string) {
+    public static boolean isNotBlank(@NonNull CharSequence string) {
         return !isBlank(string);
     }
 

@@ -43,8 +43,7 @@ public class MySqlRepositoryImplTest {
         SaveResult<Children, Long> saveResult = this.repository.save(children);
 
         System.out.println("影响行数：" + saveResult.getNumber());
-        Iterable<Children> entities = saveResult.getEntities();
-        entities.forEach((entity) ->
+        saveResult.getEntities().forEach((entity) ->
                 System.out.println("插入数据的返回id：" + entity.getId())
         );
     }
@@ -147,7 +146,7 @@ public class MySqlRepositoryImplTest {
 
     @Test
     public void count2() throws GenerateException {
-        Long count = this.repository.count(new JpaPredictImpl(new MySqlPageableImpl(null, null)));
+        Long count = this.repository.count(new JpaPredictImpl(null));
         System.out.println("数据库总数：" + count);
     }
 

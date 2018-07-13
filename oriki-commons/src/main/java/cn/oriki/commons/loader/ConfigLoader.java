@@ -1,14 +1,11 @@
 package cn.oriki.commons.loader;
 
-import cn.oriki.commons.utils.string.Strings;
 import com.google.common.collect.Maps;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * ConfigLoader 配置文件加载器
@@ -23,16 +20,14 @@ public class ConfigLoader extends Properties {
 
     private static final long serialVersionUID = 2036439234035849247L;
 
-    //    private String[] resourceFiles; // 加载器加载配置文件数组集合
-    private Map<String, String> properties = Maps.newHashMap(); // 加载器加载所有配置映射集合，同名映射后加载会覆盖先加载配置
+    /**
+     * 加载器加载所有配置映射集合，同名映射后加载会覆盖先加载配置
+     */
+    private Map<String, String> properties;
 
     public ConfigLoader(String... configFilePaths) {
-//        resourceFiles = configFilePaths; // 获取的多个配置文件
-        for (String configFilePath : configFilePaths) {
-            if (Strings.isNotBlank(configFilePath)) {
-                this.load(configFilePath);
-            }
-        }
+        properties = Maps.newHashMap();
+        Arrays.stream(configFilePaths).forEach(this::load);
     }
 
     @Override
@@ -55,17 +50,15 @@ public class ConfigLoader extends Properties {
      * @param key 获取映射的 key
      * @return 根据键获取的值的 Boolean 类型，如果不存在返回 null
      */
-    public Boolean getBooleanProperty(String key) {
+    public Boolean getBooleanProperty(@NonNull String key) {
         Boolean b = null;
 
-        String valueTemp = properties.get(key);
-        if (Strings.isNotBlank(valueTemp)) {
-            valueTemp = valueTemp.trim();
-            if (Boolean.TRUE.toString().equals(valueTemp)) {
-                b = Boolean.TRUE;
-            } else if (Boolean.FALSE.toString().equals(valueTemp)) {
-                b = Boolean.FALSE;
-            }
+        @NonNull String valueTemp = properties.get(key);
+        valueTemp = valueTemp.trim();
+        if (Boolean.TRUE.toString().equals(valueTemp)) {
+            b = Boolean.TRUE;
+        } else if (Boolean.FALSE.toString().equals(valueTemp)) {
+            b = Boolean.FALSE;
         }
         return b;
     }
@@ -84,14 +77,13 @@ public class ConfigLoader extends Properties {
         return Objects.nonNull(b) ? b : defaultBoolean;
     }
 
-    // Properties 加载
-    // 未获取流或 IO 异常会抛出
-    private void load(String resourceFile) {
-        try (InputStream inputStream = ConfigLoader.class.getClassLoader().getResourceAsStream(resourceFile)) {
-            if (Objects.isNull(inputStream)) {
-                throw new RuntimeException("instance configLoader failed , we can't get resource");
-            }
-
+    /**
+     * Properties 加载,未获取流或 IO 异常会抛出
+     *
+     * @param resourceFile properties 文件位置
+     */
+    private void load(@NonNull String resourceFile) {
+        try (@NonNull InputStream inputStream = ConfigLoader.class.getClassLoader().getResourceAsStream(resourceFile)) {
             super.load(inputStream);
             super.keySet().forEach((object) -> {
                 String key = (String) object;
@@ -100,7 +92,7 @@ public class ConfigLoader extends Properties {
             });
         } catch (IOException e) {
             e.printStackTrace();
-//            throw new RuntimeException("failed loading config from : " + resourceFile, e);
+            throw new RuntimeException("failed loading config from : " + resourceFile, e);
         } finally {
             super.clear();
         }
@@ -110,10 +102,7 @@ public class ConfigLoader extends Properties {
         return Collections.unmodifiableMap(properties);
     }
 
-    /*public String[] getResourceFiles() {
-        return resourceFiles;
-    }*/
-
+    @Override
     public void clear() {
         this.properties.clear();
     }

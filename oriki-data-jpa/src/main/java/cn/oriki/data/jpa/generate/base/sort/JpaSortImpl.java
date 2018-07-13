@@ -10,6 +10,11 @@ import cn.oriki.data.generate.result.GenerateResult;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Jpa 的 sort 实现
+ *
+ * @author oriki.wang
+ */
 public class JpaSortImpl extends AbstractSort {
 
     private static final String ORDER_BY_KEY_WORD = " ORDER BY ";
@@ -27,9 +32,7 @@ public class JpaSortImpl extends AbstractSort {
         String stringBuilder = ORDER_BY_KEY_WORD +
                 Collections.join(list, Generate.COMMA);
 
-        GenerateResult generateResult = new GenerateResult();
-        generateResult.setGenerateResult(stringBuilder);
-        return generateResult;
+        return new GenerateResult(stringBuilder);
     }
 
     public JpaSortImpl() {

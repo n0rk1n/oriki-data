@@ -1,5 +1,7 @@
 package cn.oriki.commons.utils.string;
 
+import lombok.NonNull;
+
 /**
  * StringConverts
  *
@@ -138,15 +140,21 @@ public class StringConverts {
         return toSQLName(javaName, "");
     }*/
 
-    // Java 转换为 SQL ，存在前缀
-    private static String toSQLName(String javaName, String prefix) {
-        char[] chars = javaName.toCharArray();
+    /**
+     * Java 转换为 SQL ，存在前缀
+     *
+     * @param javaName java 命名规范名称
+     * @param prefix   特定前缀
+     * @return SQL 规范名称
+     */
+    private static String toSQLName(@NonNull String javaName, String prefix) {
         StringBuilder stringBuilder = new StringBuilder();
         // 如有前缀进行拼接
         if (Strings.isNotBlank(prefix)) {
             stringBuilder.append(prefix);
         }
 
+        char[] chars = javaName.toCharArray();
         for (char aChar : chars) {
             if (Character.isUpperCase(aChar)) {
                 if (!prefix.equals(stringBuilder.toString())) {
@@ -161,17 +169,18 @@ public class StringConverts {
         return stringBuilder.toString();
     }
 
-    // 单词首字母大写（其余小写）
-    private static String firstLetterUpper(String string) {
-        if (Strings.isNotBlank(string)) {
-            if (1 == string.length()) {
-                return string.toUpperCase();
-            }
-            string = string.toLowerCase();
-            return string.substring(0, 1).toUpperCase()
-                    + string.substring(1, string.length());
+    /**
+     * 单词首字母大写（其余小写）
+     *
+     * @param string 单词
+     * @return 首字母大写的单词
+     */
+    private static String firstLetterUpper(@NonNull String string) {
+        if (string.length() == 1) {
+            return string.toUpperCase();
         }
-        return string;
+        return string.substring(0, 1).toUpperCase()
+                + string.substring(1, string.length()).toLowerCase();
     }
 
 }

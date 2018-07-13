@@ -16,6 +16,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * 抽象 JPA 的查询接口
+ *
+ * @author oriki.wang
+ */
 public abstract class AbstractJpaQuery extends AbstractQuery {
 
     protected static final String SELECT_KEY_WORD = "select ";
@@ -23,16 +28,18 @@ public abstract class AbstractJpaQuery extends AbstractQuery {
     protected static final String COUNT_1_KEY_WORD = " COUNT(1) ";
     protected static final String COUNT_ALIAS = " COUNT ";
 
-    //    private static final String SEPARATOR = "_separator_";
     private static final String NO_ALIAS = "@noAlias@";
 
     private static final String AS = " as ";
 
-    private List<String> selectQuery; // 查询字段 key _separator_ alias
+    /**
+     * 查询字段 key _separator_ alias
+     */
+    private List<String> selectQuery;
 
     public AbstractJpaQuery(AbstractPredicate predicate, AbstractFrom from) {
         super(predicate, from);
-        selectQuery = Lists.newArrayList();
+        check();
     }
 
     @Override
@@ -65,17 +72,22 @@ public abstract class AbstractJpaQuery extends AbstractQuery {
         List<Field> fields = ReflectDatas.getFields(entityClass);
         for (Field field : fields) {
             String columnName = AbstractJpaRepository.getColumnName(field);
-            query(columnName, field.getName()); // 列名 as 属性名，方便后续封装
+            // 列名 as 属性名，方便后续封装
+            query(columnName, field.getName());
         }
     }
 
-    // 添加查询字段
+    /**
+     * 添加查询字段
+     *
+     * @param key   键
+     * @param alias 别名
+     */
     private void addSelect(String key, String alias) {
-        selectQuery.remove(COUNT_1_KEY_WORD + AS + COUNT_ALIAS); // 任何情况移除 count(1) as count
+        // 任何情况移除 count(1) as count
+        selectQuery.remove(COUNT_1_KEY_WORD + AS + COUNT_ALIAS);
 
-        if (Objects.isNull(selectQuery)) {
-            selectQuery = Lists.newArrayList();
-        }
+        check();
         if (Strings.isNotBlank(key) && Strings.isNotBlank(alias)) {
             selectQuery.add(key + AS + alias);
         }
@@ -85,10 +97,12 @@ public abstract class AbstractJpaQuery extends AbstractQuery {
     }
 
     protected void setSelectImpl(StringBuilder stringBuilder) throws GenerateException {
-        stringBuilder.append(SELECT_KEY_WORD); // SELECT
+        // SELECT
+        stringBuilder.append(SELECT_KEY_WORD);
         // 获取所有属性
         if (getSelectQuery().size() == 0) {
-            stringBuilder.append(SELECT_ALL_KEY_WORD); // select * TODO 不使用别名可能会存在录入数据问题。最好保证 selectQuery 数据 > 0 ;
+            // select * TODO 不使用别名可能会存在录入数据问题。最好保证 selectQuery 数据 > 0 ;
+            stringBuilder.append(SELECT_ALL_KEY_WORD);
         } else {
             String join = cn.oriki.commons.utils.collection.Collections.join(getSelectQuery(), Generate.COMMA);
             stringBuilder.append(join);
@@ -96,7 +110,8 @@ public abstract class AbstractJpaQuery extends AbstractQuery {
     }
 
     protected void setFromImpl(StringBuilder stringBuilder) throws GenerateException {
-        stringBuilder.append(getFrom().generate().getGenerateResult()); // from table_name
+        // from table_name
+        stringBuilder.append(getFrom().generate().getGenerateResult());
     }
 
     protected void setSortImpl(StringBuilder stringBuilder) throws GenerateException {
@@ -111,6 +126,12 @@ public abstract class AbstractJpaQuery extends AbstractQuery {
 
     public List<String> getSelectQuery() {
         return Collections.unmodifiableList(selectQuery);
+    }
+
+    private void check() {
+        if (Objects.isNull(selectQuery)) {
+            selectQuery = Lists.newArrayList();
+        }
     }
 
 }

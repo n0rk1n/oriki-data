@@ -5,11 +5,28 @@ import cn.oriki.data.generate.base.sort.AbstractSort;
 import cn.oriki.data.generate.base.sort.enumeration.Direction;
 import cn.oriki.data.generate.base.where.AbstractWhere;
 import cn.oriki.data.generate.base.where.entity.Criteria;
+import lombok.Getter;
+import lombok.Setter;
 
-public abstract class AbstractPredicate implements Predicate { // 不需进行 generate
+/**
+ * Predicate 抽象类
+ * <p>
+ * 只做查询条件预存，不需进行 generate
+ *
+ * @author oriki.wang
+ */
+public abstract class AbstractPredicate implements Predicate {
 
+    @Getter
+    @Setter
     private AbstractWhere where;
+
+    @Getter
+    @Setter
     private AbstractSort sort;
+    
+    @Getter
+    @Setter
     private AbstractPageable pageable;
 
     public AbstractPredicate(AbstractWhere where, AbstractSort sort, AbstractPageable pageable) {
@@ -58,35 +75,6 @@ public abstract class AbstractPredicate implements Predicate { // 不需进行 g
     @Override
     public void set(Integer pageNumber, Integer pageSize) {
         this.pageable.set(pageNumber, pageSize);
-    }
-
-    // -----------------------------------------------------------------------------------------------------------------
-
-    @Override
-    public AbstractWhere getWhere() {
-        return where;
-    }
-
-    public void setWhere(AbstractWhere where) {
-        this.where = where;
-    }
-
-    @Override
-    public AbstractSort getSort() {
-        return sort;
-    }
-
-    public void setSort(AbstractSort sort) {
-        this.sort = sort;
-    }
-
-    @Override
-    public AbstractPageable getPageable() {
-        return pageable;
-    }
-
-    public void setPageable(AbstractPageable pageable) {
-        this.pageable = pageable;
     }
 
 }

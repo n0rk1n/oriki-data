@@ -62,7 +62,8 @@ public class Collections {
      * @return 拼接后字符串
      */
     public static <T> String join(Collection<T> collection, String separator) {
-        collection = collection.stream().filter(Objects::nonNull).collect(Collectors.toList()); // 过滤集合中为 null 元素
+        // 过滤集合中为 null 元素
+        collection = collection.stream().filter(Objects::nonNull).collect(Collectors.toList());
         return StringUtils.join(collection, separator);
     }
 

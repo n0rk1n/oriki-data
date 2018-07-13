@@ -46,7 +46,13 @@ public class Randoms {
         return new Random().nextInt(max);
     }
 
-    // 给定字符串随机生成 random code
+    /**
+     * 给定字符串随机生成 random code
+     *
+     * @param targetString 目标随机字符串
+     * @param length       获取长度
+     * @return 随机字符串
+     */
     private static String getRandom(String targetString, int length) {
         // length must >0
         if (length <= 0 || Strings.isBlank(targetString)) {

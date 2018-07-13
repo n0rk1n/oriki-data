@@ -34,14 +34,16 @@ public class JpaWhereImpl extends AbstractWhere {
                 //      WHERE ( key1 = ? or key2 = ? ) and ( key3 = ? or key4 = ? ) and ( key5 = ? )
                 //                   value1      value2           value3      value4           value5
                 StringBuilder stringBuilder = new StringBuilder();
-
-                stringBuilder.append(WHERE_KEY_WORD); // WHERE
+                // WHERE
+                stringBuilder.append(WHERE_KEY_WORD);
 
                 List<String> criteriaLists = Lists.newArrayList();
                 // GOAL : ( key1 = ? or key2 = ? ) and ( key3 = ? or key4 = ? ) and ( key5 = ? )
                 for (OperatorCreterias operatorCreteria : operatorCreterias) {
-                    OperatorEnum operator = operatorCreteria.getOperator(); // and | or
-                    List<Criteria> criterias = operatorCreteria.getCriterias(); // keyN _conditional_ valueN *n
+                    // and | or
+                    OperatorEnum operator = operatorCreteria.getOperator();
+                    // keyN _conditional_ valueN *n
+                    List<Criteria> criterias = operatorCreteria.getCriterias();
 
                     // 结果参数
                     List<String> criteriaString = Lists.newArrayList();
@@ -50,26 +52,33 @@ public class JpaWhereImpl extends AbstractWhere {
                     for (Criteria criteria : criterias) {
                         String s;
                         if (ConditionalEnum.IS.equals(criteria.getConditional())) {
-                            s = criteria.getKey() + criteria.getConditional().getConditional() + " NULL "; // key is null
+                            // key is null
+                            s = criteria.getKey() + criteria.getConditional().getConditional() + " NULL ";
                         } else if (ConditionalEnum.IS_NOT.equals(criteria.getConditional())) {
-                            s = criteria.getKey() + criteria.getConditional().getConditional() + " NULL "; // key is not null
+                            // key is not null
+                            s = criteria.getKey() + criteria.getConditional().getConditional() + " NULL ";
                         } else {
                             Serializable value = criteria.getValue();
                             if (Objects.nonNull(value)) {
-                                s = criteria.getKey() + criteria.getConditional().getConditional() + Generate.INJECTION; // key = ?
+                                // key = ?
+                                s = criteria.getKey() + criteria.getConditional().getConditional() + Generate.INJECTION;
                                 criteriaValues.add(criteria.getValue());
                             } else {
-                                s = criteria.getKey() + ConditionalEnum.IS.getConditional() + " NULL "; // key is null
+                                // key is null
+                                s = criteria.getKey() + ConditionalEnum.IS.getConditional() + " NULL ";
                             }
                         }
                         criteriaString.add(s);
                     }
-                    String join = Collections.join(criteriaString, operator.getOperator(), Generate.LEFT_PARENTHESIS, Generate.RIGHT_PARENTHESIS); // ( key = ? and key2 = ? )
+                    // ( key = ? and key2 = ? )
+                    String join = Collections.join(criteriaString, operator.getOperator(), Generate.LEFT_PARENTHESIS, Generate.RIGHT_PARENTHESIS);
 
                     criteriaLists.add(join);
-                    generateResult.setParams(criteriaValues); // 为result 添加参数
+                    // 为result 添加参数
+                    generateResult.setParams(criteriaValues);
                 }
-                stringBuilder.append(Collections.join(criteriaLists, OperatorEnum.AND.getOperator())); // ( key1 = ? or key2 = ? ) and ( key3 = ? or key4 = ? ) and ( key5 = ? )
+                // ( key1 = ? or key2 = ? ) and ( key3 = ? or key4 = ? ) and ( key5 = ? )
+                stringBuilder.append(Collections.join(criteriaLists, OperatorEnum.AND.getOperator()));
 
                 generateResult.setGenerateResult(stringBuilder.toString());
                 return generateResult;

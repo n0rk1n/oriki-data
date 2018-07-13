@@ -11,10 +11,25 @@ import cn.oriki.data.generate.base.where.Where;
  */
 public interface Predicate extends Where, Sort, Pageable {
 
+    /**
+     * 获取 条件
+     *
+     * @return Where
+     */
     Where getWhere();
 
+    /**
+     * 获取排序列表
+     *
+     * @return Sort
+     */
     Sort getSort();
 
+    /**
+     * 获取分页数据
+     *
+     * @return Pageable
+     */
     Pageable getPageable();
 
 }

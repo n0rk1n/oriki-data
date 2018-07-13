@@ -2,6 +2,7 @@ package cn.oriki.data.generate.curd.query;
 
 import cn.oriki.data.generate.Generate;
 import cn.oriki.data.generate.base.from.AbstractFrom;
+import cn.oriki.data.generate.base.from.From;
 import cn.oriki.data.generate.base.pageable.Pageable;
 import cn.oriki.data.generate.base.predicate.AbstractPredicate;
 import cn.oriki.data.generate.base.predicate.Predicate;
@@ -9,16 +10,25 @@ import cn.oriki.data.generate.base.sort.Sort;
 import cn.oriki.data.generate.base.sort.enumeration.Direction;
 import cn.oriki.data.generate.base.where.Where;
 import cn.oriki.data.generate.base.where.entity.Criteria;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-public abstract class AbstractQuery implements Query, Predicate, Generate {
+/**
+ * 抽象的查询类
+ *
+ * @author oriki.wang
+ */
+@AllArgsConstructor
+public abstract class AbstractQuery implements Query, Predicate, From, Generate {
 
+    @Getter
+    @Setter
     private AbstractPredicate predicate;
-    private AbstractFrom from;
 
-    public AbstractQuery(AbstractPredicate predicate, AbstractFrom from) {
-        this.predicate = predicate;
-        this.from = from;
-    }
+    @Getter
+    @Setter
+    private AbstractFrom from;
 
     @Override
     public Where getWhere() {
@@ -75,21 +85,14 @@ public abstract class AbstractQuery implements Query, Predicate, Generate {
         this.predicate.set(pageNumber, pageSize);
     }
 
-    // setter & getter
-    public AbstractPredicate getPredicate() {
-        return predicate;
+    @Override
+    public void from(String fromName) {
+        this.from.from(fromName);
     }
 
-    public void setPredicate(AbstractPredicate predicate) {
-        this.predicate = predicate;
-    }
-
-    public AbstractFrom getFrom() {
-        return from;
-    }
-
-    public void setFrom(AbstractFrom from) {
-        this.from = from;
+    @Override
+    public String getFromName() {
+        return this.from.getFromName();
     }
 
 }

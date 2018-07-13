@@ -5,17 +5,32 @@ import cn.oriki.commons.utils.string.Strings;
 import cn.oriki.datasource.jpa.container.Container;
 import cn.oriki.datasource.jpa.info.DataSourceInfo;
 import com.alibaba.druid.pool.DruidDataSource;
+import lombok.NonNull;
 
 import javax.sql.DataSource;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class DataSourceManager {
+/**
+ * 数据源管理器，单例。
+ * <p>
+ * 获取方式使用 getInstance 获取，对外提供 chooseDataSource 方法获取数据源
+ *
+ * @author oriki.wang
+ */
+public class DataSourceManager<T extends DataSource> {
 
     private static Container container;
 
-    private static final String DEFAULT_KEY_WORD = "default";
+    /**
+     * singleton
+     */
+    private static DataSourceManager dataSourceManager;
 
+    private static final String DEFAULT_KEY_WORD = "default";
     private static final String PREFIX_KEY_WORD = "oriki.";
 
     private static final String SUFFIX_DRIVER_CLASS_KEY_WORD = ".driver-class";
@@ -23,14 +38,13 @@ public class DataSourceManager {
     private static final String SUFFIX_USER_NAME_KEY_WORD = ".userName";
     private static final String SUFFIX_PASSWORD_KEY_WORD = ".password";
 
-    // 默认配置映射键
+    /**
+     * 默认配置映射键
+     */
     private static final String DEFAULT_DRIVER_CLASS_KEY = "oriki.default.driver-class";
     private static final String DEFAULT_URL_KEY = "oriki.default.url";
     private static final String DEFAULT_USERNAME_KEY = "oriki.default.userName";
     private static final String DEFAULT_PASSWORD_KEY = "oriki.default.password";
-
-    // singleton
-    private static DataSourceManager dataSourceManager;
 
     private DataSourceManager() {
     }
@@ -40,7 +54,7 @@ public class DataSourceManager {
             synchronized (DataSourceManager.class) {
                 if (Objects.isNull(dataSourceManager)) {
                     dataSourceManager = new DataSourceManager();
-                    init();
+                    dataSourceManager.init();
                 }
             }
         }
@@ -50,17 +64,17 @@ public class DataSourceManager {
     /**
      * 获取 source 对应 DataSource ，如果不存在则提供默认数据源
      *
-     * @param sourceKey
-     * @return
+     * @param sourceKey 数据源对应键
+     * @return 数据源
      */
     public DataSource chooseDataSource(String sourceKey) {
         return container.getContains().getOrDefault(sourceKey, container.getContains().get(DEFAULT_KEY_WORD));
     }
 
-    private static void init() {
+    private void init() {
         ConfigLoader configLoader = new ConfigLoader("oriki-datasource.properties");
-
         String profile = configLoader.getProperty("oriki.datasource.profile.active");
+
         if (Strings.isNotBlank(profile)) {
             ConfigLoader configLoader2 = new ConfigLoader("oriki-datasource-" + profile + ".properties");
 
@@ -96,41 +110,66 @@ public class DataSourceManager {
             DataSourceInfo defaultDataSource = createDataSourceInfo(defaultDriverClass, defaultUrl, defaultUsername, defaultPassword);
             createAndSetDataSource(DEFAULT_KEY_WORD, defaultDataSource);
         }
-        configLoader.clear();
     }
 
-    // 创建 DataSource TODO 使用 Druid 数据库（方便统计和效率考虑
+    /**
+     * 创建和设置 DataSource TODO 使用 Druid 数据库（方便统计和效率考虑
+     *
+     * @param key            映射键
+     * @param dataSourceInfo 数据源配置信息
+     */
     private static void createAndSetDataSource(String key, DataSourceInfo dataSourceInfo) {
         checkDataSourceInfo(dataSourceInfo);
+        checkContainer();
 
+        DataSource dataSource = createDataSource(dataSourceInfo);
+        container.setContain(key, dataSource);
+    }
+
+    private static DataSource createDataSource(@NonNull DataSourceInfo dataSourceInfo) {
         DruidDataSource dataSource = new DruidDataSource();
         dataSource.setDriverClassName(dataSourceInfo.getDriverClass());
         dataSource.setUrl(dataSourceInfo.getUrl());
         dataSource.setUsername(dataSourceInfo.getUserName());
         dataSource.setPassword(dataSourceInfo.getPassword());
 
-        checkContainer();
-        container.setContains(key, dataSource);
+        return dataSource;
     }
 
-    // 创建 DataSourceInfo 配置信息对象
+    /**
+     * 创建 DataSourceInfo 配置信息对象
+     *
+     * @param driverClass 驱动类全路径
+     * @param url         连接 url 地址
+     * @param username    用户名
+     * @param password    密码
+     * @return 数据源创建信息对象
+     */
     private static DataSourceInfo createDataSourceInfo(String driverClass, String url, String username, String password) {
         DataSourceInfo dataSourceInfo = new DataSourceInfo();
+
         dataSourceInfo.setDriverClass(driverClass);
         dataSourceInfo.setUrl(url);
         dataSourceInfo.setUserName(username);
         dataSourceInfo.setPassword(password);
+
         return dataSourceInfo;
     }
 
-    // 保证容器对象存在
+    /**
+     * 校验
+     */
     private static void checkContainer() {
         if (Objects.isNull(container)) {
             container = new Container();
         }
     }
 
-    // 保证 DataSourceInfo 各项参数非空
+    /**
+     * 保证 DataSourceInfo 各项参数非空
+     *
+     * @param dataSourceInfo 数据库创建信息类
+     */
     private static void checkDataSourceInfo(DataSourceInfo dataSourceInfo) {
         if (Strings.isBlank(dataSourceInfo.getDriverClass())) {
             throw new NullPointerException("we can't create DataSource , please check driverClass config");
@@ -146,10 +185,16 @@ public class DataSourceManager {
         }
     }
 
-    // 保证 sourceKeys 没有重复
-    private static void checkDistinct(List<String> list) {
-        if (new HashSet<>(list).size() != list.size()) {
-            throw new RuntimeException("we find the same sourceKey in properties , please check");
+    /**
+     * 保证 sourceKeys 没有重复
+     *
+     * @param list 保证 List 中没有重复值
+     */
+    private static void checkDistinct(@NonNull List<String> list) {
+        HashSet<String> strings = new HashSet<>(list);
+        if (strings.size() != list.size()) {
+            list.remove(strings);
+            throw new RuntimeException("we find the same sourceKey in properties : " + list.toString() + ", please check");
         }
     }
 

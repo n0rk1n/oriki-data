@@ -1,5 +1,10 @@
 package cn.oriki.data.generate.base.from;
 
+/**
+ * 来源定义
+ *
+ * @author oriki.wang
+ */
 public interface From {
 
     /**
@@ -9,6 +14,11 @@ public interface From {
      */
     void from(String fromName);
 
+    /**
+     * 获取来源名称
+     *
+     * @return 来源名城
+     */
     String getFromName(); // 获取来源名称
 
 }

@@ -5,23 +5,39 @@ import cn.oriki.data.generate.result.GenerateResult;
 
 public interface Generate {
 
-    // 间隔号
+    /**
+     * 间隔号
+     */
     String PREFIX_SEPARATION_DOT = " `";
     String SUFFIX_SEPARATION_DOT = "` ";
 
-    // 括号
+    /**
+     * 括号
+     */
     String LEFT_PARENTHESIS = " ( ";
     String RIGHT_PARENTHESIS = " ) ";
 
-    // 分号
+    /**
+     * 分号
+     */
     String SEMICOLON = " ; ";
 
-    // 占位符 ?
+    /**
+     * 占位符 ?
+     */
     String INJECTION = " ? ";
 
-    // 逗号（英文）
+    /**
+     * 逗号（英文）
+     */
     String COMMA = " , ";
 
+    /**
+     * 生成对应语句方法
+     *
+     * @return 语句和参数
+     * @throws GenerateException 生成失败会抛出的异常
+     */
     GenerateResult generate() throws GenerateException;
 
 }

@@ -9,7 +9,7 @@ import java.util.Objects;
 public class GenerateResult {
 
     private String generateResult; // 生成 sql 语句片段
-    private List<Serializable> params; // 语句对应注入参数，如果没有参数，为 null 或空集合
+    private List<Serializable> params; // 语句对应注入参数，如果没有参数，为空集合
 
     public String getGenerateResult() {
         return generateResult;
@@ -24,29 +24,38 @@ public class GenerateResult {
     }
 
     public void setParams(List<Serializable> params) {
-        if (Objects.isNull(this.params)) { // 如果 params 为空
+        if (Objects.isNull(this.params)) {
+            // 如果 params 为空
             this.params = params;
-        } else { // 如果 params 不为空
-            this.params.addAll(params); // 向后追加
+        } else {
+            // 如果 params 不为空
+            // 向后追加
+            this.params.addAll(params);
         }
     }
 
     public void setParam(Serializable param) {
         checkParams();
-        this.params.add(param); // 向后追加
+        // 向后追加
+        this.params.add(param);
     }
 
-    // 判断 params 为空创建集合
+    /**
+     * 校验
+     */
     private void checkParams() {
         if (Objects.isNull(params)) {
-            this.params = Lists.newArrayList(); // 添加集合并添加元素
+            // 添加集合并添加元素
+            this.params = Lists.newArrayList();
         }
     }
 
     public GenerateResult() {
+        checkParams();
     }
 
     public GenerateResult(String generateResult) {
+        checkParams();
         this.generateResult = generateResult;
     }
 

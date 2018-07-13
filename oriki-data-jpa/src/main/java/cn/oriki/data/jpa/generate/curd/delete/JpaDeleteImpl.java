@@ -22,9 +22,10 @@ public class JpaDeleteImpl extends AbstractDelete {
         GenerateResult result = new GenerateResult();
 
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(DELETE_KEY_WORD); // DELETE
-
-        stringBuilder.append(super.getFrom().generate().getGenerateResult()); // FROM table_name
+        // DELETE
+        stringBuilder.append(DELETE_KEY_WORD);
+        // FROM table_name
+        stringBuilder.append(super.getFrom().generate().getGenerateResult());
 
         GenerateResult whereResult = super.getWhere().generate();
         stringBuilder.append(whereResult.getGenerateResult());

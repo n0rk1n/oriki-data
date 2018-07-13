@@ -15,9 +15,10 @@ public class JpaFromImpl extends AbstractFrom {
 
     @Override
     public GenerateResult generate() throws GenerateException {
-        String tableName = getFromName(); // 可保证不为空
+        String tableName = getFromName();
         if (Strings.isNotBlank(tableName)) {
-            String fromTableName = FROM_KEY_WORD + tableName + " "; // FROM table_name ， table_name - 直接为来源名称
+            // FROM table_name ， table_name - 直接为来源名称
+            String fromTableName = FROM_KEY_WORD + tableName + " ";
             return new GenerateResult(fromTableName);
         }
         throw new GenerateException("tableName can't be null");
