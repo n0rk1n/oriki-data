@@ -1,8 +1,8 @@
 package cn.oriki.data.jpa.repository.impl;
 
-import cn.oriki.data.generate.curd.delete.result.DeleteResult;
-import cn.oriki.data.generate.curd.save.result.SaveResult;
-import cn.oriki.data.generate.curd.update.result.UpdateResult;
+import cn.oriki.data.generate.curd.cud.delete.result.DeleteResult;
+import cn.oriki.data.generate.curd.cud.save.result.SaveResult;
+import cn.oriki.data.generate.curd.cud.update.result.UpdateResult;
 import cn.oriki.data.generate.exception.GenerateException;
 import cn.oriki.data.jpa.entity.Children;
 import cn.oriki.data.jpa.generate.base.pageable.impl.MySqlPageableImpl;

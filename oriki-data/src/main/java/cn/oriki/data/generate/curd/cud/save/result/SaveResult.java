@@ -1,4 +1,4 @@
-package cn.oriki.data.generate.curd.save.result;
+package cn.oriki.data.generate.curd.cud.save.result;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -1,4 +1,4 @@
-package cn.oriki.data.generate.curd.save;
+package cn.oriki.data.generate.curd.cud.save;
 
 import java.io.Serializable;
 

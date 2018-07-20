@@ -2,7 +2,7 @@ package cn.oriki.data.jpa.generate.curd.save;
 
 import cn.oriki.commons.utils.collection.Collections;
 import cn.oriki.data.generate.Generate;
-import cn.oriki.data.generate.curd.save.AbstractSave;
+import cn.oriki.data.generate.curd.cud.save.AbstractSave;
 import cn.oriki.data.generate.exception.GenerateException;
 import cn.oriki.data.generate.result.GenerateResult;
 import cn.oriki.data.jpa.generate.base.from.JpaFromImpl;

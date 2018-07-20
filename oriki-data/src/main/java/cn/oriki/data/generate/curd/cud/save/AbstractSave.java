@@ -1,4 +1,4 @@
-package cn.oriki.data.generate.curd.save;
+package cn.oriki.data.generate.curd.cud.save;
 
 import cn.oriki.data.generate.Generate;
 import cn.oriki.data.generate.base.from.AbstractFrom;
@@ -21,8 +21,8 @@ public abstract class AbstractSave implements Save, From, Generate {
     private AbstractFrom from;
 
     public AbstractSave(AbstractFrom from) {
-        this.from = from;
         check();
+        this.from = from;
     }
 
     @Override

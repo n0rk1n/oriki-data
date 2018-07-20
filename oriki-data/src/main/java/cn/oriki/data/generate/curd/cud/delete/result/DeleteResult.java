@@ -1,4 +1,4 @@
-package cn.oriki.data.generate.curd.delete.result;
+package cn.oriki.data.generate.curd.cud.delete.result;
 
 import lombok.Getter;
 import lombok.Setter;

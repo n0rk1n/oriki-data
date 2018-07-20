@@ -1,9 +1,9 @@
 package cn.oriki.data.repository;
 
 import cn.oriki.data.generate.base.where.AbstractWhere;
-import cn.oriki.data.generate.curd.delete.result.DeleteResult;
-import cn.oriki.data.generate.curd.save.result.SaveResult;
-import cn.oriki.data.generate.curd.update.result.UpdateResult;
+import cn.oriki.data.generate.curd.cud.delete.result.DeleteResult;
+import cn.oriki.data.generate.curd.cud.save.result.SaveResult;
+import cn.oriki.data.generate.curd.cud.update.result.UpdateResult;
 import cn.oriki.data.generate.exception.GenerateException;
 
 import java.io.Serializable;

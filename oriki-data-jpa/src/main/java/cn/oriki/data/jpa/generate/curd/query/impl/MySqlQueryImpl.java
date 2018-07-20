@@ -25,7 +25,7 @@ public class MySqlQueryImpl extends AbstractJpaQuery {
         setSelectImpl(stringBuilder);
         setFromImpl(stringBuilder);
 
-        GenerateResult whereResult = getPredicate().getWhere().generate();
+        GenerateResult whereResult = getWhere().generate();
         String whereSQL = whereResult.getGenerateResult();
         // where ...
         stringBuilder.append(whereSQL);

@@ -1,17 +1,17 @@
 package cn.oriki.data.jpa.generate.curd.delete;
 
-import cn.oriki.data.generate.curd.delete.AbstractDelete;
+import cn.oriki.data.generate.curd.cud.delete.AbstractDelete;
 import cn.oriki.data.generate.exception.GenerateException;
 import cn.oriki.data.generate.result.GenerateResult;
 import cn.oriki.data.jpa.generate.base.from.JpaFromImpl;
-import cn.oriki.data.jpa.generate.base.where.JpaWhereImpl;
+import cn.oriki.data.jpa.generate.base.predicate.JpaCUDPredictImpl;
 
 public class JpaDeleteImpl extends AbstractDelete {
 
     private static final String DELETE_KEY_WORD = " DELETE ";
 
     public JpaDeleteImpl(String tableName) {
-        super(new JpaWhereImpl(), new JpaFromImpl(tableName));
+        super(new JpaCUDPredictImpl(), new JpaFromImpl(tableName));
     }
 
     @Override
@@ -27,7 +27,7 @@ public class JpaDeleteImpl extends AbstractDelete {
         // FROM table_name
         stringBuilder.append(super.getFrom().generate().getGenerateResult());
 
-        GenerateResult whereResult = super.getWhere().generate();
+        GenerateResult whereResult = getWhere().generate();
         stringBuilder.append(whereResult.getGenerateResult());
 
         // 拼接语句
@@ -37,5 +37,6 @@ public class JpaDeleteImpl extends AbstractDelete {
 
         return result;
     }
+
 
 }

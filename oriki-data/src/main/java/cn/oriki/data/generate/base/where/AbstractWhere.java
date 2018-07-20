@@ -11,6 +11,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * 抽象 条件
+ *
+ * @author oriki.wang
+ */
 public abstract class AbstractWhere implements Where, Generate {
 
     /**

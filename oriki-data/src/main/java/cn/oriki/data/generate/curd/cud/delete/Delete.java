@@ -1,4 +1,4 @@
-package cn.oriki.data.generate.curd.delete;
+package cn.oriki.data.generate.curd.cud.delete;
 
 public interface Delete {
 

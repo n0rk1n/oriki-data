@@ -3,11 +3,11 @@ package cn.oriki.data.jpa.generate.curd.update;
 import cn.oriki.commons.utils.collection.Collections;
 import cn.oriki.data.generate.Generate;
 import cn.oriki.data.generate.base.where.enumeration.ConditionalEnum;
-import cn.oriki.data.generate.curd.update.AbstractUpdate;
+import cn.oriki.data.generate.curd.cud.update.AbstractUpdate;
 import cn.oriki.data.generate.exception.GenerateException;
 import cn.oriki.data.generate.result.GenerateResult;
 import cn.oriki.data.jpa.generate.base.from.JpaFromImpl;
-import cn.oriki.data.jpa.generate.base.where.JpaWhereImpl;
+import cn.oriki.data.jpa.generate.base.predicate.JpaCUDPredictImpl;
 import com.google.common.collect.Lists;
 
 import java.io.Serializable;
@@ -21,7 +21,7 @@ public class JpaUpdateImpl extends AbstractUpdate {
     private static final String SET_KEY_WORD = " SET ";
 
     public JpaUpdateImpl(String tableName) {
-        super(new JpaWhereImpl(), new JpaFromImpl(tableName));
+        super(new JpaCUDPredictImpl(), new JpaFromImpl(tableName));
     }
 
     @Override

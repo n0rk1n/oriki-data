@@ -88,14 +88,4 @@ public class JpaWhereImpl extends AbstractWhere {
         }
     }
 
-    // 添加条件，关系符使用 operator
-    /*private OperatorCreterias createOperatorCreteria(OperatorEnum operator, Criteria... keyConditionalValues) {
-        OperatorCreterias operatorCreterias = new OperatorCreterias();
-        {
-            operatorCreterias.setOperator(operator);
-            operatorCreterias.setCriterias(Lists.newArrayList(keyConditionalValues));
-        }
-        return operatorCreterias;
-    }*/
-
 }

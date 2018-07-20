@@ -7,7 +7,7 @@ import cn.oriki.data.generate.base.pageable.Pageable;
 import cn.oriki.data.generate.base.predicate.AbstractPredicate;
 import cn.oriki.data.generate.base.predicate.Predicate;
 import cn.oriki.data.generate.base.sort.Sort;
-import cn.oriki.data.generate.base.where.Where;
+import cn.oriki.data.generate.base.where.AbstractWhere;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,11 +23,10 @@ import lombok.Setter;
 public abstract class AbstractQuery implements Query, Predicate, From, Generate {
 
     private AbstractPredicate predicate;
-
     private AbstractFrom from;
 
     @Override
-    public Where getWhere() {
+    public AbstractWhere getWhere() {
         return this.predicate.getWhere();
     }
 
