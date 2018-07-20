@@ -41,13 +41,15 @@ public class Strings {
      * 判断 string 中是否包含 s
      *
      * @param string 待检测字符串
-     * @param s      检测字符串
+     * @param str    检测字符串
      * @return 包含 s 返回 true ，不包含或 s 为空字符串返回 false
      * @throws IllegalArgumentException string 为空时抛出的异常
      */
-    /*public static boolean isContain(String string, CharSequence s) {
-        if (isBlank(string) && isNotBlank(s)) return false;
-        return !isBlank(s) && string.contains(s);
-    }*/
+    public static boolean isContain(String string, CharSequence str) {
+        if (isBlank(string) && isNotBlank(str)) {
+            return false;
+        }
+        return !isBlank(str) && string.contains(str);
+    }
 
 }

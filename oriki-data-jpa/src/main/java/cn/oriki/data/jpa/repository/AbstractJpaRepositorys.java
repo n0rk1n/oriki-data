@@ -240,8 +240,8 @@ public abstract class AbstractJpaRepositorys<T, ID extends Serializable> extends
      */
     protected List<T> queryList(AbstractJpaQuery query) throws GenerateException {
         GenerateResult generateResult = query.generate();
-        List<Serializable> params = generateResult.getParams();
         String sql = generateResult.getGenerateResult();
+        List<Serializable> params = generateResult.getParams();
 
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(entityClass), params.toArray());
     }

@@ -2,8 +2,19 @@ package cn.oriki.data.generate.curd.update;
 
 import java.io.Serializable;
 
+/**
+ * Update
+ *
+ * @author oriki.wang
+ */
 public interface Update {
 
-    void update(String key, Serializable value); // 修改具体 key 为 value
+    /**
+     * 修改具体 key 为 value
+     *
+     * @param key   键
+     * @param value 修改后的值
+     */
+    void update(String key, Serializable value);
 
 }

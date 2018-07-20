@@ -38,6 +38,8 @@ public class Randoms {
 
     /**
      * 获取一个从 0 到 max 的数字
+     * <p>
+     * 生成一个随机的int值，该值介于[0,n)的区间，也就是0到n之间的随机int值，包含0而不包含n
      *
      * @param max 最大值
      * @return 0 ~ max 的随机数

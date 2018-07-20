@@ -1,15 +1,20 @@
 package cn.oriki.data.generate.curd.delete.result;
 
+import lombok.Getter;
+import lombok.Setter;
+
+/**
+ * 删除结果
+ *
+ * @author oriki.wang
+ */
+@Getter
+@Setter
 public class DeleteResult {
 
-    private Integer number; // 影响行数
-
-    public Integer getNumber() {
-        return number;
-    }
-
-    public void setNumber(Integer number) {
-        this.number = number;
-    }
+    /**
+     * 影响行数
+     */
+    private Integer number;
 
 }

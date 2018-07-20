@@ -8,11 +8,11 @@ import java.io.InputStream;
 import java.util.*;
 
 /**
- * ConfigLoader 配置文件加载器
+ * ConfigLoader 配置文件加载
  * <p>
  * 可以加载多个配置映射文件
  * <p>
- * TODO 后加载映射出现重复 key 会覆盖前面添加的映射，请小心配置
+ * TODO 但是后加载映射出现重复 key 会覆盖前面添加的映射，请小心配置
  *
  * @author oriki.wang
  */
@@ -26,7 +26,7 @@ public class ConfigLoader extends Properties {
     private Map<String, String> properties;
 
     public ConfigLoader(String... configFilePaths) {
-        properties = Maps.newHashMap();
+        checkProperties();
         Arrays.stream(configFilePaths).forEach(this::load);
     }
 
@@ -54,7 +54,6 @@ public class ConfigLoader extends Properties {
         Boolean b = null;
 
         @NonNull String valueTemp = properties.get(key);
-        valueTemp = valueTemp.trim();
         if (Boolean.TRUE.toString().equals(valueTemp)) {
             b = Boolean.TRUE;
         } else if (Boolean.FALSE.toString().equals(valueTemp)) {
@@ -79,32 +78,51 @@ public class ConfigLoader extends Properties {
 
     /**
      * Properties 加载,未获取流或 IO 异常会抛出
+     * <p>
+     * 加载内容会被存入本类 properties 中
      *
      * @param resourceFile properties 文件位置
      */
     private void load(@NonNull String resourceFile) {
-        try (@NonNull InputStream inputStream = ConfigLoader.class.getClassLoader().getResourceAsStream(resourceFile)) {
+        try (InputStream inputStream = ConfigLoader.class.getClassLoader().getResourceAsStream(resourceFile)) {
             super.load(inputStream);
             super.keySet().forEach((object) -> {
                 String key = (String) object;
-                // 去除前后空格
-                properties.put(key, super.getProperty(key).trim());
+                properties.put(key, super.getProperty(key));
             });
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException("failed loading config from : " + resourceFile, e);
         } finally {
+            // 父类清空方法
             super.clear();
         }
     }
 
+    /**
+     * 获取不可变映射
+     *
+     * @return 读取的配置文件所有映射，不可修改
+     */
     public Map<String, String> getProperties() {
         return Collections.unmodifiableMap(properties);
     }
 
+    /**
+     * 清空所有读取的配置文件映射
+     */
     @Override
     public void clear() {
         this.properties.clear();
+    }
+
+    /**
+     * 校验成员变量不为空
+     */
+    private void checkProperties() {
+        if (Objects.isNull(properties)) {
+            properties = Maps.newHashMap();
+        }
     }
 
 }

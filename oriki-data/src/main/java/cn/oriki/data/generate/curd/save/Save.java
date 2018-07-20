@@ -4,6 +4,12 @@ import java.io.Serializable;
 
 public interface Save {
 
-    void save(String key, Serializable value); // 来源名，可以是列名或者键名
+    /**
+     * 来源名，可以是列名或者键名
+     *
+     * @param key   键
+     * @param value 存入值
+     */
+    void save(String key, Serializable value);
 
 }

@@ -27,14 +27,15 @@ public class MySqlQueryImpl extends AbstractJpaQuery {
 
         GenerateResult whereResult = getPredicate().getWhere().generate();
         String whereSQL = whereResult.getGenerateResult();
-        stringBuilder.append(whereSQL); // where ...
+        // where ...
+        stringBuilder.append(whereSQL);
         generateResult.setParams(whereResult.getParams());
 
         // 添加 sort 排序 sql
         setSortImpl(stringBuilder);
 
         // 添加分页数据
-        if (Objects.nonNull(getPredicate().getPageable()) && Objects.nonNull(getPredicate().getPageable().getPageNumber()) && Objects.nonNull(getPredicate().getPageable().getPageSize())) {
+        if (Objects.nonNull(getPageable()) && Objects.nonNull(getPageNumber()) && Objects.nonNull(getPageSize())) {
             GenerateResult pageResult = getPredicate().getPageable().generate();
             if (Collections.isNotNullAndHasElements(pageResult.getParams())) {
                 stringBuilder.append(pageResult.getGenerateResult());

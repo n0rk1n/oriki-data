@@ -7,15 +7,27 @@ import cn.oriki.data.generate.base.where.AbstractWhere;
 import cn.oriki.data.generate.base.where.Where;
 import cn.oriki.data.generate.base.where.entity.Criteria;
 import com.google.common.collect.Maps;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * 抽象 Update
+ *
+ * @author oriki.wang
+ */
 public abstract class AbstractUpdate implements Update, Where, From, Generate {
 
+    @Getter
+    @Setter
     private AbstractWhere where;
+
+    @Getter
+    @Setter
     private AbstractFrom from;
     private Map<String, Serializable> setParams;
 
@@ -62,24 +74,9 @@ public abstract class AbstractUpdate implements Update, Where, From, Generate {
         }
     }
 
-    public AbstractWhere getWhere() {
-        return where;
-    }
-
-    public void setWhere(AbstractWhere where) {
-        this.where = where;
-    }
-
-    public AbstractFrom getFrom() {
-        return from;
-    }
-
-    public void setFrom(AbstractFrom from) {
-        this.from = from;
-    }
-
     public Map<String, Serializable> getSetParams() {
-        return Collections.unmodifiableMap(setParams); // 不可被修改映射
+        // 不可被修改映射
+        return Collections.unmodifiableMap(setParams);
     }
 
 }

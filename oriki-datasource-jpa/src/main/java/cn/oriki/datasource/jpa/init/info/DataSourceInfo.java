@@ -1,4 +1,4 @@
-package cn.oriki.datasource.jpa.info;
+package cn.oriki.datasource.jpa.init.info;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -16,5 +16,5 @@ public class DataSourceInfo {
     private String url;
     private String userName;
     private String password;
-    
+
 }

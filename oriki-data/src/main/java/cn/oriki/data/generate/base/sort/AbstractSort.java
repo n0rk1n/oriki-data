@@ -9,11 +9,17 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * 抽象的排序方法
+ *
+ * @author oriki.wang
+ */
 public abstract class AbstractSort implements Sort, Generate {
 
-    private static final Direction NORMAL_ORDER = Direction.ASC;
-
-    private List<OrderEntity> orders; // 考虑排序优先级， List
+    /**
+     * 考虑排序优先级， List
+     */
+    private List<OrderEntity> orders;
 
     public AbstractSort() {
         checkOrders();
@@ -26,9 +32,7 @@ public abstract class AbstractSort implements Sort, Generate {
      */
     public AbstractSort(String... keys) { // keys 传值建议 > 2
         checkOrders();
-        for (String key : keys) {
-            sort(key, NORMAL_ORDER);
-        }
+        orderAsc(keys);
     }
 
     @Override
@@ -43,7 +47,9 @@ public abstract class AbstractSort implements Sort, Generate {
         return orders.size();
     }
 
-    // 检查 orders 是否存在
+    /**
+     * 检查 orders 是否存在
+     */
     private void checkOrders() {
         if (Objects.isNull(orders)) {
             orders = Lists.newArrayList();

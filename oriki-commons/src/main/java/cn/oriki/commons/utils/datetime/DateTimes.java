@@ -51,20 +51,44 @@ public class DateTimes {
      * @param after  之后时间对象
      * @return 两个时间的毫秒差值
      */
-    public static long diffTime(LocalDateTime before, LocalDateTime after) {
+    public static long diffMillis(LocalDateTime before, LocalDateTime after) {
         Duration duration = Duration.between(before, after);
         return duration.toMillis();
     }
 
-    // 推进（后退） hours 小时
-    /*public static LocalDateTime addHours(LocalDateTime localDateTime, long hours) {
-        return localDateTime.plusHours(hours);
-    }*/
+    /**
+     * 获取两个时间查，填入时间为之前的时间，与调用该方法的时刻作比较，单位为毫秒值
+     *
+     * @param before
+     * @return
+     */
+    public static long diffMillis(LocalDateTime before) {
+        return diffMillis(before, now());
+    }
 
-    // 推进（后退） months 月
-    /*public static LocalDateTime addMonths(LocalDateTime localDateTime, long months) {
+    /**
+     * 推进（后退） hours 小时
+     * <p>
+     * 链式结构
+     *
+     * @param localDateTime 目标对象
+     * @param hours         延后的时间（小时）
+     * @return 目标对象延后后后的对象
+     */
+    public static LocalDateTime addHours(LocalDateTime localDateTime, long hours) {
+        return localDateTime.plusHours(hours);
+    }
+
+    /**
+     * 推进（后退） months 月
+     *
+     * @param localDateTime 目标对象
+     * @param months        延后的时间（小时）
+     * @return 目标对象延后后后的对象
+     */
+    public static LocalDateTime addMonths(LocalDateTime localDateTime, long months) {
         return localDateTime.plusMonths(months);
-    }*/
+    }
 
     /**
      * 以 yyyy-MM-dd 格式化 LocalDateTime 对象

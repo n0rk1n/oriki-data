@@ -1,11 +1,9 @@
 package cn.oriki.commons.utils.collection;
 
-import org.apache.commons.lang3.StringUtils;
 
-import java.util.Collection;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.Objects;
+import cn.oriki.commons.constants.StringConstants;
+
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -19,10 +17,9 @@ public class Collections {
      * Collection 对象已实例化并且有元素
      *
      * @param collection Collection 对象
-     * @param <T>        泛型
      * @return Collection 对象存在 & 有元素，返回 true
      */
-    public static <T> boolean isNotNullAndHasElements(Collection<T> collection) {
+    public static boolean isNotNullAndHasElements(Collection<?> collection) {
         return Objects.nonNull(collection) && !collection.isEmpty();
     }
 
@@ -30,10 +27,9 @@ public class Collections {
      * 判断 Collection 对象未实例化或没有元素
      *
      * @param collection Collection 对象
-     * @param <T>        泛型
      * @return Collection 对象为空 | 存在但没有元素，返回 true
      */
-    public static <T> boolean isNullOrEmpty(Collection<T> collection) {
+    public static boolean isNullOrEmpty(Collection<?> collection) {
         return !isNotNullAndHasElements(collection);
     }
 
@@ -44,10 +40,9 @@ public class Collections {
      * @param separator  分隔符
      * @param prefix     前缀
      * @param suffix     后缀
-     * @param <T>        泛型
      * @return 拼接后的字符串
      */
-    public static <T> String join(Collection<T> collection, String separator, String prefix, String suffix) {
+    public static String join(Collection<?> collection, String separator, String prefix, String suffix) {
         return prefix + join(collection, separator) + suffix;
     }
 
@@ -58,13 +53,44 @@ public class Collections {
      *
      * @param collection Collection 对象
      * @param separator  分隔符
-     * @param <T>        泛型
      * @return 拼接后字符串
      */
-    public static <T> String join(Collection<T> collection, String separator) {
+    public static String join(Collection<?> collection, String separator) {
         // 过滤集合中为 null 元素
         collection = collection.stream().filter(Objects::nonNull).collect(Collectors.toList());
-        return StringUtils.join(collection, separator);
+
+        if (Objects.isNull(collection)) {
+            // 不存在映射返回空字符串
+            return StringConstants.EMPTY_STRING_VALUE;
+        } else {
+            Iterator<?> iterator = collection.iterator();
+            if (!iterator.hasNext()) {
+                return StringConstants.EMPTY_STRING_VALUE;
+            } else {
+                Object first = iterator.next();
+                if (!iterator.hasNext()) {
+                    return Objects.isNull(first) ? StringConstants.EMPTY_STRING_VALUE : first.toString();
+                } else {
+                    StringBuilder stringBuilder = new StringBuilder(256);
+                    if (Objects.nonNull(first)) {
+                        stringBuilder.append(first);
+                    }
+
+                    while (iterator.hasNext()) {
+                        Object obj = iterator.next();
+                        if (Objects.isNull(obj)) {
+                            continue;
+                        }
+
+                        if (Objects.nonNull(separator)) {
+                            stringBuilder.append(separator);
+                        }
+                        stringBuilder.append(obj.toString());
+                    }
+                    return stringBuilder.toString();
+                }
+            }
+        }
     }
 
     /**

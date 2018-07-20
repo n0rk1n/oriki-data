@@ -1,6 +1,8 @@
 package cn.oriki.data.generate.result;
 
 import com.google.common.collect.Lists;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.List;
@@ -8,16 +10,17 @@ import java.util.Objects;
 
 public class GenerateResult {
 
-    private String generateResult; // 生成 sql 语句片段
-    private List<Serializable> params; // 语句对应注入参数，如果没有参数，为空集合
+    /**
+     * 生成 sql 语句片段
+     */
+    @Getter
+    @Setter
+    private String generateResult;
 
-    public String getGenerateResult() {
-        return generateResult;
-    }
-
-    public void setGenerateResult(String generateResult) {
-        this.generateResult = generateResult;
-    }
+    /**
+     * 语句对应注入参数，如果没有参数，为空集合
+     */
+    private List<Serializable> params;
 
     public List<Serializable> getParams() {
         return params;

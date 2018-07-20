@@ -1,27 +1,23 @@
 package cn.oriki.data.generate.curd.save.result;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.io.Serializable;
 import java.util.Collection;
 
+@Getter
+@Setter
 public class SaveResult<T, ID extends Serializable> {
 
-    private Integer number; // 影响行数
+    /**
+     * 影响行数
+     */
+    private Integer number;
 
-    private Collection<T> entities; // 默认为空
+    /**
+     * 默认为空
+     */
+    private Collection<T> entities;
 
-    public Integer getNumber() {
-        return number;
-    }
-
-    public void setNumber(Integer number) {
-        this.number = number;
-    }
-
-    public Collection<T> getEntities() {
-        return entities;
-    }
-
-    public void setEntities(Collection<T> entities) {
-        this.entities = entities;
-    }
 }

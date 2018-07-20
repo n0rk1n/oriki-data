@@ -10,25 +10,23 @@ import java.util.Objects;
  *
  * @author oriki.wang
  */
+@Getter
 public class FieldTypeNameValue {
 
     /**
      * 成员变量类型
      */
-    @Getter
     private Class<?> type;
 
     /**
      * 成员变量名称
      */
-    @Getter
     private String name;
 
     /**
      * 成员变量的值
      */
     @Setter
-    @Getter
     private Object value;
 
     public FieldTypeNameValue(Class<?> type, String name, Object value) {

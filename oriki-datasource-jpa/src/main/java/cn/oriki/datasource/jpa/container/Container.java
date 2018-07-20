@@ -14,6 +14,9 @@ import java.util.Objects;
  */
 public class Container {
 
+    /**
+     * 容器映射
+     */
     private Map<String, DataSource> contains;
 
     public Container() {
@@ -30,9 +33,6 @@ public class Container {
         this.contains.put(key, dataSource);
     }
 
-    /**
-     * 校验
-     */
     private void checkContains() {
         if (Objects.isNull(contains)) {
             contains = Maps.newHashMap();

@@ -8,6 +8,7 @@ import lombok.NonNull;
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -44,9 +45,9 @@ public class Reflects {
      * @param <T>   泛型
      * @return Class 对象中所有权限为 public 方法的对象
      */
-    /*public static <T> List<Method> getPublicMethods(Class<T> clazz) {
+    public static <T> List<Method> getPublicMethods(Class<T> clazz) {
         return Lists.newArrayList(clazz.getMethods());
-    }*/
+    }
 
     /**
      * 获取字节码文件的所有 field (包含父类)
@@ -69,10 +70,10 @@ public class Reflects {
      * @return Field 对象，如果不存在，返回 null
      */
     public static <T> Field getField(Class<T> clazz, String fieldName) {
-        Field field = null;
         if (Strings.isBlank(fieldName)) {
             return null;
         }
+        Field field = null;
 
         // 获取所有属性
         for (Field fieldTemp : getFields(clazz)) {
@@ -94,7 +95,9 @@ public class Reflects {
     public static <S> List<FieldTypeNameValue> getFieldTypeNameValuesWithValuesIsNotNull(S entity) {
         List<FieldTypeNameValue> fieldTypeNameValues = getFieldTypeNameValues(entity);
 
-        return fieldTypeNameValues.stream().filter(fieldTypeNameValue -> Objects.nonNull(fieldTypeNameValue.getValue()) && (fieldTypeNameValue.getValue() instanceof Serializable)).collect(Collectors.toList());
+        return fieldTypeNameValues.stream().filter(fieldTypeNameValue ->
+                Objects.nonNull(fieldTypeNameValue.getValue()) && (fieldTypeNameValue.getValue() instanceof Serializable)).
+                collect(Collectors.toList());
     }
 
     /**
@@ -107,8 +110,7 @@ public class Reflects {
     public static <S> List<FieldTypeNameValue> getFieldTypeNameValues(S entity) {
         List<FieldTypeNameValue> list = Lists.newArrayList();
 
-        List<Field> fields = getFields(entity.getClass());
-        fields.forEach((field -> {
+        getFields(entity.getClass()).forEach((field -> {
             try {
                 list.add(getFieldTypeNameValue(field, entity));
             } catch (IllegalAccessException e) {
@@ -146,10 +148,10 @@ public class Reflects {
      * @param clazz Class 文件
      * @return 注解集合
      */
-    /*public static List<Annotation> getAnnotations(Class clazz) {
+    public static List<Annotation> getAnnotations(Class clazz) {
         Annotation[] annotations = clazz.getDeclaredAnnotations();
         return Lists.newArrayList(annotations);
-    }*/
+    }
 
     /**
      * 获取类上的特定注解，如果不存在，返回null

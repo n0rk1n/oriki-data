@@ -47,7 +47,7 @@ public abstract class AbstractRepository<T, ID extends Serializable> implements 
         Field primaryKeyField = getPrimaryKeyField();
         primaryKeyField.setAccessible(true);
 
-        Object o = null;
+        Object o ;
         try {
             o = primaryKeyField.get(entity);
             if (Objects.nonNull(o) && o instanceof Serializable) {

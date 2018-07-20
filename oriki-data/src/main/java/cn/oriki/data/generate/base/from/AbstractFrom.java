@@ -1,5 +1,6 @@
 package cn.oriki.data.generate.base.from;
 
+import cn.oriki.commons.utils.string.Strings;
 import cn.oriki.data.generate.Generate;
 import lombok.Getter;
 import lombok.NonNull;
@@ -27,6 +28,9 @@ public abstract class AbstractFrom implements From, Generate {
     }
 
     private void setFromName(@NonNull String fromName) {
+        if (Strings.isBlank(fromName)) {
+            throw new IllegalArgumentException("fromName can't be null");
+        }
         this.fromName = fromName;
     }
 

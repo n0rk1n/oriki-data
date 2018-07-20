@@ -6,16 +6,17 @@ import cn.oriki.data.generate.base.from.From;
 import cn.oriki.data.generate.base.where.AbstractWhere;
 import cn.oriki.data.generate.base.where.Where;
 import cn.oriki.data.generate.base.where.entity.Criteria;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
+@AllArgsConstructor
 public abstract class AbstractDelete implements Delete, Where, From, Generate {
 
     private AbstractWhere where;
     private AbstractFrom from;
-
-    public AbstractDelete(AbstractWhere where, AbstractFrom from) {
-        this.where = where;
-        this.from = from;
-    }
 
     @Override
     public void clear() {
@@ -40,22 +41,6 @@ public abstract class AbstractDelete implements Delete, Where, From, Generate {
     @Override
     public String getFromName() {
         return this.from.getFromName();
-    }
-
-    public AbstractWhere getWhere() {
-        return where;
-    }
-
-    public void setWhere(AbstractWhere where) {
-        this.where = where;
-    }
-
-    public AbstractFrom getFrom() {
-        return from;
-    }
-
-    public void setFrom(AbstractFrom from) {
-        this.from = from;
     }
 
 }

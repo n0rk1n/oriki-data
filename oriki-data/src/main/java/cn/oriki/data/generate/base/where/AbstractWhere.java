@@ -13,7 +13,10 @@ import java.util.Objects;
 
 public abstract class AbstractWhere implements Where, Generate {
 
-    private LinkedList<OperatorCreterias> operatorCreterias; // 条件列表
+    /**
+     * 条件列表
+     */
+    private LinkedList<OperatorCreterias> operatorCreterias;
 
     public AbstractWhere() {
         operatorCreterias = Lists.newLinkedList();
@@ -32,7 +35,8 @@ public abstract class AbstractWhere implements Where, Generate {
     public void andCriteria(Criteria... criterias) {
         if (criterias.length > 0) {
             OperatorCreterias operatorCreterias = createOperatorCreteria(OperatorEnum.AND, criterias);
-            this.operatorCreterias.addLast(operatorCreterias); // and 条件添加到结尾
+            // and 条件添加到结尾
+            this.operatorCreterias.addLast(operatorCreterias);
         }
     }
 
@@ -40,15 +44,26 @@ public abstract class AbstractWhere implements Where, Generate {
     public void orCriteria(Criteria... criterias) {
         if (criterias.length > 0) {
             OperatorCreterias operatorCreterias = createOperatorCreteria(OperatorEnum.OR, criterias);
-            this.operatorCreterias.addFirst(operatorCreterias); // or 条件添加到开头
+            // or 条件添加到开头
+            this.operatorCreterias.addFirst(operatorCreterias);
         }
     }
 
-    // 添加条件，关系符使用 operator
-    private OperatorCreterias createOperatorCreteria(OperatorEnum operator, Criteria... keyConditionalValues) {
+    /**
+     * 添加条件，关系符使用 operator
+     *
+     * @param operator  关系符
+     * @param criterias 条件
+     * @return 关系符+条件
+     */
+    private OperatorCreterias createOperatorCreteria(OperatorEnum operator, Criteria... criterias) {
+        if (Objects.isNull(criterias) || criterias.length == 0) {
+            throw new RuntimeException("criteria must not null");
+        }
+
         OperatorCreterias operatorCreteria = new OperatorCreterias();
         operatorCreteria.setOperator(operator);
-        operatorCreteria.setCriterias(Lists.newArrayList(keyConditionalValues));
+        operatorCreteria.setCriterias(Lists.newArrayList(criterias));
 
         return operatorCreteria;
     }
