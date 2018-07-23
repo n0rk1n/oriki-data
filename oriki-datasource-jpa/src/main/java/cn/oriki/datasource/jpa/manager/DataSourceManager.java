@@ -5,6 +5,7 @@ import cn.oriki.commons.utils.string.Strings;
 import cn.oriki.datasource.jpa.container.Container;
 import cn.oriki.datasource.jpa.init.DataSourceInitializer;
 import cn.oriki.datasource.jpa.init.info.DataSourceInfo;
+import com.google.common.collect.Sets;
 import lombok.NonNull;
 
 import javax.sql.DataSource;
@@ -35,14 +36,15 @@ public class DataSourceManager<T extends DataSource> {
      */
     private static DataSourceManager dataSourceManager;
 
-    private DataSourceManager() {
+    private DataSourceManager(Container container) {
+        DataSourceManager.container = container;
     }
 
-    public static DataSourceManager getInstance() {
+    public static DataSourceManager getInstance(Container container) {
         if (Objects.isNull(dataSourceManager)) {
             synchronized (DataSourceManager.class) {
                 if (Objects.isNull(dataSourceManager)) {
-                    dataSourceManager = new DataSourceManager();
+                    dataSourceManager = new DataSourceManager(container);
                     dataSourceManager.init();
                 }
             }
@@ -122,6 +124,11 @@ public class DataSourceManager<T extends DataSource> {
             DataSourceInfo defaultDataSource = DataSourceInitializer.createDataSourceInfo(defaultDriverClass, defaultUrl, defaultUsername, defaultPassword);
             createAndSetDataSource(DEFAULT_KEY_WORD, defaultDataSource);
         }
+
+        DataSource dataSource = chooseDataSource(DEFAULT_KEY_WORD);
+        if (Objects.isNull(dataSource)) {
+            throw new IllegalArgumentException("we need a default DataSource");
+        }
     }
 
     /**
@@ -142,7 +149,7 @@ public class DataSourceManager<T extends DataSource> {
      */
     private static void checkContainer() {
         if (Objects.isNull(container)) {
-            container = new Container();
+            throw new RuntimeException("we can't find ContainerImpl");
         }
     }
 
@@ -152,7 +159,7 @@ public class DataSourceManager<T extends DataSource> {
      * @param list 保证 List 中没有重复值
      */
     private static void checkDistinct(@NonNull List<String> list) {
-        HashSet<String> strings = new HashSet<>(list);
+        HashSet<String> strings = Sets.newHashSet(list);
         if (strings.size() != list.size()) {
             list.remove(strings);
             throw new RuntimeException("we find the same sourceKey in properties : " + list.toString() + ", please check");

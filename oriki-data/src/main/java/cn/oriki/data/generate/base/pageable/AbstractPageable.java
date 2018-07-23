@@ -22,7 +22,7 @@ public abstract class AbstractPageable implements Pageable, Generate {
     private Integer pageSize;
 
     @Override
-    public void set(Integer pageNumber, Integer pageSize) {
+    public void setPageNumberAndPageSize(Integer pageNumber, Integer pageSize) {
         this.pageNumber = pageNumber;
         this.pageSize = pageSize;
     }

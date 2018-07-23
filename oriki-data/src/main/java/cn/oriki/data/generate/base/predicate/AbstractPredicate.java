@@ -50,8 +50,8 @@ public abstract class AbstractPredicate extends AbstractCRDPredicate implements 
      * @param pageSize   每页条数
      */
     @Override
-    public void set(Integer pageNumber, Integer pageSize) {
-        this.pageable.set(pageNumber, pageSize);
+    public void setPageNumberAndPageSize(Integer pageNumber, Integer pageSize) {
+        this.pageable.setPageNumberAndPageSize(pageNumber, pageSize);
     }
 
     /**

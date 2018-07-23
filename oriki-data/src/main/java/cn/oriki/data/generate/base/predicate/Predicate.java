@@ -37,8 +37,8 @@ public interface Predicate extends CRDPredicate, Sort, Pageable {
     }
 
     @Override
-    default void set(Integer pageNumber, Integer pageSize) {
-        getPageable().set(pageNumber, pageSize);
+    default void setPageNumberAndPageSize(Integer pageNumber, Integer pageSize) {
+        getPageable().setPageNumberAndPageSize(pageNumber, pageSize);
     }
 
 }

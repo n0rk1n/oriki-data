@@ -39,8 +39,8 @@ public abstract class AbstractCRD implements CRDPredicate, From {
     }
 
     @Override
-    public void from(String fromName) {
-        this.from.from(fromName);
+    public void setFromName(String fromName) {
+        this.from.setFromName(fromName);
     }
 
     @Override

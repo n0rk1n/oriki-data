@@ -8,35 +8,25 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * 数据源容器
+ * 数据源容器接口
  *
  * @author oriki.wang
  */
-public class Container {
+public interface Container {
 
     /**
-     * 容器映射
+     * 获取不可变容器方法
+     *
+     * @return 容器对象，不可修改
      */
-    private Map<String, DataSource> contains;
+    Map<String, DataSource> getContains();
 
-    public Container() {
-        checkContains();
-    }
-
-    public Map<String, DataSource> getContains() {
-        checkContains();
-        return Collections.unmodifiableMap(contains);
-    }
-
-    public void setContain(String key, DataSource dataSource) {
-        checkContains();
-        this.contains.put(key, dataSource);
-    }
-
-    private void checkContains() {
-        if (Objects.isNull(contains)) {
-            contains = Maps.newHashMap();
-        }
-    }
+    /**
+     * 添加数据源映射方法
+     *
+     * @param key        键
+     * @param dataSource 数据源
+     */
+    void setContain(String key, DataSource dataSource);
 
 }

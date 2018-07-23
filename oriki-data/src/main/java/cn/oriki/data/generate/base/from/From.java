@@ -12,7 +12,7 @@ public interface From {
      *
      * @param fromName 来源名称（可以为表名，可以为集合名）
      */
-    void from(String fromName);
+    void setFromName(String fromName);
 
     /**
      * 获取来源名称

@@ -27,6 +27,6 @@ public interface Pageable {
      * @param pageNumber 当前页码
      * @param pageSize   每页条数
      */
-    void set(Integer pageNumber, Integer pageSize);
+    void setPageNumberAndPageSize(Integer pageNumber, Integer pageSize);
 
 }

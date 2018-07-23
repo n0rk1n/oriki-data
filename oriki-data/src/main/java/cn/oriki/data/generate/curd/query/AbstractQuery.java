@@ -41,8 +41,8 @@ public abstract class AbstractQuery implements Query, Predicate, From, Generate 
     }
 
     @Override
-    public void from(String fromName) {
-        this.from.from(fromName);
+    public void setFromName(String fromName) {
+        this.from.setFromName(fromName);
     }
 
     @Override

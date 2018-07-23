@@ -19,15 +19,15 @@ public abstract class AbstractFrom implements From, Generate {
     private String fromName;
 
     public AbstractFrom(@NonNull String fromName) {
-        setFromName(fromName);
+        set(fromName);
     }
 
     @Override
-    public void from(@NonNull String fromName) {
-        setFromName(fromName);
+    public void setFromName(@NonNull String fromName) {
+        set(fromName);
     }
 
-    private void setFromName(@NonNull String fromName) {
+    private void set(@NonNull String fromName) {
         if (Strings.isBlank(fromName)) {
             throw new IllegalArgumentException("fromName can't be null");
         }
